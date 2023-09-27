@@ -1,0 +1,23 @@
+/*
+
+This CSS file will be included with your plugin, and
+available in the app when your plugin is enabled.
+
+If your plugin does not need CSS, delete this file.
+
+*/
+.comment-group-0 {
+	color: #59606b;
+}
+
+.comment-group-1 {
+	color: #328e84;
+}
+
+.comment-group-2 {
+	color: #4399bf;
+}
+
+.comment-group-3 {
+	color: #6a43ad;
+}
