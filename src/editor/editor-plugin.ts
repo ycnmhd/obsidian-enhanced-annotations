@@ -25,9 +25,6 @@ export const context: {
 
 class EditorPlugin implements PluginValue {
     decorations: DecorationSet;
-    private state: {
-        updateOutlineTimeout?: ReturnType<typeof setTimeout>;
-    } = {};
 
     constructor(view: EditorView) {
         this.decorations = decorateComments(view);
