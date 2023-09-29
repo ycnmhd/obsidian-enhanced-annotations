@@ -1,11 +1,11 @@
 import { EditorView } from '@codemirror/view';
 import { syntaxTree } from '@codemirror/language';
-import { splitComment } from './split-comment';
-import { debounce } from '../helpers/debounce';
-import { CommentsStore, commentsStore } from '../components/comments-store';
+import { parseComment } from '../../helpers/parse-comment';
+import { CommentsStore, commentsStore } from '../../components/comments-store';
+import { debounce } from '../../helpers/debounce';
 
 export type Comment = {
-    group: number;
+    group: string;
     text: string;
     position: {
         from: number;
@@ -23,10 +23,9 @@ export const updateOutline = (view: EditorView) => {
                     node.from,
                     node.to,
                 );
-                const split = splitComment(originalCommentText);
+                const split = parseComment(originalCommentText);
                 if (!split) return;
-                const [, text, end] = split;
-                const group = end.length - 3;
+                const [, group, text] = split;
                 comments.push({
                     text,
                     group,
@@ -48,7 +47,7 @@ export const updateOutline = (view: EditorView) => {
             acc[val.group].push(val);
             return acc;
         },
-        {} as CommentsStore['groups'],
+        { '/': [] } as CommentsStore['groups'],
     );
     commentsStore.set({ groups });
 };

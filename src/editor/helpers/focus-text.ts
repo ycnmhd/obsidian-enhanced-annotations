@@ -1,5 +1,5 @@
 import { Comment } from './update-comments-outline';
-import { context } from './editor-plugin';
+import { context } from '../editor-plugin';
 
 type Props = {
     position: Comment['position'];

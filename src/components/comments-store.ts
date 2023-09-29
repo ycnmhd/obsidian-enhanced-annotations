@@ -1,6 +1,6 @@
 import { writable } from 'svelte/store';
 
-import type { Comment } from '../editor/update-comments-outline';
+import type { Comment } from '../editor/helpers/update-comments-outline';
 
 export type CommentsStore = {
     groups: {

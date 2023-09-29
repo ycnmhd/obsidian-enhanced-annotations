@@ -1,6 +1,6 @@
 <script lang="ts">
 	import { CommentsStore, commentsStore } from "./comments-store";
-	import { selectText } from "../editor/focus-text";
+	import { selectText } from "../editor/helpers/focus-text";
 
 	let comments: CommentsStore;
 	let selectedGroup: string;

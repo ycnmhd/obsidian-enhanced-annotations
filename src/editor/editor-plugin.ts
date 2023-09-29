@@ -1,7 +1,4 @@
-import { syntaxTree } from '@codemirror/language';
-import { RangeSetBuilder } from '@codemirror/state';
 import {
-    Decoration,
     DecorationSet,
     EditorView,
     PluginSpec,
@@ -9,12 +6,12 @@ import {
     ViewPlugin,
     ViewUpdate,
 } from '@codemirror/view';
-import { splitComment } from './split-comment';
 import {
     debouncedUpdateOutline,
     updateOutline,
-} from './update-comments-outline';
+} from './helpers/update-comments-outline';
 import { Editor, TFile } from 'obsidian';
+import { decorateComments } from './helpers/decorate-comments';
 
 export const context: {
     editor: Editor;
@@ -33,7 +30,7 @@ class EditorPlugin implements PluginValue {
     } = {};
 
     constructor(view: EditorView) {
-        this.decorations = this.buildDecorations(view);
+        this.decorations = decorateComments(view);
     }
 
     update(update: ViewUpdate) {
@@ -46,7 +43,7 @@ class EditorPlugin implements PluginValue {
             const editor = activeEditor?.editor as Editor;
             const file = activeEditor.file;
             context.editor = editor;
-            this.decorations = this.buildDecorations(update.view);
+            this.decorations = decorateComments(update.view);
             if (!context.currentFile || context.currentFile !== file) {
                 context.currentFile = file;
                 if (context.currentCleanup) context.currentCleanup();
@@ -58,34 +55,6 @@ class EditorPlugin implements PluginValue {
     }
 
     destroy() {}
-
-    buildDecorations(view: EditorView): DecorationSet {
-        const builder = new RangeSetBuilder<Decoration>();
-        for (const { from, to } of view.visibleRanges) {
-            syntaxTree(view.state).iterate({
-                from,
-                to,
-                enter(node) {
-                    if (node.type.name.startsWith('comment')) {
-                        const originalCommentText = view.state.sliceDoc(
-                            node.from,
-                            node.to,
-                        );
-                        const split = splitComment(originalCommentText);
-                        if (!split) return;
-                        const [, , end] = split;
-                        const group = end.length - 3;
-                        const textDecoration = Decoration.mark({
-                            class: 'comment-group-' + group,
-                        });
-                        builder.add(node.from, node.to, textDecoration);
-                    }
-                },
-            });
-        }
-
-        return builder.finish();
-    }
 }
 
 const pluginSpec: PluginSpec<EditorPlugin> = {
