@@ -35,7 +35,7 @@ export class CommentSuggest extends EditorSuggest<CommentCompletion> {
 
     getSuggestions(context: EditorSuggestContext): CommentCompletion[] {
         const groups = this.plugin.settings.getValue().labels;
-        const patterns = Object.values(groups).map((g) => g.pattern);
+        const patterns = Object.values(groups).map((g) => g.label);
         const suggestions = patterns
             .map((val) => ({ label: val, text: `<!--${val}: -->` }))
             .filter((item) =>

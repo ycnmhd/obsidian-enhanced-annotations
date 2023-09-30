@@ -1,12 +1,12 @@
 import { EditorView } from '@codemirror/view';
 import { syntaxTree } from '@codemirror/language';
 import { parseComment } from '../../editor-plugin/helpers/parse-comment';
-import { outlineComments, OutlineStore } from '../outline-comments';
+import { outlineComments, OutlineStore } from '../comments-outline-store';
 import { debounce } from '../../helpers/debounce';
 import { registerNewLabels } from './register-new-labels';
 
 export type Comment = {
-    group: string;
+    label: string;
     text: string;
     position: {
         from: number;
@@ -27,31 +27,32 @@ export const updateOutline = (view: EditorView) => {
                 const split = parseComment(originalCommentText);
                 if (!split) return;
                 const [, group, text] = split;
-                comments.push({
-                    text,
-                    group,
-                    position: {
-                        from: node.from - line.from,
-                        to: node.to - line.from,
-                        line: line.number - 1,
-                    },
-                });
+                if (text.trim())
+                    comments.push({
+                        text,
+                        label: group,
+                        position: {
+                            from: node.from - line.from,
+                            to: node.to - line.from,
+                            line: line.number - 1,
+                        },
+                    });
             }
         },
     });
 
     const groups = comments.reduce(
         (acc, val) => {
-            if (!acc[val.group]) {
-                acc[val.group] = [];
+            if (!acc[val.label]) {
+                acc[val.label] = [];
             }
-            acc[val.group].push(val);
+            acc[val.label].push(val);
             return acc;
         },
-        { '/': [] } as OutlineStore['groups'],
+        { '/': [] } as OutlineStore['labels'],
     );
     registerNewLabels(comments);
-    outlineComments.set({ groups });
+    outlineComments.set({ labels: groups });
 };
 
 export const debouncedUpdateOutline = debounce(

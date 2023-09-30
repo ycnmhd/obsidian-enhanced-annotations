@@ -9,4 +9,7 @@ export const DEFAULT_SETTINGS: Settings = {
     parsing: {
         autoRegisterLabels: true,
     },
+    commands: {
+        enableLabelCommands: false,
+    },
 };

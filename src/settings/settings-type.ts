@@ -1,8 +1,8 @@
 export type Label = {
-    pattern: string;
+    label: string;
     color?: string;
     id: string;
-    enableCommand: boolean;
+    enableStyles: boolean;
 };
 export type Settings = {
     labels: Record<string, Label>;
@@ -12,5 +12,8 @@ export type Settings = {
     };
     parsing: {
         autoRegisterLabels: boolean;
+    };
+    commands: {
+        enableLabelCommands: boolean;
     };
 };

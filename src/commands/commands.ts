@@ -29,19 +29,19 @@ const commands = [
     },
 ];
 export const addInsertCommentCommands = (plugin: CommentLabels) => {
-    const labels = Object.values(plugin.settings.getValue().labels).filter(
-        (l) => l.enableCommand,
-    );
+    if (plugin.settings.getValue().commands.enableLabelCommands) {
+        const labels = Object.values(plugin.settings.getValue().labels);
 
-    for (const { pattern } of labels) {
-        plugin.addCommand({
-            id: 'insert' + pattern,
-            callback: async () => {
-                await insertComment({ plugin, afterStart: `${pattern}: ` });
-            },
-            name: `Insert "${pattern}" comment`,
-            hotkeys: [],
-        });
+        for (const { label } of labels) {
+            plugin.addCommand({
+                id: 'insert' + label,
+                callback: async () => {
+                    await insertComment({ plugin, afterStart: `${label}: ` });
+                },
+                name: `Insert "${label}" comment`,
+                hotkeys: [],
+            });
+        }
     }
 
     for (const { key, name, modifiers = [], noComment, newLine } of commands) {

@@ -7,10 +7,10 @@ import { Label } from '../../settings/settings-type';
 
 export const decorateComments = (view: EditorView) => {
     const builder = new RangeSetBuilder<Decoration>();
-    const groups = plugin.current.settings.getValue().labels;
-    const groupsByPattern = Object.values(groups).reduce(
+    const labels = plugin.current.settings.getValue().labels;
+    const labelsByPattern = Object.values(labels).reduce(
         (acc, val) => {
-            acc[val.pattern] = val;
+            acc[val.label] = val;
             return acc;
         },
         {} as Record<string, Label>,
@@ -27,12 +27,12 @@ export const decorateComments = (view: EditorView) => {
                     );
                     const split = parseComment(originalCommentText);
                     if (!split) return;
-                    const [, group] = split;
-                    const groupSettings = groupsByPattern[group];
-                    if (groupSettings) {
+                    const [, label] = split;
+                    const labelSettings = labelsByPattern[label];
+                    if (labelSettings && labelSettings.enableStyles) {
                         const textDecoration = Decoration.mark({
                             attributes: {
-                                style: `color: ${groupSettings.color}`,
+                                style: `color: ${labelSettings.color}`,
                             },
                         });
                         builder.add(node.from, node.to, textDecoration);

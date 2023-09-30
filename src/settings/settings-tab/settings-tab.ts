@@ -1,7 +1,7 @@
 import { App, PluginSettingTab, Setting } from 'obsidian';
 import CommentLabels from '../../main';
 import { AddNewGroup } from './components/add-new-group';
-import { GroupSettings } from './components/group-settings';
+import { LabelSettings } from './components/label-settings';
 import { AutoRegisterLabels } from './components/auto-register-labels';
 
 export class SettingsTab extends PluginSettingTab {
@@ -12,7 +12,7 @@ export class SettingsTab extends PluginSettingTab {
         this.plugin = plugin;
     }
 
-    display(): void {
+    display = (): void => {
         const settings = this.plugin.settings.getValue();
         const { containerEl } = this;
 
@@ -48,7 +48,7 @@ export class SettingsTab extends PluginSettingTab {
             containerEl,
         });
         for (const label of Object.values(settings.labels)) {
-            GroupSettings({
+            LabelSettings({
                 renderSettings: this.display,
                 plugin: this.plugin,
                 label,
@@ -60,5 +60,5 @@ export class SettingsTab extends PluginSettingTab {
             plugin: this.plugin,
             containerEl,
         });
-    }
+    };
 }

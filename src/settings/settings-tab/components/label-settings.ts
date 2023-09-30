@@ -8,21 +8,20 @@ type Props = {
     plugin: CommentLabels;
     renderSettings: () => void;
 };
-export const GroupSettings = ({
+export const LabelSettings = ({
     containerEl,
     label,
     plugin,
     renderSettings,
 }: Props) => {
     const el = new Setting(containerEl)
-        .setName(label.pattern)
+        .setName(label.label)
         .addText((text) => {
             text.inputEl.pattern = '^\\w+$';
             text.setPlaceholder('pattern')
-                .setValue(label.pattern)
+                .setValue(label.label)
                 .onChange((value) => {
                     text.inputEl.checkValidity();
-                    console.log(text.inputEl.validity);
                     if (text.inputEl.validity.patternMismatch) {
                         text.inputEl.reportValidity();
                         new Notice(`Only A-Za-z0-9_ are allowed`);
@@ -51,12 +50,12 @@ export const GroupSettings = ({
         })
         .addToggle((toggle) => {
             toggle
-                .setValue(label.enableCommand)
-                .setTooltip('Command to insert this label')
+                .setValue(label.enableStyles)
+                .setTooltip('Enable styles')
                 .onChange((value) => {
                     plugin.settings.dispatch({
                         payload: { id: label.id, enable: value },
-                        type: 'ENABLE_LABEL_COMMAND',
+                        type: 'ENABLE_LABEL_STYLES',
                     });
                 });
         })
