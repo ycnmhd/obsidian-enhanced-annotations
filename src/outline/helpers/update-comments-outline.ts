@@ -1,7 +1,7 @@
 import { EditorView } from '@codemirror/view';
 import { syntaxTree } from '@codemirror/language';
 import { parseComment } from '../../editor-plugin/helpers/parse-comment';
-import { CommentsStore, commentsStore } from '../comments-store';
+import { outlineComments, OutlineStore } from '../outline-comments';
 import { debounce } from '../../helpers/debounce';
 import { registerNewLabels } from './register-new-labels';
 
@@ -48,10 +48,10 @@ export const updateOutline = (view: EditorView) => {
             acc[val.group].push(val);
             return acc;
         },
-        { '/': [] } as CommentsStore['groups'],
+        { '/': [] } as OutlineStore['groups'],
     );
     registerNewLabels(comments);
-    commentsStore.set({ groups });
+    outlineComments.set({ groups });
 };
 
 export const debouncedUpdateOutline = debounce(
