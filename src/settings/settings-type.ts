@@ -1,10 +1,11 @@
-export type Group = {
+export type Label = {
     pattern: string;
     color?: string;
     id: string;
+    enableCommand: boolean;
 };
 export type Settings = {
-    groups: Record<string, Group>;
+    labels: Record<string, Label>;
     editorSuggest: {
         enableAutoSuggest: boolean;
         triggerPhrase: string;

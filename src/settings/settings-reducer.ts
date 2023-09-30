@@ -31,7 +31,11 @@ export type SettingsActions =
       }
     | { type: 'ENABLE_AUTO_SUGGEST'; payload: { enable: boolean } }
     | { type: 'SET_AUTO_SUGGEST_TRIGGER'; payload: { trigger: string } }
-    | { type: 'ENABLE_AUTO_REGISTER_LABELS'; payload: { enable: boolean } };
+    | { type: 'ENABLE_AUTO_REGISTER_LABELS'; payload: { enable: boolean } }
+    | {
+          type: 'ENABLE_LABEL_COMMAND';
+          payload: { id: string; enable: boolean };
+      };
 export const settingsReducer = (
     store: Settings,
     action: SettingsActions,
@@ -39,18 +43,19 @@ export const settingsReducer = (
     store = JSON.parse(JSON.stringify(store));
     if (action.type === 'SET_PATTERN') {
         if (isValidLabel(action.payload.pattern))
-            store.groups[action.payload.id].pattern = action.payload.pattern;
+            store.labels[action.payload.id].pattern = action.payload.pattern;
     } else if (action.type === 'SET_COLOR') {
-        store.groups[action.payload.id].color = action.payload.color;
+        store.labels[action.payload.id].color = action.payload.color;
     } else if (action.type === 'DELETE_GROUP') {
-        delete store.groups[action.payload.id];
+        delete store.labels[action.payload.id];
     } else if (action.type === 'NEW_GROUP') {
         if (!action.payload.pattern || isValidLabel(action.payload.pattern)) {
             const id = String(Date.now());
-            store.groups[id] = {
+            store.labels[id] = {
                 pattern: action.payload.pattern,
-                color: getDefaultColor(Object.values(store.groups))?.hex,
+                color: getDefaultColor(Object.values(store.labels))?.hex,
                 id,
+                enableCommand: false,
             };
         }
     } else if (action.type === 'ENABLE_AUTO_SUGGEST') {
@@ -59,6 +64,8 @@ export const settingsReducer = (
         store.editorSuggest.triggerPhrase = action.payload.trigger;
     } else if (action.type === 'ENABLE_AUTO_REGISTER_LABELS') {
         store.parsing.autoRegisterLabels = action.payload.enable;
+    } else if (action.type === 'ENABLE_LABEL_COMMAND') {
+        store.labels[action.payload.id].enableCommand = action.payload.enable;
     }
     return store;
 };

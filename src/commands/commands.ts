@@ -1,5 +1,5 @@
 import { insertComment } from './insert-comment';
-import CommentGroups from '../main';
+import CommentLabels from '../main';
 import { Modifier } from 'obsidian';
 
 const slugify = (inputString: string) => {
@@ -12,69 +12,46 @@ const slugify = (inputString: string) => {
 
 const commands = [
     {
-        name: 'Insert group 1 comment',
+        name: 'Jump to the next line',
         key: 'F5',
-        beforeEnd: '',
+        noComment: true,
+        newLine: true,
     },
     {
-        name: 'Insert group 2 comment',
+        name: 'Insert a comment',
         key: 'F6',
-        beforeEnd: '-',
     },
     {
-        name: 'Insert group 3 comment',
-        key: 'F7',
-        beforeEnd: '--',
-    },
-    {
-        name: 'Insert group 4 comment',
-        key: 'F8',
-        beforeEnd: '---',
-    },
-    {
-        name: 'Insert group 1 comment below',
-        key: 'F5',
-        beforeEnd: '',
-        modifiers: ['Shift'],
-    },
-    {
-        name: 'Insert group 2 comment below',
+        name: 'Insert a comment in a new line',
         key: 'F6',
-        beforeEnd: '-',
-        modifiers: ['Shift'],
-    },
-    {
-        name: 'Insert group 3 comment below',
-        key: 'F7',
-        beforeEnd: '--',
-        modifiers: ['Shift'],
-    },
-    {
-        name: 'Insert group 4 comment below',
-        key: 'F8',
-        beforeEnd: '---',
-        modifiers: ['Shift'],
+        modifiers: ['Shift'] as Modifier[],
+        newLine: true,
     },
 ];
-export const addInsertCommentCommands = (plugin: CommentGroups) => {
-    for (const { beforeEnd, name, key, modifiers = [] } of commands) {
+export const addInsertCommentCommands = (plugin: CommentLabels) => {
+    const labels = Object.values(plugin.settings.getValue().labels).filter(
+        (l) => l.enableCommand,
+    );
+
+    for (const { pattern } of labels) {
+        plugin.addCommand({
+            id: 'insert' + pattern,
+            callback: async () => {
+                await insertComment({ plugin, afterStart: `${pattern}: ` });
+            },
+            name: `Insert "${pattern}" comment`,
+            hotkeys: [],
+        });
+    }
+
+    for (const { key, name, modifiers = [], noComment, newLine } of commands) {
         plugin.addCommand({
             id: slugify(name),
             callback: async () => {
-                await insertComment(
-                    plugin,
-                    beforeEnd,
-                    beforeEnd,
-                    modifiers[0] === 'Shift',
-                );
+                await insertComment({ plugin, noComment, newLine });
             },
-            name,
-            hotkeys: [
-                {
-                    key,
-                    modifiers: modifiers as Modifier[],
-                },
-            ],
+            name: name,
+            hotkeys: [{ key, modifiers }],
         });
     }
 };

@@ -1,21 +1,30 @@
-import CommentGroups from '../main';
+import CommentLabels from '../main';
 
-export const insertComment = async (
-    plugin: CommentGroups,
+type Props = {
+    plugin: CommentLabels;
+    afterStart?: string;
+    beforeEnd?: string;
+    newLine?: boolean;
+    noComment?: boolean;
+};
+export const insertComment = async ({
+    plugin,
+    newLine,
+    noComment,
     beforeEnd = '',
     afterStart = '',
-    newLine = true,
-) => {
+}: Props) => {
     const editor = plugin.app.workspace.activeEditor?.editor;
     if (editor) {
         const doc = editor.getDoc();
         const cursor = doc.getCursor();
         const selection = doc.getSelection();
-
+        const commentStart = noComment ? '' : '<!--';
+        const commentEnd = noComment ? '' : '-->';
         if (selection) {
             // Wrap the selected text in a comment
-            const firstPart = `<!--${afterStart}${selection}`;
-            const secondPart = `${beforeEnd}-->`;
+            const firstPart = `${commentStart}${afterStart}${selection}`;
+            const secondPart = `${beforeEnd}${commentEnd}`;
             const text = firstPart + secondPart;
             doc.replaceSelection(text);
             doc.setCursor({
@@ -24,8 +33,8 @@ export const insertComment = async (
             });
         } else {
             // Insert an empty comment at the current cursor position
-            const firstPart = `<!--${afterStart}`;
-            const secondPart = `${beforeEnd}-->`;
+            const firstPart = `${commentStart}${afterStart}`;
+            const secondPart = `${beforeEnd}${commentEnd}`;
             const text = firstPart + secondPart;
             if (newLine) {
                 const lineText = doc.getLine(cursor.line);

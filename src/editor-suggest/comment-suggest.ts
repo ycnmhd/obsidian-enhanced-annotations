@@ -8,7 +8,7 @@ import {
     MarkdownView,
     TFile,
 } from 'obsidian';
-import CommentGroups from 'src/main';
+import CommentLabels from 'src/main';
 import { isValidLabel } from '../helpers/is-valid-label';
 
 export type CommentCompletion = {
@@ -17,10 +17,10 @@ export type CommentCompletion = {
 };
 
 export class CommentSuggest extends EditorSuggest<CommentCompletion> {
-    private plugin: CommentGroups;
+    private plugin: CommentLabels;
     readonly app: App;
 
-    constructor(app: App, plugin: CommentGroups) {
+    constructor(app: App, plugin: CommentLabels) {
         super(app);
         this.app = app;
         this.plugin = plugin;
@@ -34,7 +34,7 @@ export class CommentSuggest extends EditorSuggest<CommentCompletion> {
     }
 
     getSuggestions(context: EditorSuggestContext): CommentCompletion[] {
-        const groups = this.plugin.settings.getValue().groups;
+        const groups = this.plugin.settings.getValue().labels;
         const patterns = Object.values(groups).map((g) => g.pattern);
         const suggestions = patterns
             .map((val) => ({ label: val, text: `<!--${val}: -->` }))

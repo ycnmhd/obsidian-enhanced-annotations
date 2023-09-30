@@ -6,18 +6,18 @@ import {
     COMMENTS_OUTLINE_VIEW_TYPE,
     CommentsOutlineView,
 } from './outline/comments-outline';
-import { SettingsTab } from './settings/settings-tab';
+import { SettingsTab } from './settings/settings-tab/settings-tab';
 import { Store } from './helpers/store';
 import { SettingsActions, settingsReducer } from './settings/settings-reducer';
 import { CommentSuggest } from './editor-suggest/comment-suggest';
 import { DEFAULT_SETTINGS } from './settings/default-settings';
 
 export const plugin: {
-    current: CommentGroups;
+    current: CommentLabels;
 } = {
     current: undefined as any,
 };
-export default class CommentGroups extends Plugin {
+export default class CommentLabels extends Plugin {
     settings: Store<Settings, SettingsActions>;
 
     async onload() {

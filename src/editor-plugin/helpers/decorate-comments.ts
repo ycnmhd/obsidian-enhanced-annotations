@@ -3,17 +3,17 @@ import { Decoration, EditorView } from '@codemirror/view';
 import { syntaxTree } from '@codemirror/language';
 import { parseComment } from './parse-comment';
 import { plugin } from '../../main';
-import { Group } from '../../settings/settings-type';
+import { Label } from '../../settings/settings-type';
 
 export const decorateComments = (view: EditorView) => {
     const builder = new RangeSetBuilder<Decoration>();
-    const groups = plugin.current.settings.getValue().groups;
+    const groups = plugin.current.settings.getValue().labels;
     const groupsByPattern = Object.values(groups).reduce(
         (acc, val) => {
             acc[val.pattern] = val;
             return acc;
         },
-        {} as Record<string, Group>,
+        {} as Record<string, Label>,
     );
     for (const { from, to } of view.visibleRanges) {
         syntaxTree(view.state).iterate({

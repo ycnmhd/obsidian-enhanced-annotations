@@ -1,4 +1,4 @@
-import { Group } from '../settings-type';
+import { Label } from '../settings-type';
 
 const defaultColors = [
     { name: 'mutedBlue', hex: '#6A5ACD' },
@@ -17,7 +17,7 @@ const defaultColors = [
     { name: 'mutedCyan', hex: '#008B8B' },
 ];
 
-export const getDefaultColor = (groups: Group[]) => {
+export const getDefaultColor = (groups: Label[]) => {
     const colors = new Set(groups.map((g) => g.color).filter(Boolean));
     return defaultColors.find((c) => !colors.has(c.hex));
 };
