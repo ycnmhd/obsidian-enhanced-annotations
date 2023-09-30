@@ -5,8 +5,8 @@ export type Group = {
 };
 export type Settings = {
     groups: Record<string, Group>;
-};
-
-export const DEFAULT_SETTINGS: Settings = {
-    groups: {},
+    editorSuggest: {
+        enableAutoSuggest: boolean;
+        triggerPhrase: string;
+    };
 };

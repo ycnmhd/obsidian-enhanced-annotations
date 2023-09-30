@@ -1,14 +1,16 @@
 import { Plugin } from 'obsidian';
-import { editorPlugin } from './editor/editor-plugin';
+import { editorPlugin } from './editor-plugin/editor-plugin';
 import { addInsertCommentCommands } from './commands/commands';
-import { DEFAULT_SETTINGS, Settings } from './settings/settings';
+import { Settings } from './settings/settings-type';
 import {
     COMMENTS_OUTLINE_VIEW_TYPE,
     CommentsOutlineView,
-} from './components/comments-outline';
+} from './outline/comments-outline';
 import { SettingsTab } from './settings/settings-tab';
 import { Store } from './helpers/store';
 import { SettingsActions, settingsReducer } from './settings/settings-reducer';
+import { CommentSuggest } from './editor-suggest/comment-suggest';
+import { DEFAULT_SETTINGS } from './settings/default-settings';
 
 export const plugin: {
     current: CommentGroups;
@@ -29,6 +31,7 @@ export default class CommentGroups extends Plugin {
         );
         await this.activateView();
         this.addSettingTab(new SettingsTab(this.app, this));
+        this.registerEditorSuggest(new CommentSuggest(this.app, this));
     }
 
     onunload() {}

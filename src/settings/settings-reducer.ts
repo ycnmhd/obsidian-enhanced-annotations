@@ -1,4 +1,4 @@
-import { Settings } from './settings';
+import { Settings } from './settings-type';
 
 export type SettingsActions =
     | {
@@ -23,7 +23,9 @@ export type SettingsActions =
       }
     | {
           type: 'NEW_GROUP';
-      };
+      }
+    | { type: 'ENABLE_AUTO_SUGGEST'; payload: { enable: boolean } }
+    | { type: 'SET_AUTO_SUGGEST_TRIGGER'; payload: { trigger: string } };
 export const settingsReducer = (
     store: Settings,
     action: SettingsActions,
@@ -42,6 +44,10 @@ export const settingsReducer = (
             color: '',
             id,
         };
+    } else if (action.type === 'ENABLE_AUTO_SUGGEST') {
+        store.editorSuggest.enableAutoSuggest = action.payload.enable;
+    } else if (action.type === 'SET_AUTO_SUGGEST_TRIGGER') {
+        store.editorSuggest.triggerPhrase = action.payload.trigger;
     }
     return store;
 };

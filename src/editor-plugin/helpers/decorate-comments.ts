@@ -1,9 +1,9 @@
 import { RangeSetBuilder } from '@codemirror/state';
 import { Decoration, EditorView } from '@codemirror/view';
 import { syntaxTree } from '@codemirror/language';
-import { parseComment } from '../../helpers/parse-comment';
+import { parseComment } from './parse-comment';
 import { plugin } from '../../main';
-import { Group } from '../../settings/settings';
+import { Group } from '../../settings/settings-type';
 
 export const decorateComments = (view: EditorView) => {
     const builder = new RangeSetBuilder<Decoration>();

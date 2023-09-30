@@ -9,18 +9,18 @@ import {
 import {
     debouncedUpdateOutline,
     updateOutline,
-} from './helpers/update-comments-outline';
+} from '../outline/helpers/update-comments-outline';
 import { Editor, TFile } from 'obsidian';
 import { decorateComments } from './helpers/decorate-comments';
 
 export const context: {
     editor: Editor;
     currentFile?: TFile;
-    currentCleanup?: () => void;
+    clearTimeout?: () => void;
 } = {
     editor: undefined as any,
     currentFile: undefined,
-    currentCleanup: undefined,
+    clearTimeout: undefined,
 };
 
 class EditorPlugin implements PluginValue {
@@ -43,10 +43,10 @@ class EditorPlugin implements PluginValue {
             this.decorations = decorateComments(update.view);
             if (!context.currentFile || context.currentFile !== file) {
                 context.currentFile = file;
-                if (context.currentCleanup) context.currentCleanup();
+                if (context.clearTimeout) context.clearTimeout();
                 updateOutline(update.view);
             } else {
-                context.currentCleanup = debouncedUpdateOutline(update.view);
+                context.clearTimeout = debouncedUpdateOutline(update.view);
             }
         }
     }

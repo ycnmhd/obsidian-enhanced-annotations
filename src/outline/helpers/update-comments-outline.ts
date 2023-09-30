@@ -1,7 +1,7 @@
 import { EditorView } from '@codemirror/view';
 import { syntaxTree } from '@codemirror/language';
-import { parseComment } from '../../helpers/parse-comment';
-import { CommentsStore, commentsStore } from '../../components/comments-store';
+import { parseComment } from '../../editor-plugin/helpers/parse-comment';
+import { CommentsStore, commentsStore } from '../comments-store';
 import { debounce } from '../../helpers/debounce';
 
 export type Comment = {

@@ -10,13 +10,37 @@ export class SettingsTab extends PluginSettingTab {
     }
 
     display(): void {
+        const settings = this.plugin.settings.getValue();
         const { containerEl } = this;
 
         containerEl.empty();
 
-        for (const group of Object.values(
-            this.plugin.settings.getValue().groups,
-        )) {
+        new Setting(containerEl)
+            .setName('Enable comment auto-suggest')
+            .addToggle((toggle) => {
+                toggle
+                    .onChange((value) =>
+                        this.plugin.settings.dispatch({
+                            payload: { enable: value },
+                            type: 'ENABLE_AUTO_SUGGEST',
+                        }),
+                    )
+                    .setValue(settings.editorSuggest.enableAutoSuggest);
+            });
+        new Setting(containerEl)
+            .setName('Auto-suggest trigger phrase')
+            .addText((component) => {
+                component
+                    .onChange((value) =>
+                        this.plugin.settings.dispatch({
+                            payload: { trigger: value },
+                            type: 'SET_AUTO_SUGGEST_TRIGGER',
+                        }),
+                    )
+                    .setValue(settings.editorSuggest.triggerPhrase)
+                    .setPlaceholder('//');
+            });
+        for (const group of Object.values(settings.groups)) {
             const el = new Setting(containerEl)
                 .setName(group.pattern)
                 .addText((text) => {
@@ -66,10 +90,13 @@ export class SettingsTab extends PluginSettingTab {
                 });
         }
         new Setting(containerEl).addButton((button) => {
-            button.setIcon('plus').onClick(() => {
-                this.plugin.settings.dispatch({ type: 'NEW_GROUP' });
-                this.display();
-            });
+            button
+                .setIcon('plus')
+                .onClick(() => {
+                    this.plugin.settings.dispatch({ type: 'NEW_GROUP' });
+                    this.display();
+                })
+                .setTooltip('Add group');
         });
     }
 }
