@@ -6,4 +6,7 @@ export const DEFAULT_SETTINGS: Settings = {
         enableAutoSuggest: true,
         triggerPhrase: '//',
     },
+    parsing: {
+        autoRegisterLabels: true,
+    },
 };

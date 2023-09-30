@@ -14,11 +14,11 @@ import { Editor, TFile } from 'obsidian';
 import { decorateComments } from './helpers/decorate-comments';
 
 export const context: {
-    editor: Editor;
+    currentEditor?: Editor;
     currentFile?: TFile;
     clearTimeout?: () => void;
 } = {
-    editor: undefined as any,
+    currentEditor: undefined as any,
     currentFile: undefined,
     clearTimeout: undefined,
 };
@@ -39,7 +39,7 @@ class EditorPlugin implements PluginValue {
         if (shouldUpdate && canUpdate) {
             const editor = activeEditor?.editor as Editor;
             const file = activeEditor.file;
-            context.editor = editor;
+            context.currentEditor = editor;
             this.decorations = decorateComments(update.view);
             if (!context.currentFile || context.currentFile !== file) {
                 context.currentFile = file;

@@ -40,6 +40,18 @@ export class SettingsTab extends PluginSettingTab {
                     .setValue(settings.editorSuggest.triggerPhrase)
                     .setPlaceholder('//');
             });
+        new Setting(containerEl)
+            .setName('Auto-register new labels')
+            .addToggle((component) => {
+                component
+                    .onChange((value) =>
+                        this.plugin.settings.dispatch({
+                            payload: { enable: value },
+                            type: 'ENABLE_AUTO_REGISTER_LABELS',
+                        }),
+                    )
+                    .setValue(settings.parsing.autoRegisterLabels);
+            });
         for (const group of Object.values(settings.groups)) {
             const el = new Setting(containerEl)
                 .setName(group.pattern)
@@ -93,7 +105,10 @@ export class SettingsTab extends PluginSettingTab {
             button
                 .setIcon('plus')
                 .onClick(() => {
-                    this.plugin.settings.dispatch({ type: 'NEW_GROUP' });
+                    this.plugin.settings.dispatch({
+                        type: 'NEW_GROUP',
+                        payload: { pattern: '' },
+                    });
                     this.display();
                 })
                 .setTooltip('Add group');

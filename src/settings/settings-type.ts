@@ -9,4 +9,7 @@ export type Settings = {
         enableAutoSuggest: boolean;
         triggerPhrase: string;
     };
+    parsing: {
+        autoRegisterLabels: boolean;
+    };
 };

@@ -3,6 +3,7 @@ import { syntaxTree } from '@codemirror/language';
 import { parseComment } from '../../editor-plugin/helpers/parse-comment';
 import { CommentsStore, commentsStore } from '../comments-store';
 import { debounce } from '../../helpers/debounce';
+import { registerNewLabels } from './register-new-labels';
 
 export type Comment = {
     group: string;
@@ -49,6 +50,7 @@ export const updateOutline = (view: EditorView) => {
         },
         { '/': [] } as CommentsStore['groups'],
     );
+    registerNewLabels(comments);
     commentsStore.set({ groups });
 };
 

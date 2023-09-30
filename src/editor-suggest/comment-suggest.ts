@@ -9,6 +9,7 @@ import {
     TFile,
 } from 'obsidian';
 import CommentGroups from 'src/main';
+import { isValidLabel } from '../helpers/is-valid-label';
 
 export type CommentCompletion = {
     label: string;
@@ -44,7 +45,11 @@ export class CommentSuggest extends EditorSuggest<CommentCompletion> {
             return suggestions;
         }
 
-        return [{ label: context.query, text: context.query }];
+        if (isValidLabel(context.query))
+            return [
+                { label: context.query, text: `<!--${context.query}: -->` },
+            ];
+        else return [];
     }
 
     renderSuggestion(suggestion: CommentCompletion, el: HTMLElement): void {

@@ -5,7 +5,7 @@ type Props = {
     position: Comment['position'];
 };
 export const selectText = ({ position: { from, to, line } }: Props) => {
-    const editor = context.editor;
+    const editor = context.currentEditor;
     if (editor) {
         const selection = { from: { line, ch: from }, to: { line, ch: to } };
         editor.setCursor({ line, ch: 0 }); // Move cursor to the beginning of the line
