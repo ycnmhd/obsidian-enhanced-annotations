@@ -11,6 +11,8 @@ export const outlineComments = writable<OutlineStore>({ labels: {} });
 
 export const outlineFilter = writable('');
 export const displayMode = writable<'list' | 'tabs'>('tabs');
+export const selectedLabel = writable('/');
+
 export const filteredComments = derived(
     [outlineFilter, outlineComments],
     ([$term, $items]) => {
@@ -25,6 +27,31 @@ export const filteredComments = derived(
                 filteredDictionary.labels[label] = filteredComments;
             }
         }
-        return filteredDictionary;
+        return filteredDictionary as OutlineStore;
+    },
+);
+
+export const safeSelectedLabel = derived(
+    [filteredComments, selectedLabel],
+    ([$filteredComments, $selectedLabel]) => {
+        if (!$selectedLabel || !$filteredComments.labels[$selectedLabel]) {
+            return Object.keys($filteredComments.labels)[0];
+        }
+        return $selectedLabel;
+    },
+);
+
+export const selectTab = (tab: string) => {
+    selectedLabel.set(tab);
+};
+
+export const visibleComments = derived(
+    [filteredComments, safeSelectedLabel, displayMode],
+    ([$filteredComments, $safeSelectedLabel, $displayMode]): Comment[] => {
+        if ($displayMode === 'tabs') {
+            return $filteredComments.labels[$safeSelectedLabel];
+        } else {
+            return Object.values($filteredComments.labels).flat();
+        }
     },
 );

@@ -1,29 +1,20 @@
 <script>
 
-	import { filteredComments } from "./comments-outline-store";
+	import { filteredComments, safeSelectedLabel, selectTab } from "./comments-outline-store";
 	import { selectText } from "./helpers/focus-text";
-
-	let selectedGroup;
-	filteredComments.subscribe(newComments => {
-		if (!selectedGroup || !newComments.labels[selectedGroup]) {
-			selectedGroup = Object.keys(newComments.labels)[0];
-		}
-	});
 </script>
 
 <div class="tabs-container">
 	{#each Object.entries($filteredComments.labels) as [groupName, group]}
-		<div class={"tab "+(selectedGroup===groupName? "is-active":"")} on:click={()=>{
-			 selectedGroup = groupName
-			}}>
+		<div class={"tab "+($safeSelectedLabel===groupName? "is-active":"")} on:click={()=>selectTab(groupName)}>
 			<span>{groupName}</span>
 			<span class="tab-badge">{group.length}</span>
 		</div>
 	{/each}
 </div>
 <div class="comments-container">
-	{#if $filteredComments.labels[selectedGroup]}
-		{#each $filteredComments.labels[selectedGroup] as comment}
+	{#if $filteredComments.labels[$safeSelectedLabel]}
+		{#each $filteredComments.labels[$safeSelectedLabel] as comment}
 			<div class="comment" on:click={()=>{
 				selectText({ position: comment.position})
 			}}>

@@ -3,7 +3,6 @@ import { syntaxTree } from '@codemirror/language';
 import { parseComment } from '../../editor-plugin/helpers/parse-comment';
 import { outlineComments, OutlineStore } from '../comments-outline-store';
 import { debounce } from '../../helpers/debounce';
-import { registerNewLabels } from './register-new-labels';
 
 export type Comment = {
     label: string;
@@ -51,8 +50,19 @@ export const updateOutline = (view: EditorView) => {
         },
         { '/': [] } as OutlineStore['labels'],
     );
-    registerNewLabels(comments);
-    outlineComments.set({ labels: groups });
+    const sorted = Object.keys(groups)
+        .sort()
+        .reduce(
+            (acc, key) => {
+                if (groups[key].length > 0) {
+                    acc[key] = groups[key];
+                }
+                return acc;
+            },
+            {} as OutlineStore['labels'],
+        );
+
+    outlineComments.set({ labels: sorted });
 };
 
 export const debouncedUpdateOutline = debounce(
