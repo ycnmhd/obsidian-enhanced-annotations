@@ -18,6 +18,6 @@ const defaultColors = [
 ];
 
 export const getDefaultColor = (groups: Label[]) => {
-    const colors = new Set(groups.map((g) => g.color).filter(Boolean));
+    const colors = new Set(groups.map((g) => g.style.color).filter(Boolean));
     return defaultColors.find((c) => !colors.has(c.hex));
 };

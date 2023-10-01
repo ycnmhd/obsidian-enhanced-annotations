@@ -35,6 +35,40 @@ export type SettingsActions =
     | {
           type: 'ENABLE_LABEL_STYLES';
           payload: { id: string; enable: boolean };
+      }
+    | {
+          type: 'SET_LABEL_UNDERLINE';
+          payload: {
+              id: string;
+              underline: boolean;
+          };
+      }
+    | {
+          type: 'SET_LABEL_BOLD';
+          payload: {
+              id: string;
+              bold: boolean;
+          };
+      }
+    | {
+          type: 'SET_LABEL_FONT_SIZE';
+          payload: {
+              id: string;
+              fontSize: string;
+          };
+      }
+    | {
+          type: 'SET_LABEL_ITALIC';
+          payload: {
+              id: string;
+              italic: boolean;
+          };
+      }
+    | {
+          type: 'TOGGLE_LABEL_CASE';
+          payload: {
+              id: string;
+          };
       };
 export const settingsReducer = (
     store: Settings,
@@ -45,7 +79,7 @@ export const settingsReducer = (
         if (isValidLabel(action.payload.pattern))
             store.labels[action.payload.id].label = action.payload.pattern;
     } else if (action.type === 'SET_COLOR') {
-        store.labels[action.payload.id].color = action.payload.color;
+        store.labels[action.payload.id].style.color = action.payload.color;
     } else if (action.type === 'DELETE_GROUP') {
         delete store.labels[action.payload.id];
     } else if (action.type === 'NEW_GROUP') {
@@ -53,9 +87,11 @@ export const settingsReducer = (
             const id = String(Date.now());
             store.labels[id] = {
                 label: action.payload.pattern,
-                color: getDefaultColor(Object.values(store.labels))?.hex,
                 id,
-                enableStyles: true,
+                enableStyle: true,
+                style: {
+                    color: getDefaultColor(Object.values(store.labels))?.hex,
+                },
             };
         }
     } else if (action.type === 'ENABLE_AUTO_SUGGEST') {
@@ -65,7 +101,35 @@ export const settingsReducer = (
     } else if (action.type === 'ENABLE_AUTO_REGISTER_LABELS') {
         store.parsing.autoRegisterLabels = action.payload.enable;
     } else if (action.type === 'ENABLE_LABEL_STYLES') {
-        store.labels[action.payload.id].enableStyles = action.payload.enable;
+        store.labels[action.payload.id].enableStyle = action.payload.enable;
+    } else if (action.type === 'SET_LABEL_UNDERLINE') {
+        store.labels[action.payload.id].style.underline =
+            action.payload.underline;
+    } else if (action.type === 'SET_LABEL_BOLD') {
+        store.labels[action.payload.id].style.bold = action.payload.bold;
+    } else if (action.type === 'SET_LABEL_FONT_SIZE') {
+        store.labels[action.payload.id].style.fontSize = isNaN(
+            +action.payload.fontSize,
+        )
+            ? undefined
+            : +action.payload.fontSize;
+    } else if (action.type === 'SET_LABEL_ITALIC') {
+        store.labels[action.payload.id].style.italic = action.payload.italic;
+    } else if (action.type === 'TOGGLE_LABEL_CASE') {
+        const label = store.labels[action.payload.id];
+        const currentCase = label.style.case || 'unset';
+
+        if (currentCase === 'unset') {
+            label.style.case = 'upper';
+        } else if (currentCase === 'upper') {
+            label.style.case = 'title';
+        } else if (currentCase === 'title') {
+            label.style.case = 'lower';
+        } else if (currentCase === 'lower') {
+            label.style.case = 'unset';
+        } else {
+            label.style.case = 'unset';
+        }
     }
     return store;
 };

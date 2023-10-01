@@ -1,8 +1,16 @@
+export type LabelStyle = {
+    color?: string;
+    italic?: boolean;
+    bold?: boolean;
+    underline?: boolean;
+    fontSize?: number;
+    case?: 'upper' | 'lower' | 'title' | 'unset';
+};
 export type Label = {
     label: string;
-    color?: string;
     id: string;
-    enableStyles: boolean;
+    style: LabelStyle;
+    enableStyle: boolean;
 };
 export type Settings = {
     labels: Record<string, Label>;

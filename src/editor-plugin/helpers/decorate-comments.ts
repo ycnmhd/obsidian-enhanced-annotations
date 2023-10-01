@@ -4,6 +4,7 @@ import { syntaxTree } from '@codemirror/language';
 import { parseComment } from './parse-comment';
 import { plugin } from '../../main';
 import { Label } from '../../settings/settings-type';
+import { generateLabelStyleString } from './helpers/generate-label-style-string';
 
 export const decorateComments = (view: EditorView) => {
     const builder = new RangeSetBuilder<Decoration>();
@@ -29,10 +30,12 @@ export const decorateComments = (view: EditorView) => {
                     if (!split) return;
                     const [, label] = split;
                     const labelSettings = labelsByPattern[label];
-                    if (labelSettings && labelSettings.enableStyles) {
+                    if (labelSettings && labelSettings.enableStyle) {
                         const textDecoration = Decoration.mark({
                             attributes: {
-                                style: `color: ${labelSettings.color}`,
+                                style: generateLabelStyleString(
+                                    labelSettings.style,
+                                ),
                             },
                         });
                         builder.add(node.from, node.to, textDecoration);
