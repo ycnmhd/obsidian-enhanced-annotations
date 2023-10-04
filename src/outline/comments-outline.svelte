@@ -1,6 +1,6 @@
 <script lang="ts">
 	import { displayMode, filteredComments, outlineFilter } from "./comments-outline-store";
-	import Controls from "./controls.svelte";
+	import Controls from "./outline-controls.svelte";
 	import FlatOutline from "./flat-outline.svelte";
 	import TabbedOutline from "./tabbed-outline.svelte";
 </script>
@@ -29,12 +29,11 @@
 		justify-content: center;
 		opacity: 40%;
 		padding: 10px;
+
 	}
 
 	.outline {
-		display: flex;
-		flex-direction: column;
-		gap: 15px;
+		height: 100%;
 	}
 
 

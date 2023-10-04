@@ -1,5 +1,5 @@
 <script>
-	import { filteredComments } from "./comments-outline-store";
+	import { filteredComments, fontSize, labelSettings } from "./comments-outline-store";
 	import { selectText } from "./helpers/focus-text";
 
 
@@ -12,15 +12,13 @@
 
 <div class="comments-container">
 	{#each comments as comment}
+			<span class="comment-label"
+				  style={`font-size:${$fontSize}px;color: ${$labelSettings[comment.label]?.style?.color||""};`}>{comment.label}</span>
 		<div class="comment" on:click={()=>{
 				selectText({ position: comment.position})
 			}}>
-
-			<span>
-			<span>{comment.text}</span>
-			<span class="comment-label">{comment.label}</span>
-			</span>
-			<span class="line-number">{comment.position.line + 1}</span>
+			<span class="comment-text" style={`font-size:${$fontSize}px;`}>{comment.text}</span>
+			<span class="comment-line-number">{comment.position.line + 1}</span>
 		</div>
 	{/each}
 </div>
@@ -28,29 +26,36 @@
 <style>
 
 	.comments-container {
-		display: flex;
-		flex-direction: column;
+		display: grid;
+		grid-template-columns: max-content auto;
 		width: 100%;
+		gap: 5px;
+		align-items: center;
+		max-height: calc(100% - 80px);
+		overflow-y: auto;
 	}
 
 	.comment {
-		padding: var(--nav-item-padding);
+		padding: 5px 10px;
 		color: var(--nav-item-color);
 		cursor: pointer;
 		border-radius: 3px;
 		display: flex;
 		justify-content: space-between;
 		align-items: center;
+		box-sizing: border-box;
+		height: fit-content;
 	}
 
 	.comment-label {
-		opacity: 0.5;
-		font-size: 12px;
+		text-overflow: ellipsis;
 	}
 
-	.line-number {
+
+	.comment-line-number {
 		opacity: 0.5;
 		font-size: 12px;
+		margin-left: auto;
 	}
 
 	.comment:hover {

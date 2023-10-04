@@ -1,50 +1,51 @@
-type Subscriber = () => void;
-type Setter<T> = (currentValue: T) => T;
+import {
+    Invalidator,
+    Subscriber,
+    Unsubscriber,
+    Updater,
+    Writable,
+} from 'svelte/store';
+
 export type Reducer<T, U> = (store: T, action: U) => T;
 
-export class Store<T, U> {
-    private data: T;
-    private subscribers: Set<Subscriber> = new Set();
-    private readonly reducer: Reducer<T, U> = () => this.data;
+export class Store<T, U> implements Writable<T> {
+    private value: T;
+    private subscribers: Set<Subscriber<T>> = new Set();
+    private readonly reducer: Reducer<T, U> = () => this.value;
 
     constructor(initialValue: T, reducer?: Reducer<T, U>) {
-        this.data = initialValue;
+        this.value = initialValue;
         if (reducer) this.reducer = reducer;
     }
 
-    // Set a new value in the store and notify subscribers
-    setValue(newValue: T | Setter<T>): void {
-        this.data =
-            // @ts-ignore
-            typeof newValue === 'function' ? newValue(this.data) : newValue;
-        this.notifySubscribers();
-    }
-
-    // Get the current value from the store
     getValue(): T {
-        return JSON.parse(JSON.stringify(this.data));
+        return JSON.parse(JSON.stringify(this.value));
     }
 
     dispatch(action: U) {
-        this.setValue(this.reducer(this.data, action));
+        this.set(this.reducer(this.value, action));
     }
 
-    // Subscribe to changes in the store
-    subscribe(subscriber: Subscriber): void {
-        this.subscribers.add(subscriber);
-        // Provide the initial value to the new subscriber
-        subscriber();
+    set(value: T): void {
+        this.value = value;
     }
 
-    // Unsubscribe from changes in the store
-    unsubscribe(subscriber: Subscriber): void {
-        this.subscribers.delete(subscriber);
+    subscribe(run: Subscriber<T>, invalidate?: Invalidator<T>): Unsubscriber {
+        this.subscribers.add(run);
+        run(this.value);
+        return () => {
+            this.subscribers.delete(run);
+        };
     }
 
-    // Notify all subscribers of a change in the store value
+    update(updater: Updater<T>): void {
+        this.value = updater(this.value);
+        this.notifySubscribers();
+    }
+
     private notifySubscribers(): void {
         for (const subscriber of this.subscribers) {
-            subscriber();
+            subscriber(this.value);
         }
     }
 }

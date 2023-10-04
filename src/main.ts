@@ -11,6 +11,7 @@ import { Store } from './helpers/store';
 import { SettingsActions, settingsReducer } from './settings/settings-reducer';
 import { CommentSuggest } from './editor-suggest/comment-suggest';
 import { DEFAULT_SETTINGS } from './settings/default-settings';
+import { subscribeToSettings } from './outline/comments-outline-store';
 
 export const plugin: {
     current: CommentLabels;
@@ -24,14 +25,17 @@ export default class CommentLabels extends Plugin {
         plugin.current = this;
         await this.loadSettings();
         this.registerEditorExtension([editorPlugin]);
+        this.registerEditorSuggest(new CommentSuggest(this.app, this));
         addInsertCommentCommands(this);
         this.registerView(
             COMMENTS_OUTLINE_VIEW_TYPE,
             (leaf) => new CommentsOutlineView(leaf),
         );
-        await this.activateView();
-        this.addSettingTab(new SettingsTab(this.app, this));
-        this.registerEditorSuggest(new CommentSuggest(this.app, this));
+        this.app.workspace.onLayoutReady(async () => {
+            await this.activateView();
+            subscribeToSettings();
+            this.addSettingTab(new SettingsTab(this.app, this));
+        });
     }
 
     onunload() {}

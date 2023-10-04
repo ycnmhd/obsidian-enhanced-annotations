@@ -34,7 +34,10 @@ class EditorPlugin implements PluginValue {
         const activeEditor = app.workspace.activeEditor;
 
         const shouldUpdate =
-            !context.currentFile || update.docChanged || update.viewportChanged;
+            !context.currentFile ||
+            activeEditor?.file !== context.currentFile ||
+            update.docChanged ||
+            update.viewportChanged;
         const canUpdate = activeEditor?.file && activeEditor?.editor;
         if (shouldUpdate && canUpdate) {
             const editor = activeEditor?.editor as Editor;

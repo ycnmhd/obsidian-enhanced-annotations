@@ -1,6 +1,8 @@
 import { derived, writable } from 'svelte/store';
 
 import type { Comment } from './helpers/update-comments-outline';
+import { Label } from '../settings/settings-type';
+import { plugin } from '../main';
 
 export type OutlineStore = {
     labels: {
@@ -10,8 +12,23 @@ export type OutlineStore = {
 export const outlineComments = writable<OutlineStore>({ labels: {} });
 
 export const outlineFilter = writable('');
-export const displayMode = writable<'list' | 'tabs'>('tabs');
+export const displayMode = writable<'list' | 'tabs'>('list');
 export const selectedLabel = writable('/');
+
+export const POSSIBLE_FONT_SIZES = [10, 12, 14, 16, 18, 20, 22, 24] as const;
+export const fontSize = writable<(typeof POSSIBLE_FONT_SIZES)[number]>(12);
+export const labelSettings = writable<Record<string, Label>>({});
+
+export const subscribeToSettings = () => {
+    plugin.current.settings.subscribe(() => {
+        const v = plugin.current.settings.getValue();
+        labelSettings.set(
+            Object.fromEntries(
+                Object.values(v.labels).map((label) => [label.label, label]),
+            ),
+        );
+    });
+};
 
 export const filteredComments = derived(
     [outlineFilter, outlineComments],
