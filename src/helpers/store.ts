@@ -28,6 +28,7 @@ export class Store<T, U> implements Writable<T> {
 
     set(value: T): void {
         this.value = value;
+        this.notifySubscribers();
     }
 
     subscribe(run: Subscriber<T>, invalidate?: Invalidator<T>): Unsubscriber {

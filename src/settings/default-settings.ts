@@ -12,4 +12,10 @@ export const DEFAULT_SETTINGS: Settings = {
     commands: {
         enableLabelCommands: false,
     },
+    outline: {
+        fontSize: 12,
+        showLabelsFilter: false,
+        showSearchInput: false,
+        hiddenLabels: [],
+    },
 };

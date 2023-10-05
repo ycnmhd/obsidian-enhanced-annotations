@@ -9,7 +9,7 @@ import {
 import {
     debouncedUpdateOutline,
     updateOutline,
-} from '../outline/helpers/update-comments-outline';
+} from '../comments-outline-view/helpers/update-comments-outline';
 import { Editor, TFile } from 'obsidian';
 import { decorateComments } from './helpers/decorate-comments';
 

@@ -1,6 +1,6 @@
 import { ItemView, WorkspaceLeaf } from 'obsidian';
 
-import CommentsOutline from './comments-outline.svelte';
+import CommentsOutline from './comments-outline/comments-outline.svelte';
 
 export const COMMENTS_OUTLINE_VIEW_TYPE = 'example-view';
 

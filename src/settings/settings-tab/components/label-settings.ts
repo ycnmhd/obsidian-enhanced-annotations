@@ -1,5 +1,5 @@
 import { Notice, Setting } from 'obsidian';
-import { Label } from '../../settings-type';
+import { LabelSettings } from '../../settings-type';
 import CommentLabels from '../../../main';
 
 const rec = {
@@ -28,7 +28,7 @@ const styleToggleButton = (button: HTMLElement, enabled?: boolean) => {
 
 type Props = {
     containerEl: HTMLElement;
-    label: Label;
+    label: LabelSettings;
     plugin: CommentLabels;
     renderSettings: () => void;
 };

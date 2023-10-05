@@ -5,13 +5,17 @@ import { Settings } from './settings/settings-type';
 import {
     COMMENTS_OUTLINE_VIEW_TYPE,
     CommentsOutlineView,
-} from './outline/comments-outline';
+} from './comments-outline-view/comments-outline-view';
 import { SettingsTab } from './settings/settings-tab/settings-tab';
 import { Store } from './helpers/store';
 import { SettingsActions, settingsReducer } from './settings/settings-reducer';
 import { CommentSuggest } from './editor-suggest/comment-suggest';
 import { DEFAULT_SETTINGS } from './settings/default-settings';
-import { subscribeToSettings } from './outline/comments-outline-store';
+import {
+    loadOutlineStateFromSettings,
+    subscribeToSettings,
+    syncOutlineStateToSettings,
+} from './settings/helpers/sync-settings-with-outline-ui';
 
 export const plugin: {
     current: CommentLabels;
@@ -33,7 +37,9 @@ export default class CommentLabels extends Plugin {
         );
         this.app.workspace.onLayoutReady(async () => {
             await this.activateView();
-            subscribeToSettings();
+            loadOutlineStateFromSettings(this);
+            subscribeToSettings(this);
+            syncOutlineStateToSettings(this);
             this.addSettingTab(new SettingsTab(this.app, this));
         });
     }

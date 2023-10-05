@@ -1,11 +1,16 @@
 <script>
-	import { filteredComments, fontSize, labelSettings } from "./comments-outline-store";
-	import { selectText } from "./helpers/focus-text";
+	import { selectText } from "../../helpers/focus-text";
+	import { fontSize } from "../components/controls-bar/controls-bar.store";
+	import { filteredComments, labelSettings } from "./comments-list.store";
+	import { hiddenLabels } from "../components/controls-bar/components/tabs-filter/tabs-filter.store";
 
 
 	let comments;
 	$: {
-		comments = Object.values($filteredComments.labels).flat().sort((a, b) => a.position.line - b.position.line);
+		comments = Object.values($filteredComments.labels)
+			.flat()
+			.sort((a, b) => a.position.line - b.position.line)
+			.filter(c => !$hiddenLabels.has(c.label));
 	}
 </script>
 
@@ -31,7 +36,8 @@
 		width: 100%;
 		gap: 5px;
 		align-items: center;
-		max-height: calc(100% - 80px);
+		/*max-height: calc(100% - 80px);*/
+		/*flex: 1;*/
 		overflow-y: auto;
 	}
 

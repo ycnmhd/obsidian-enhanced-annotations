@@ -1,8 +1,11 @@
 import { EditorView } from '@codemirror/view';
 import { syntaxTree } from '@codemirror/language';
 import { parseComment } from '../../editor-plugin/helpers/parse-comment';
-import { outlineComments, OutlineStore } from '../comments-outline-store';
 import { debounce } from '../../helpers/debounce';
+import {
+    outlineComments,
+    OutlineStore,
+} from '../comments-outline/comments-list/comments-list.store';
 
 export type Comment = {
     label: string;

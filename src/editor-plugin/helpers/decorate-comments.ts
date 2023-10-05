@@ -3,7 +3,7 @@ import { Decoration, EditorView } from '@codemirror/view';
 import { syntaxTree } from '@codemirror/language';
 import { parseComment } from './parse-comment';
 import { plugin } from '../../main';
-import { Label } from '../../settings/settings-type';
+import { LabelSettings } from '../../settings/settings-type';
 import { generateLabelStyleString } from './helpers/generate-label-style-string';
 
 export const decorateComments = (view: EditorView) => {
@@ -14,7 +14,7 @@ export const decorateComments = (view: EditorView) => {
             acc[val.label] = val;
             return acc;
         },
-        {} as Record<string, Label>,
+        {} as Record<string, LabelSettings>,
     );
     for (const { from, to } of view.visibleRanges) {
         syntaxTree(view.state).iterate({
