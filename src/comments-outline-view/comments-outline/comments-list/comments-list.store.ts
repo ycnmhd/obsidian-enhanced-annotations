@@ -2,6 +2,7 @@ import { derived, writable } from 'svelte/store';
 import { searchTerm } from '../components/controls-bar/components/search-input/search-input.store';
 import { LabelSettings } from '../../../settings/settings-type';
 import { Comment } from '../../helpers/update-comments-outline';
+import { hiddenLabels } from '../components/controls-bar/components/tabs-filter/tabs-filter.store';
 
 export const labelSettings = writable<Record<string, LabelSettings>>({});
 export type OutlineStore = {
@@ -25,5 +26,20 @@ export const filteredComments = derived(
             }
         }
         return filteredDictionary as OutlineStore;
+    },
+);
+
+export const visibleComments = derived(
+    [filteredComments, hiddenLabels],
+    ([filteredComments, hiddenLabels]) => {
+        const allComments: Comment[] = [];
+        for (const [label, comments] of Object.entries(
+            filteredComments.labels,
+        )) {
+            if (!hiddenLabels.has(label)) {
+                allComments.push(...comments);
+            }
+        }
+        return allComments.sort((a, b) => a.position.line - b.position.line);
     },
 );

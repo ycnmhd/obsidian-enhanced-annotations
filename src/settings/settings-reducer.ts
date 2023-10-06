@@ -69,7 +69,11 @@ export type SettingsActions =
           payload: {
               id: string;
           };
-      };
+      }
+    | { type: 'SET_TTS_VOLUME'; payload: { volume: number } }
+    | { type: 'SET_TTS_RATE'; payload: { rate: number } }
+    | { type: 'SET_TTS_PITCH'; payload: { pitch: number } }
+    | { type: 'SET_TTS_VOICE'; payload: { voice: string } };
 export const settingsReducer = (
     store: Settings,
     action: SettingsActions,
@@ -130,6 +134,14 @@ export const settingsReducer = (
         } else {
             label.style.case = 'unset';
         }
+    } else if (action.type === 'SET_TTS_PITCH') {
+        store.tts.pitch = action.payload.pitch;
+    } else if (action.type === 'SET_TTS_RATE') {
+        store.tts.rate = action.payload.rate;
+    } else if (action.type === 'SET_TTS_VOLUME') {
+        store.tts.volume = action.payload.volume;
+    } else if (action.type === 'SET_TTS_VOICE') {
+        store.tts.voice = action.payload.voice;
     }
     return store;
 };

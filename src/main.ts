@@ -16,6 +16,8 @@ import {
     subscribeToSettings,
     syncOutlineStateToSettings,
 } from './settings/helpers/sync-settings-with-outline-ui';
+import { tts } from './comments-outline-view/comments-outline/components/controls-bar/helpers/tts';
+import { mergeDeep } from './settings/helpers/merge-objects';
 
 export const plugin: {
     current: CommentLabels;
@@ -27,6 +29,7 @@ export default class CommentLabels extends Plugin {
 
     async onload() {
         plugin.current = this;
+        tts.setPlugin = this;
         await this.loadSettings();
         this.registerEditorExtension([editorPlugin]);
         this.registerEditorSuggest(new CommentSuggest(this.app, this));
@@ -49,7 +52,7 @@ export default class CommentLabels extends Plugin {
     async loadSettings() {
         const settings = await this.loadData();
         this.settings = new Store<Settings, SettingsActions>(
-            settings || DEFAULT_SETTINGS,
+            mergeDeep(settings, DEFAULT_SETTINGS()),
             settingsReducer,
         );
         this.settings.subscribe(() => {

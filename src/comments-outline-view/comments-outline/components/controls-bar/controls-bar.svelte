@@ -3,7 +3,8 @@
 	import { copyCommentsToClipboard } from "../../../helpers/copy-comments-to-clipboard";
 	import TabsFilter from "./components/tabs-filter/tabs-filter.svelte";
 	import SearchInput from "./components/search-input/search-input.svelte";
-	import { fontSize, POSSIBLE_FONT_SIZES, showLabelsFilter, showSearchInput } from "./controls-bar.store";
+	import { fontSize, isReading, POSSIBLE_FONT_SIZES, showLabelsFilter, showSearchInput } from "./controls-bar.store";
+	import { tts } from "./helpers/tts";
 
 
 	const toggleFontSize = (e) => {
@@ -17,6 +18,14 @@
 	};
 	const toggleShowSearchInput = () => {
 		showSearchInput.set(!$showSearchInput);
+	};
+
+	const read = () => {
+		if (!tts.isReading) {
+			tts.read();
+		} else {
+			tts.stop();
+		}
 	};
 
 </script>
@@ -77,6 +86,43 @@
 				<circle cx="18" cy="12" r="3" />
 				<path d="M21 9v6" />
 			</svg>
+		</button>
+		<button aria-label="Read comments" class="clickable-icon nav-action-button" on:click={read}>
+			{#if $isReading}
+				<svg
+					xmlns="http://www.w3.org/2000/svg"
+					width="24"
+					height="24"
+					viewBox="0 0 24 24"
+					fill="none"
+					stroke="currentColor"
+					stroke-width="2"
+					stroke-linecap="round"
+					stroke-linejoin="round"
+				>
+					<circle cx="12" cy="12" r="10" />
+					<rect width="6" height="6" x="9" y="9" />
+				</svg>
+			{:else }
+				<svg
+					xmlns="http://www.w3.org/2000/svg"
+					width="24"
+					height="24"
+					viewBox="0 0 24 24"
+					fill="none"
+					stroke="currentColor"
+					stroke-width="2"
+					stroke-linecap="round"
+					stroke-linejoin="round"
+				>
+					<path
+						d="M17.5 22h.5c.5 0 1-.2 1.4-.6.4-.4.6-.9.6-1.4V7.5L14.5 2H6c-.5 0-1 .2-1.4.6C4.2 3 4 3.5 4 4v3" />
+					<polyline points="14 2 14 8 20 8" />
+					<path d="M10 20v-1a2 2 0 1 1 4 0v1a2 2 0 1 1-4 0Z" />
+					<path d="M6 20v-1a2 2 0 1 0-4 0v1a2 2 0 1 0 4 0Z" />
+					<path d="M2 19v-3a6 6 0 0 1 12 0v3" />
+				</svg>
+			{/if}
 		</button>
 		<button aria-label="Copy visible comments to clipboard"
 				class="clickable-icon nav-action-button"

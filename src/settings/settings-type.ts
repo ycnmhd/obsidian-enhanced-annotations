@@ -32,4 +32,10 @@ export type Settings = {
         showLabelsFilter: boolean;
         hiddenLabels: string[];
     };
+    tts: {
+        volume: number;
+        rate: number;
+        voice?: string;
+        pitch: number;
+    };
 };
