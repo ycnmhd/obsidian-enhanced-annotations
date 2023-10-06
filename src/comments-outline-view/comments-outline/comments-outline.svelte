@@ -1,9 +1,9 @@
 <script lang="ts">
 	import ControlsBar from "./components/controls-bar/controls-bar.svelte";
-	import FlatOutline from "./comments-list/comments-list.svelte";
+	import FlatOutline from "./components/comments-list/comments-list.svelte";
 	import NoComments from "./components/no-comments.svelte";
 	import { searchTerm } from "./components/controls-bar/components/search-input/search-input.store";
-	import { filteredComments } from "./comments-list/comments-list.store";
+	import { filteredComments } from "./components/comments-list/comments-list.store";
 </script>
 
 <div class="outline">

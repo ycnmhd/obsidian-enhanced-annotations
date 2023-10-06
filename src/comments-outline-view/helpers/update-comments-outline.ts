@@ -5,7 +5,7 @@ import { debounce } from '../../helpers/debounce';
 import {
     outlineComments,
     OutlineStore,
-} from '../comments-outline/comments-list/comments-list.store';
+} from '../comments-outline/components/comments-list/comments-list.store';
 import { registerNewLabels } from './register-new-labels';
 
 export type Comment = {

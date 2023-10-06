@@ -5,7 +5,7 @@
 	import SearchInput from "./components/search-input/search-input.svelte";
 	import { fontSize, isReading, POSSIBLE_FONT_SIZES, showLabelsFilter, showSearchInput } from "./controls-bar.store";
 	import { tts } from "./helpers/tts";
-
+	import NavButton from "./components/clickable-icon.svelte";
 
 	const toggleFontSize = (e) => {
 		const delta = e.shiftKey ? -1 : 1;
@@ -30,12 +30,17 @@
 
 </script>
 
-<div class="outline-controls">
+<div class="nav-header outline-controls">
 
 	<div class="nav-buttons-container">
 
-		<button aria-label="Filter labels" class="clickable-icon nav-action-button" on:click={toggleLabelsFilter}>
+		<NavButton
+			isActive={$showLabelsFilter}
+			label="Filter labels"
+			onClick={toggleLabelsFilter}
+		>
 			<svg
+				class="svg-icon"
 				xmlns="http://www.w3.org/2000/svg"
 				width="24"
 				height="24"
@@ -50,10 +55,11 @@
 				<path d="M7 12h10" />
 				<path d="M10 18h4" />
 			</svg>
+		</NavButton>
 
-		</button>
-		<button aria-label="Filter comments" class="clickable-icon nav-action-button" on:click={toggleShowSearchInput}>
+		<NavButton label="Filter comments" onClick={toggleShowSearchInput} isActive={$showSearchInput}>
 			<svg
+				class="svg-icon"
 				xmlns="http://www.w3.org/2000/svg"
 				width="24"
 				height="24"
@@ -68,9 +74,10 @@
 				<path d="m21 21-4.3-4.3" />
 			</svg>
 
-		</button>
-		<button aria-label="Toggle font size" class="clickable-icon nav-action-button" on:click={toggleFontSize}>
+		</NavButton>
+		<NavButton label="Toggle font size" onClick={toggleFontSize}>
 			<svg
+				class="svg-icon"
 				xmlns="http://www.w3.org/2000/svg"
 				width="24"
 				height="24"
@@ -86,10 +93,11 @@
 				<circle cx="18" cy="12" r="3" />
 				<path d="M21 9v6" />
 			</svg>
-		</button>
-		<button aria-label="Read comments" class="clickable-icon nav-action-button" on:click={read}>
+		</NavButton>
+		<NavButton label="Read comments" onClick={read} isActive={$isReading}>
 			{#if $isReading}
 				<svg
+					class="svg-icon"
 					xmlns="http://www.w3.org/2000/svg"
 					width="24"
 					height="24"
@@ -105,6 +113,7 @@
 				</svg>
 			{:else }
 				<svg
+					class="svg-icon"
 					xmlns="http://www.w3.org/2000/svg"
 					width="24"
 					height="24"
@@ -123,21 +132,20 @@
 					<path d="M2 19v-3a6 6 0 0 1 12 0v3" />
 				</svg>
 			{/if}
-		</button>
-		<button aria-label="Copy visible comments to clipboard"
-				class="clickable-icon nav-action-button"
-				on:click={copyCommentsToClipboard}
+		</NavButton>
+		<NavButton label="Copy visible comments to clipboard"
+				   onClick={copyCommentsToClipboard}
 		>
 			<svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none"
 				 stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
-				 class="lucide lucide-clipboard-copy">
+				 class="svg-icon lucide lucide-clipboard-copy">
 				<rect width="8" height="4" x="8" y="2" rx="1" ry="1" />
 				<path d="M8 4H6a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-2" />
 				<path d="M16 4h2a2 2 0 0 1 2 2v4" />
 				<path d="M21 14H11" />
 				<path d="m15 10-4 4 4 4" />
 			</svg>
-		</button>
+		</NavButton>
 
 
 	</div>

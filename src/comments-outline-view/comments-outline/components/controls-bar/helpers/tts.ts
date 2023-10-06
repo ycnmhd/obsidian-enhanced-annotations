@@ -1,5 +1,5 @@
 import CommentLabels from '../../../../../main';
-import { visibleComments } from '../../../comments-list/comments-list.store';
+import { visibleComments } from '../../comments-list/comments-list.store';
 import { Comment } from '../../../../helpers/update-comments-outline';
 
 type Subscriber = (isReading: boolean) => void;

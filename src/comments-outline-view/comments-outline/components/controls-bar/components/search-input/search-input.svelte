@@ -5,16 +5,9 @@
 	let term = "";
 	$: searchTerm.set(term);
 </script>
-<div class="search-input-container">
-	<input type="search" class="search-input" bind:value={term} placeholder="filter">
+
+<div class="search-input-container" style="width: 90%">
+	<input bind:value={term} enterkeyhint="search" placeholder="Filter comments..." type="search" spellcheck="false" />
+	<div class="search-input-clear-button" aria-label="Clear search" on:click={()=>{term=""}}></div>
 </div>
 
-<style>
-	.search-input-container {
-	}
-
-	.search-input {
-	}
-
-
-</style>

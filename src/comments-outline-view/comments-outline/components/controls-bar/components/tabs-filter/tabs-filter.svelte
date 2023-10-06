@@ -1,6 +1,6 @@
 <script>
 	import { hiddenLabels } from "./tabs-filter.store";
-	import { filteredComments } from "../../../../comments-list/comments-list.store";
+	import { filteredComments } from "../../../comments-list/comments-list.store";
 
 	let allLabels;
 	$: allLabels = Object.keys($filteredComments.labels);
@@ -14,7 +14,6 @@
 			return hidden;
 		});
 	};
-	hiddenLabels.subscribe(console.log);
 </script>
 
 {#if Object.keys($filteredComments.labels).length}

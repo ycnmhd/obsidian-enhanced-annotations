@@ -1,8 +1,8 @@
 import { derived, writable } from 'svelte/store';
-import { searchTerm } from '../components/controls-bar/components/search-input/search-input.store';
-import { LabelSettings } from '../../../settings/settings-type';
-import { Comment } from '../../helpers/update-comments-outline';
-import { hiddenLabels } from '../components/controls-bar/components/tabs-filter/tabs-filter.store';
+import { searchTerm } from '../controls-bar/components/search-input/search-input.store';
+import { LabelSettings } from '../../../../settings/settings-type';
+import { Comment } from '../../../helpers/update-comments-outline';
+import { hiddenLabels } from '../controls-bar/components/tabs-filter/tabs-filter.store';
 
 export const labelSettings = writable<Record<string, LabelSettings>>({});
 export type OutlineStore = {

@@ -1,32 +1,27 @@
 <script>
-	import { selectText } from "../../helpers/focus-text";
-	import { fontSize } from "../components/controls-bar/controls-bar.store";
-	import { filteredComments, labelSettings } from "./comments-list.store";
-	import { hiddenLabels } from "../components/controls-bar/components/tabs-filter/tabs-filter.store";
-
-
-	let comments;
-	$: {
-		comments = Object.values($filteredComments.labels)
-			.flat()
-			.sort((a, b) => a.position.line - b.position.line)
-			.filter(c => !$hiddenLabels.has(c.label));
-	}
+	import { selectText } from "../../../helpers/focus-text";
+	import { fontSize } from "../controls-bar/controls-bar.store";
+	import { labelSettings, visibleComments } from "./comments-list.store";
+	import NoComments from "../no-comments.svelte";
 </script>
 
+{#if $visibleComments.length > 0}
+	<div class="comments-container">
 
-<div class="comments-container">
-	{#each comments as comment}
+		{#each $visibleComments as comment}
 			<span class="comment-label"
 				  style={`font-size:${$fontSize}px;color: ${$labelSettings[comment.label]?.style?.color||""};`}>{comment.label}</span>
-		<div class="comment" on:click={()=>{
+			<div class="comment" on:click={()=>{
 				selectText({ position: comment.position})
 			}}>
-			<span class="comment-text" style={`font-size:${$fontSize}px;`}>{comment.text}</span>
-			<span class="comment-line-number">{comment.position.line + 1}</span>
-		</div>
-	{/each}
-</div>
+				<span class="comment-text" style={`font-size:${$fontSize}px;`}>{comment.text}</span>
+				<span class="comment-line-number">{comment.position.line + 1}</span>
+			</div>
+		{/each}
+	</div>
+{:else }
+	<NoComments />
+{/if}
 
 <style>
 
@@ -45,16 +40,22 @@
 		padding: 5px 10px;
 		color: var(--nav-item-color);
 		cursor: pointer;
-		border-radius: 3px;
 		display: flex;
 		justify-content: space-between;
 		align-items: center;
 		box-sizing: border-box;
 		height: fit-content;
+
+		border-radius: var(--radius-s);
+		font-size: var(--nav-item-size);
+		line-height: var(--line-height-tight);
+		font-weight: var(--nav-item-weight);
+		margin-bottom: var(--size-2-1);
 	}
 
 	.comment-label {
 		text-overflow: ellipsis;
+		opacity: 0.8;
 	}
 
 

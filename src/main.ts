@@ -38,6 +38,7 @@ export default class CommentLabels extends Plugin {
             COMMENTS_OUTLINE_VIEW_TYPE,
             (leaf) => new CommentsOutlineView(leaf),
         );
+
         this.app.workspace.onLayoutReady(async () => {
             await this.activateView();
             loadOutlineStateFromSettings(this);

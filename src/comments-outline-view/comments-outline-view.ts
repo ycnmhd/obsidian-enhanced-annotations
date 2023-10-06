@@ -7,6 +7,8 @@ export const COMMENTS_OUTLINE_VIEW_TYPE = 'example-view';
 export class CommentsOutlineView extends ItemView {
     component: CommentsOutline | undefined;
 
+    icon = 'message-square';
+
     constructor(leaf: WorkspaceLeaf) {
         super(leaf);
     }

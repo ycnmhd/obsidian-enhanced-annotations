@@ -1,5 +1,5 @@
 import CommentLabels from '../../main';
-import { labelSettings } from '../../comments-outline-view/comments-outline/comments-list/comments-list.store';
+import { labelSettings } from '../../comments-outline-view/comments-outline/components/comments-list/comments-list.store';
 import {
     fontSize,
     showLabelsFilter,

@@ -1,11 +1,10 @@
-<div class="no-comments">No comments</div>
-<style>
-	.no-comments {
-		display: flex;
-		align-items: center;
-		justify-content: center;
-		opacity: 40%;
-		padding: 10px;
+<script lang="ts">
+	type Label = "no-comments-found" | "no-selected-file"
+	export let label: Label = "no-comments-found";
+	const text: Record<Label, string> = {
+		"no-comments-found": "No comments found.",
+		"no-selected-file": "No selected file."
+	};
+</script>
 
-	}
-</style>
+<div class="pane-empty">{text[label]}</div>
