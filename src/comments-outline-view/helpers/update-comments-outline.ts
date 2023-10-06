@@ -6,6 +6,7 @@ import {
     outlineComments,
     OutlineStore,
 } from '../comments-outline/comments-list/comments-list.store';
+import { registerNewLabels } from './register-new-labels';
 
 export type Comment = {
     label: string;
@@ -66,6 +67,7 @@ export const updateOutline = (view: EditorView) => {
         );
 
     outlineComments.set({ labels: sorted });
+    registerNewLabels(Object.values(sorted).flat());
 };
 
 export const debouncedUpdateOutline = debounce(

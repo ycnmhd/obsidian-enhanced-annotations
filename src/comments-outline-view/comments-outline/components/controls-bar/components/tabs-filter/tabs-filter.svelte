@@ -2,10 +2,15 @@
 	import { hiddenLabels } from "./tabs-filter.store";
 	import { filteredComments } from "../../../../comments-list/comments-list.store";
 
-	const toggleTab = (label) => {
+	let allLabels;
+	$: allLabels = Object.keys($filteredComments.labels);
+	const toggleTab = (label, inverted) => {
 		hiddenLabels.update(hidden => {
-			hidden.has(label) ? hidden.delete(label) : hidden.add(label);
-
+			if (inverted) {
+				const notHidden = allLabels.filter(l => !hidden.has(l));
+				hidden.clear();
+				notHidden.forEach(l => hidden.add(l));
+			} else hidden.has(label) ? hidden.delete(label) : hidden.add(label);
 			return hidden;
 		});
 	};
@@ -15,7 +20,7 @@
 {#if Object.keys($filteredComments.labels).length}
 	<div class="tabs-container">
 		{#each Object.entries($filteredComments.labels) as [label, group]}
-			<div class={`tab ${$hiddenLabels.has(label)? "is-hidden":""}`} on:click={()=>toggleTab(label)}>
+			<div class={`tab ${$hiddenLabels.has(label)? "is-hidden":""}`} on:click={(e)=>toggleTab(label,e.shiftKey)}>
 				<span>{label}</span>
 				<span class="tab-badge">{group.length}</span>
 			</div>

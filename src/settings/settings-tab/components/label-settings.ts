@@ -149,7 +149,7 @@ export const LabelSettings = ({
                 '32': '32px',
             });
             c.selectEl.setCssStyles({
-                width: '50px',
+                width: 'auto',
             });
             c.onChange((value) => {
                 plugin.settings.dispatch({
@@ -158,7 +158,7 @@ export const LabelSettings = ({
                 });
                 renderSettings();
             });
-            c.setValue(String(label.style.fontSize));
+            c.setValue(String(label.style.fontSize || 'default'));
         });
     el.addToggle((toggle) => {
         toggle

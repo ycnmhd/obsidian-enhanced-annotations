@@ -1,4 +1,5 @@
 import CommentLabels from '../main';
+import { parseComment } from '../editor-plugin/helpers/parse-comment';
 
 type Props = {
     plugin: CommentLabels;
@@ -47,11 +48,23 @@ export const insertComment = async ({
                     ch: firstPart.length,
                 });
             } else {
-                doc.replaceRange(text, cursor);
-                doc.setCursor({
-                    line: cursor.line,
-                    ch: cursor.ch + firstPart.length,
-                });
+                const line = doc.getLine(cursor.line).trim();
+                const comment = parseComment(line);
+                if (comment) {
+                    const [, label] = comment;
+                    await insertComment({
+                        plugin,
+                        newLine: true,
+                        noComment: false,
+                        afterStart: label !== '/' ? `${label}: ` : '',
+                    });
+                } else {
+                    doc.replaceRange(text, cursor);
+                    doc.setCursor({
+                        line: cursor.line,
+                        ch: cursor.ch + firstPart.length,
+                    });
+                }
             }
         }
     }

@@ -40,7 +40,12 @@ export class CommentSuggest extends EditorSuggest<CommentCompletion> {
             .map((val) => ({ label: val, text: `<!--${val}: -->` }))
             .filter((item) =>
                 item.label.toLowerCase().startsWith(context.query),
-            );
+            )
+            .sort((a, b) => {
+                const nA = this.usedSuggestions[a.label] || 0;
+                const nB = this.usedSuggestions[b.label] || 0;
+                return nB - nA;
+            });
         if (suggestions.length) {
             return suggestions;
         }
@@ -55,6 +60,13 @@ export class CommentSuggest extends EditorSuggest<CommentCompletion> {
     renderSuggestion(suggestion: CommentCompletion, el: HTMLElement): void {
         el.setText(suggestion.label);
     }
+
+    private usedSuggestions: Record<string, number> = {};
+    private recordUsedSuggestion = (suggestion: string) => {
+        if (!this.usedSuggestions[suggestion])
+            this.usedSuggestions[suggestion] = 0;
+        this.usedSuggestions[suggestion] = this.usedSuggestions[suggestion] + 1;
+    };
 
     selectSuggestion(
         suggestion: CommentCompletion,
@@ -74,6 +86,8 @@ export class CommentSuggest extends EditorSuggest<CommentCompletion> {
             line: cursor.line,
             ch: cursor.ch - 3,
         });
+
+        this.recordUsedSuggestion(suggestion.label);
     }
 
     onTrigger(

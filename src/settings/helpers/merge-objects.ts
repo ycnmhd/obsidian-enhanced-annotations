@@ -15,7 +15,8 @@ export const mergeDeep = <T extends Record<string, any>>(
                 if (!target[key]) Object.assign(target, { [key]: {} });
                 mergeDeep(target[key], source[key]);
             } else {
-                if (!target[key]) Object.assign(target, { [key]: source[key] });
+                if (typeof target[key] === 'undefined')
+                    Object.assign(target, { [key]: source[key] });
             }
         }
     }
