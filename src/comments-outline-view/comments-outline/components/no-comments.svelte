@@ -1,10 +1,5 @@
 <script lang="ts">
-	type Label = "no-comments-found" | "no-selected-file"
-	export let label: Label = "no-comments-found";
-	const text: Record<Label, string> = {
-		"no-comments-found": "No comments found.",
-		"no-selected-file": "No selected file."
-	};
+	import { l } from "../../../lang/lang";
 </script>
 
-<div class="pane-empty">{text[label]}</div>
+<div class="pane-empty">{l.OUTLINE_NO_COMMENTS_FOUND}</div>

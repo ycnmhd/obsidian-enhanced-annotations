@@ -6,6 +6,7 @@
 	import { fontSize, isReading, POSSIBLE_FONT_SIZES, showLabelsFilter, showSearchInput } from "./controls-bar.store";
 	import { tts } from "./helpers/tts";
 	import NavButton from "./components/clickable-icon.svelte";
+	import { l } from "../../../../lang/lang";
 
 	const toggleFontSize = (e) => {
 		const delta = e.shiftKey ? -1 : 1;
@@ -36,7 +37,7 @@
 
 		<NavButton
 			isActive={$showLabelsFilter}
-			label="Filter labels"
+			label={l.OUTLINE_FILTER_LABELS}
 			onClick={toggleLabelsFilter}
 		>
 			<svg
@@ -57,7 +58,7 @@
 			</svg>
 		</NavButton>
 
-		<NavButton label="Filter comments" onClick={toggleShowSearchInput} isActive={$showSearchInput}>
+		<NavButton label={l.OUTLINE_FILTER_COMMENTS} onClick={toggleShowSearchInput} isActive={$showSearchInput}>
 			<svg
 				class="svg-icon"
 				xmlns="http://www.w3.org/2000/svg"
@@ -75,7 +76,7 @@
 			</svg>
 
 		</NavButton>
-		<NavButton label="Toggle font size" onClick={toggleFontSize}>
+		<NavButton label={l.OUTLINE_TOGGLE_FONT_SIZE} onClick={toggleFontSize}>
 			<svg
 				class="svg-icon"
 				xmlns="http://www.w3.org/2000/svg"
@@ -94,7 +95,7 @@
 				<path d="M21 9v6" />
 			</svg>
 		</NavButton>
-		<NavButton label="Read comments" onClick={read} isActive={$isReading}>
+		<NavButton label={l.OUTLINE_READ_COMMENTS} onClick={read} isActive={$isReading}>
 			{#if $isReading}
 				<svg
 					class="svg-icon"
@@ -133,7 +134,7 @@
 				</svg>
 			{/if}
 		</NavButton>
-		<NavButton label="Copy visible comments to clipboard"
+		<NavButton label={l.OUTLINE_COPY_COMMENTS_TO_CLIPBOARD}
 				   onClick={copyCommentsToClipboard}
 		>
 			<svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none"

@@ -1,12 +1,13 @@
 import { Setting } from 'obsidian';
-import CommentLabels from '../../../main';
+import CommentLabels from '../../../../../main';
+import { l } from '../../../../../lang/lang';
 
 type Props = {
     containerEl: HTMLElement;
     plugin: CommentLabels;
     renderSettings: () => void;
 };
-export const AddNewGroup = ({ renderSettings, plugin, containerEl }: Props) => {
+export const AddNewLabel = ({ renderSettings, plugin, containerEl }: Props) => {
     new Setting(containerEl).addButton((button) => {
         button
             .setIcon('plus')
@@ -17,6 +18,6 @@ export const AddNewGroup = ({ renderSettings, plugin, containerEl }: Props) => {
                 });
                 renderSettings();
             })
-            .setTooltip('Add group');
+            .setTooltip(l.SETTINGS_LABELS_STYLES_NEW);
     });
 };

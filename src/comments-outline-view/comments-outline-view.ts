@@ -1,6 +1,7 @@
 import { ItemView, WorkspaceLeaf } from 'obsidian';
 
 import CommentsOutline from './comments-outline/comments-outline.svelte';
+import { l } from '../lang/lang';
 
 export const COMMENTS_OUTLINE_VIEW_TYPE = 'example-view';
 
@@ -18,7 +19,7 @@ export class CommentsOutlineView extends ItemView {
     }
 
     getDisplayText() {
-        return 'CommentsOutline';
+        return l.PLUGIN_NAME;
     }
 
     async onOpen() {

@@ -1,6 +1,7 @@
 import { Notice, Setting } from 'obsidian';
-import { LabelSettings as TLabelSettings } from '../../settings-type';
-import CommentLabels from '../../../main';
+import { LabelSettings as TLabelSettings } from '../../../../settings-type';
+import CommentLabels from '../../../../../main';
+import { l } from '../../../../../lang/lang';
 
 const rec = {
     upper: 'case-upper',
@@ -46,13 +47,13 @@ export const LabelSettings = ({
         text.inputEl.setCssStyles({
             marginRight: 'auto',
         });
-        text.setPlaceholder('pattern')
+        text.setPlaceholder(l.SETTINGS_LABELS_STYLES_NAME_PLACE_HOLDER)
             .setValue(label.label)
             .onChange((value) => {
                 text.inputEl.checkValidity();
                 if (text.inputEl.validity.patternMismatch) {
                     text.inputEl.reportValidity();
-                    new Notice(`Only A-Za-z0-9_ are allowed`);
+                    new Notice(l.SETTINGS_LABELS_STYLES_LABEL_INVALID);
                 } else {
                     plugin.settings.dispatch({
                         payload: {
@@ -137,6 +138,7 @@ export const LabelSettings = ({
                 });
                 renderSettings();
             });
+            button.setTooltip(l.SETTINGS_LABELS_STYLES_TOGGLE_CASE);
         })
         .addDropdown((c) => {
             c.addOptions({
@@ -158,12 +160,14 @@ export const LabelSettings = ({
                 });
                 renderSettings();
             });
+
             c.setValue(String(label.style.fontSize || 'default'));
         });
+
     el.addToggle((toggle) => {
         toggle
             .setValue(label.enableStyle)
-            .setTooltip('Enable styles')
+            .setTooltip(l.SETTINGS_LABELS_STYLES_ENABLE_STYLE)
             .onChange((value) => {
                 plugin.settings.dispatch({
                     payload: { id: label.id, enable: value },
@@ -172,12 +176,14 @@ export const LabelSettings = ({
             });
     }).addExtraButton((button) => {
         button.setIcon('trash');
-        button.onClick(() => {
-            plugin.settings.dispatch({
-                payload: { id: label.id },
-                type: 'DELETE_GROUP',
-            });
-            renderSettings();
-        });
+        button
+            .onClick(() => {
+                plugin.settings.dispatch({
+                    payload: { id: label.id },
+                    type: 'DELETE_GROUP',
+                });
+                renderSettings();
+            })
+            .setTooltip(l.SETTINGS_LABELS_STYLES_DELETE_STYLE);
     });
 };

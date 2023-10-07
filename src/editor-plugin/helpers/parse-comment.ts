@@ -1,6 +1,6 @@
 export const parseComment = (comment: string) => {
-    const startRegex = /^<!(-{2})/.exec(comment);
-    const endRegex = /(-{2})>$/.exec(comment);
+    const startRegex = /^\s*<!(-{2})/.exec(comment);
+    const endRegex = startRegex && /(-{2})>\s*$/.exec(comment);
     if (startRegex && endRegex) {
         const start = startRegex[0];
         const end = endRegex[0];

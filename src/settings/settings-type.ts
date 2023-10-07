@@ -14,6 +14,7 @@ export type LabelSettings = {
     style: LabelStyle;
     enableStyle: boolean;
 };
+export type NotesNamingMode = 'comment' | 'label - comment' | 'label/comment';
 export type Settings = {
     labels: Record<string, LabelSettings>;
     editorSuggest: {
@@ -37,5 +38,10 @@ export type Settings = {
         rate: number;
         voice?: string;
         pitch: number;
+    };
+    notes: {
+        defaultFolder: string;
+        notesNamingMode: NotesNamingMode;
+        openNoteAfterCreation: boolean;
     };
 };

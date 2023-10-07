@@ -1,5 +1,5 @@
-import CommentLabels from '../main';
-import { parseComment } from '../editor-plugin/helpers/parse-comment';
+import CommentLabels from '../../main';
+import { parseComment } from '../../editor-plugin/helpers/parse-comment';
 
 type Props = {
     plugin: CommentLabels;

@@ -18,6 +18,7 @@ import {
 } from './settings/helpers/sync-settings-with-outline-ui';
 import { tts } from './comments-outline-view/comments-outline/components/controls-bar/helpers/tts';
 import { mergeDeep } from './settings/helpers/merge-objects';
+import { registerMenuEvent } from './note-creation/register-menu-event';
 
 export const plugin: {
     current: CommentLabels;
@@ -45,6 +46,7 @@ export default class CommentLabels extends Plugin {
             subscribeToSettings(this);
             syncOutlineStateToSettings(this);
             this.addSettingTab(new SettingsTab(this.app, this));
+            registerMenuEvent(this);
         });
     }
 

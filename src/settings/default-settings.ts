@@ -24,4 +24,9 @@ export const DEFAULT_SETTINGS = (): Settings => ({
         volume: 1,
         voice: window.speechSynthesis.getVoices().find((v) => v.default)?.name,
     },
+    notes: {
+        defaultFolder: 'notes',
+        notesNamingMode: 'label/comment',
+        openNoteAfterCreation: true,
+    },
 });

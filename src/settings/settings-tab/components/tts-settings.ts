@@ -1,6 +1,7 @@
 import { Setting } from 'obsidian';
 import CommentLabels from '../../../main';
 import { DEFAULT_SETTINGS } from '../../default-settings';
+import { l } from '../../../lang/lang';
 
 type Props = {
     containerEl: HTMLElement;
@@ -8,7 +9,7 @@ type Props = {
     renderSettings: () => void;
 };
 export const TTSSettings = ({ plugin, containerEl, renderSettings }: Props) => {
-    containerEl.createEl('h3', { text: 'TTS settings' });
+    containerEl.createEl('h3', { text: l.SETTINGS_TTS_TITLE });
     new Setting(containerEl)
         .addDropdown((component) => {
             const voices = window.speechSynthesis
@@ -27,9 +28,9 @@ export const TTSSettings = ({ plugin, containerEl, renderSettings }: Props) => {
                 });
             });
         })
-        .setName('Voice');
+        .setName(l.SETTINGS_TTS_VOICE);
     new Setting(containerEl)
-        .setName('Volume')
+        .setName(l.SETTINGS_TTS_VOLUME)
         .addSlider((component) =>
             component
                 .setValue(plugin.settings.getValue().tts.volume * 100)
@@ -45,7 +46,7 @@ export const TTSSettings = ({ plugin, containerEl, renderSettings }: Props) => {
         .addExtraButton((button) => {
             button
                 .setIcon('reset')
-                .setTooltip('restore default')
+                .setTooltip(l.SETTINGS_TTS_RESTORE_DEFAULTS)
                 .onClick(() => {
                     plugin.settings.dispatch({
                         type: 'SET_TTS_VOLUME',
@@ -56,7 +57,7 @@ export const TTSSettings = ({ plugin, containerEl, renderSettings }: Props) => {
         });
 
     new Setting(containerEl)
-        .setName('Rate')
+        .setName(l.SETTINGS_TTS_RATE)
         .addSlider((slider) => {
             slider
                 .setValue(plugin.settings.getValue().tts.rate)
@@ -72,7 +73,7 @@ export const TTSSettings = ({ plugin, containerEl, renderSettings }: Props) => {
         .addExtraButton((button) => {
             button
                 .setIcon('reset')
-                .setTooltip('restore default')
+                .setTooltip(l.SETTINGS_TTS_RESTORE_DEFAULTS)
                 .onClick(() => {
                     plugin.settings.dispatch({
                         type: 'SET_TTS_RATE',
@@ -83,7 +84,7 @@ export const TTSSettings = ({ plugin, containerEl, renderSettings }: Props) => {
         });
 
     new Setting(containerEl)
-        .setName('Pitch')
+        .setName(l.SETTINGS_TTS_PITCH)
         .addSlider((slider) => {
             slider
                 .setValue(plugin.settings.getValue().tts.pitch)
@@ -99,7 +100,7 @@ export const TTSSettings = ({ plugin, containerEl, renderSettings }: Props) => {
         .addExtraButton((button) => {
             button
                 .setIcon('reset')
-                .setTooltip('restore default')
+                .setTooltip(l.SETTINGS_TTS_RESTORE_DEFAULTS)
                 .onClick(() => {
                     plugin.settings.dispatch({
                         type: 'SET_TTS_PITCH',

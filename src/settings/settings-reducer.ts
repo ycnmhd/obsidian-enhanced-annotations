@@ -1,4 +1,4 @@
-import { Settings } from './settings-type';
+import { NotesNamingMode, Settings } from './settings-type';
 import { getDefaultColor } from './helpers/get-default-color';
 import { isValidLabel } from '../helpers/is-valid-label';
 
@@ -73,7 +73,10 @@ export type SettingsActions =
     | { type: 'SET_TTS_VOLUME'; payload: { volume: number } }
     | { type: 'SET_TTS_RATE'; payload: { rate: number } }
     | { type: 'SET_TTS_PITCH'; payload: { pitch: number } }
-    | { type: 'SET_TTS_VOICE'; payload: { voice: string } };
+    | { type: 'SET_TTS_VOICE'; payload: { voice: string } }
+    | { type: 'SET_NOTES_FOLDER'; payload: { folder: string } }
+    | { type: 'SET_NOTES_NAMING_MODE'; payload: { folder: NotesNamingMode } }
+    | { type: 'SET_NOTES_OPEN_AFTER_CREATION'; payload: { open: boolean } };
 export const settingsReducer = (
     store: Settings,
     action: SettingsActions,
@@ -101,7 +104,8 @@ export const settingsReducer = (
     } else if (action.type === 'ENABLE_AUTO_SUGGEST') {
         store.editorSuggest.enableAutoSuggest = action.payload.enable;
     } else if (action.type === 'SET_AUTO_SUGGEST_TRIGGER') {
-        store.editorSuggest.triggerPhrase = action.payload.trigger;
+        if (action.payload.trigger)
+            store.editorSuggest.triggerPhrase = action.payload.trigger;
     } else if (action.type === 'ENABLE_AUTO_REGISTER_LABELS') {
         store.parsing.autoRegisterLabels = action.payload.enable;
     } else if (action.type === 'ENABLE_LABEL_STYLES') {
@@ -142,6 +146,11 @@ export const settingsReducer = (
         store.tts.volume = action.payload.volume;
     } else if (action.type === 'SET_TTS_VOICE') {
         store.tts.voice = action.payload.voice;
-    }
+    } else if (action.type === 'SET_NOTES_FOLDER')
+        store.notes.defaultFolder = action.payload.folder;
+    else if (action.type === 'SET_NOTES_NAMING_MODE')
+        store.notes.notesNamingMode = action.payload.folder;
+    else if (action.type === 'SET_NOTES_OPEN_AFTER_CREATION')
+        store.notes.openNoteAfterCreation = action.payload.open;
     return store;
 };
