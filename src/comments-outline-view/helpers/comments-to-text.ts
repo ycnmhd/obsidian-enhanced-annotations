@@ -1,7 +1,7 @@
-import { Comment } from './update-comments-outline';
+import { ParsedComment } from '../../editor-plugin/helpers/parse-comments';
 
 export const commentsToString = (
-    comments: Comment[],
+    comments: ParsedComment[],
     includeLabel: boolean,
 ): string => {
     const result = [];

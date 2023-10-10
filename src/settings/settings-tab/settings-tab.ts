@@ -1,6 +1,6 @@
 import { App, PluginSettingTab } from 'obsidian';
 import CommentLabels from '../../main';
-import { GeneralSettings } from './components/general-settings';
+import { AutoSuggestSettings } from './components/auto-suggest-settings';
 import { TTSSettings } from './components/tts-settings';
 import { NoteSettings } from './components/note-settings/note-settings';
 import { LabelsSettings } from './components/label-settings/labels-settings';
@@ -18,7 +18,7 @@ export class SettingsTab extends PluginSettingTab {
 
         containerEl.empty();
 
-        GeneralSettings({
+        AutoSuggestSettings({
             plugin: this.plugin,
             containerEl,
         });

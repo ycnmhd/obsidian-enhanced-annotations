@@ -1,11 +1,11 @@
-import { Comment } from '../comments-outline-view/helpers/update-comments-outline';
+import { ParsedComment } from '../editor-plugin/helpers/parse-comments';
 import { sanitizeFileName } from './sanitize-file-name';
 import { plugin } from '../main';
 import { Notice } from 'obsidian';
 import { l } from '../lang/lang';
 
 type Props = {
-    comment: Pick<Comment, 'label' | 'text'>;
+    comment: Pick<ParsedComment, 'label' | 'text'>;
     currentFileName: string;
     blockId: string;
 };

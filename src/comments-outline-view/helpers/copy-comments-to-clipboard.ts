@@ -1,11 +1,11 @@
 import { commentsToString } from './comments-to-text';
 import { copyTextToClipboard } from '../../helpers/copy-text-to-clipboard';
 import { Notice } from 'obsidian';
-import { Comment } from './update-comments-outline';
 import { filteredComments } from '../comments-outline/components/comments-list/comments-list.store';
 import { l } from '../../lang/lang';
+import { ParsedComment } from '../../editor-plugin/helpers/parse-comments';
 
-const state: { comments: Comment[] } = { comments: undefined as any };
+const state: { comments: ParsedComment[] } = { comments: undefined as any };
 
 filteredComments.subscribe((v) => {
     state.comments = Object.values(v.labels).flat();

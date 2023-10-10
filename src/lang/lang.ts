@@ -36,4 +36,5 @@ export const l = {
     COMMANDS_INSERT_COMMENT_NEXT_LINE: 'Insert a comment in a new line',
     COMMANDS_COULD_NOT_CREATE_FILE: 'Could not create note: ',
     OUTLINE_EDITOR_CREATE_NOTE: 'Create note from comment',
+    SETTINGS_AUTO_SUGGEST_COMMENT_TYPE: 'Comment type',
 };

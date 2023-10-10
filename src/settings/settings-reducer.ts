@@ -1,4 +1,4 @@
-import { NotesNamingMode, Settings } from './settings-type';
+import { CommentType, NotesNamingMode, Settings } from './settings-type';
 import { getDefaultColor } from './helpers/get-default-color';
 import { isValidLabel } from '../helpers/is-valid-label';
 
@@ -76,7 +76,11 @@ export type SettingsActions =
     | { type: 'SET_TTS_VOICE'; payload: { voice: string } }
     | { type: 'SET_NOTES_FOLDER'; payload: { folder: string } }
     | { type: 'SET_NOTES_NAMING_MODE'; payload: { folder: NotesNamingMode } }
-    | { type: 'SET_NOTES_OPEN_AFTER_CREATION'; payload: { open: boolean } };
+    | { type: 'SET_NOTES_OPEN_AFTER_CREATION'; payload: { open: boolean } }
+    | {
+          type: 'SET_AUTO_SUGGEST_COMMENT_TYPE';
+          payload: { type: CommentType };
+      };
 export const settingsReducer = (
     store: Settings,
     action: SettingsActions,
@@ -152,5 +156,7 @@ export const settingsReducer = (
         store.notes.notesNamingMode = action.payload.folder;
     else if (action.type === 'SET_NOTES_OPEN_AFTER_CREATION')
         store.notes.openNoteAfterCreation = action.payload.open;
+    else if (action.type === 'SET_AUTO_SUGGEST_COMMENT_TYPE')
+        store.editorSuggest.commentType = action.payload.type;
     return store;
 };

@@ -5,6 +5,7 @@ export const DEFAULT_SETTINGS = (): Settings => ({
     editorSuggest: {
         enableAutoSuggest: true,
         triggerPhrase: '//',
+        commentType: 'html',
     },
     parsing: {
         autoRegisterLabels: true,

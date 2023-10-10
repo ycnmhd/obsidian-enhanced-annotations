@@ -10,12 +10,12 @@
 
 		{#each $visibleComments as comment}
 			<span class="comment-label"
-				  style={`font-size:${$fontSize}px;color: ${$labelSettings[comment.label]?.style?.color||""};`}>{comment.label}</span>
+				  style={`font-size:${$fontSize}px;color: ${$labelSettings[comment.label]?.style?.color||""};`}>{comment.label || "/"}</span>
 			<div class="comment" on:click={()=>{
-				selectText({ position: comment.position})
+				selectText({ comment})
 			}}>
 				<span class="comment-text" style={`font-size:${$fontSize}px;`}>{comment.text}</span>
-				<span class="comment-line-number">{comment.position.line + 1}</span>
+				<span class="comment-line-number">{comment.range.from.line + 1}</span>
 			</div>
 		{/each}
 	</div>

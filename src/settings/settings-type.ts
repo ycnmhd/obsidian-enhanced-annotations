@@ -15,11 +15,13 @@ export type LabelSettings = {
     enableStyle: boolean;
 };
 export type NotesNamingMode = 'comment' | 'label - comment' | 'label/comment';
+export type CommentType = 'markdown' | 'html';
 export type Settings = {
     labels: Record<string, LabelSettings>;
     editorSuggest: {
         enableAutoSuggest: boolean;
         triggerPhrase: string;
+        commentType: CommentType;
     };
     parsing: {
         autoRegisterLabels: boolean;

@@ -1,5 +1,5 @@
 import CommentLabels from '../../main';
-import { parseComment } from '../../editor-plugin/helpers/parse-comment';
+import { parseComments } from '../../editor-plugin/helpers/parse-comments';
 
 type Props = {
     plugin: CommentLabels;
@@ -16,12 +16,21 @@ export const insertComment = async ({
     afterStart = '',
 }: Props) => {
     const editor = plugin.app.workspace.activeEditor?.editor;
+    const commentType = plugin.settings.getValue().editorSuggest.commentType;
     if (editor) {
         const doc = editor.getDoc();
         const cursor = doc.getCursor();
         const selection = doc.getSelection();
-        const commentStart = noComment ? '' : '<!--';
-        const commentEnd = noComment ? '' : '-->';
+        const commentStart = noComment
+            ? ''
+            : commentType === 'html'
+            ? '<!--'
+            : '%%';
+        const commentEnd = noComment
+            ? ''
+            : commentType === 'html'
+            ? '-->'
+            : '%%';
         if (selection) {
             // Wrap the selected text in a comment
             const firstPart = `${commentStart}${afterStart}${selection}`;
@@ -49,14 +58,14 @@ export const insertComment = async ({
                 });
             } else {
                 const line = doc.getLine(cursor.line).trim();
-                const comment = parseComment(line);
-                if (comment) {
-                    const [, label] = comment;
+                const comments = parseComments([line]);
+                if (comments.length) {
+                    const { label } = comments[0];
                     await insertComment({
                         plugin,
                         newLine: true,
                         noComment: false,
-                        afterStart: label !== '/' ? `${label}: ` : '',
+                        afterStart: label && label !== '/' ? `${label}: ` : '',
                     });
                 } else {
                     doc.replaceRange(text, cursor);

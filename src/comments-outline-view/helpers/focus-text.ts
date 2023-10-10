@@ -1,18 +1,22 @@
-import { Comment } from './update-comments-outline';
 import { context } from '../../editor-plugin/editor-plugin';
+import { ParsedComment } from '../../editor-plugin/helpers/parse-comments';
+import { EditorRange, EditorRangeOrCaret } from 'obsidian';
 
 type Props = {
-    position: Comment['position'];
+    comment: ParsedComment;
 };
-export const selectText = ({ position: { from, to, line } }: Props) => {
+export const selectText = ({ comment: { range } }: Props) => {
     const editor = context.currentEditor;
     if (editor) {
-        const selection = { from: { line, ch: from }, to: { line, ch: to } };
-        editor.setCursor({ line, ch: 0 }); // Move cursor to the beginning of the line
+        const selection: EditorRangeOrCaret = {
+            from: range.from,
+            to: range.to,
+        };
+        editor.setCursor({ line: range.from.line - 1, ch: 0 }); // Move cursor to the beginning of the line
         editor.transaction({
             selection: selection,
         });
 
-        editor.scrollIntoView(selection, true);
+        editor.scrollIntoView(selection as EditorRange, true);
     }
 };

@@ -13,7 +13,7 @@ import { isValidLabel } from '../helpers/is-valid-label';
 
 export type CommentCompletion = {
     label: string;
-    text: string;
+    // text: string;
 };
 
 export class CommentSuggest extends EditorSuggest<CommentCompletion> {
@@ -50,10 +50,7 @@ export class CommentSuggest extends EditorSuggest<CommentCompletion> {
             return suggestions;
         }
 
-        if (isValidLabel(context.query))
-            return [
-                { label: context.query, text: `<!--${context.query}: -->` },
-            ];
+        if (isValidLabel(context.query)) return [{ label: context.query }];
         else return [];
     }
 
@@ -76,18 +73,26 @@ export class CommentSuggest extends EditorSuggest<CommentCompletion> {
         if (!activeView) return;
         if (!this.context) return;
 
+        const settings = this.plugin.settings.getValue();
+        const label = suggestion.label.trim();
+        const text =
+            settings.editorSuggest.commentType === 'html'
+                ? `<!--${label}: -->`
+                : `%%${label}: %%`;
         activeView.editor.replaceRange(
-            suggestion.text,
+            text,
             this.context.start,
             this.context.end,
         );
         const cursor = activeView.editor.getCursor();
         activeView.editor.setCursor({
             line: cursor.line,
-            ch: cursor.ch - 3,
+            ch:
+                cursor.ch -
+                (settings.editorSuggest.commentType === 'html' ? 3 : 2),
         });
 
-        this.recordUsedSuggestion(suggestion.label);
+        this.recordUsedSuggestion(label);
     }
 
     onTrigger(

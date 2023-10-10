@@ -1,7 +1,7 @@
-import { Comment } from './update-comments-outline';
 import { plugin } from '../../main';
+import { ParsedComment } from '../../editor-plugin/helpers/parse-comments';
 
-export const registerNewLabels = (comments: Comment[]) => {
+export const registerNewLabels = (comments: ParsedComment[]) => {
     const settings = plugin.current.settings.getValue();
     if (!settings.parsing.autoRegisterLabels) return;
     const groups = new Set(comments.map((c) => c.label));

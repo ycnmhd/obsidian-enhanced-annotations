@@ -1,15 +1,15 @@
 import CommentLabels from '../main';
-import { parseComment } from '../editor-plugin/helpers/parse-comment';
 import { insertBlockId } from './insert-block-id';
 import { createNoteFile } from './create-note-file';
 import { l } from '../lang/lang';
+import { parseComments } from '../editor-plugin/helpers/parse-comments';
 
 export const registerMenuEvent = (plugin: CommentLabels) => {
     plugin.registerEvent(
         plugin.app.workspace.on('editor-menu', (menu, editor, view) => {
             const cursor = editor.getCursor();
             const line = editor.getLine(cursor.line);
-            const comment = parseComment(line);
+            const comment = parseComments([line])[0];
             if (comment) {
                 const onClick = async () => {
                     const blockId = insertBlockId({ cursor, editor });
@@ -19,8 +19,8 @@ export const registerMenuEvent = (plugin: CommentLabels) => {
                             blockId,
                             currentFileName: currentFileName,
                             comment: {
-                                label: comment[1],
-                                text: comment[2],
+                                label: comment.label,
+                                text: comment.text,
                             },
                         });
                     }

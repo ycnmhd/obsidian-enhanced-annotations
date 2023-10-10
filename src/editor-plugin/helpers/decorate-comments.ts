@@ -1,7 +1,6 @@
 import { RangeSetBuilder } from '@codemirror/state';
 import { Decoration, EditorView } from '@codemirror/view';
-import { syntaxTree } from '@codemirror/language';
-import { parseComment } from './parse-comment';
+import { parseComments } from './parse-comments';
 import { plugin } from '../../main';
 import { LabelSettings } from '../../settings/settings-type';
 import { generateLabelStyleString } from './helpers/generate-label-style-string';
@@ -17,32 +16,24 @@ export const decorateComments = (view: EditorView) => {
         {} as Record<string, LabelSettings>,
     );
     for (const { from, to } of view.visibleRanges) {
-        syntaxTree(view.state).iterate({
-            from,
-            to,
-            enter(node) {
-                if (node.type.name.startsWith('comment')) {
-                    const originalCommentText = view.state.sliceDoc(
-                        node.from,
-                        node.to,
-                    );
-                    const split = parseComment(originalCommentText);
-                    if (!split) return;
-                    const [, label] = split;
-                    const labelSettings = labelsByPattern[label];
-                    if (labelSettings && labelSettings.enableStyle) {
-                        const textDecoration = Decoration.mark({
-                            attributes: {
-                                style: generateLabelStyleString(
-                                    labelSettings.style,
-                                ),
-                            },
-                        });
-                        builder.add(node.from, node.to, textDecoration);
-                    }
-                }
-            },
-        });
+        const lines = view.state.sliceDoc(from, to).split('\n');
+        const line = view.state.doc.lineAt(from);
+        const comments = parseComments(lines, line.number, from);
+        for (const comment of comments) {
+            const labelSettings = labelsByPattern[comment.label];
+            if (labelSettings && labelSettings.enableStyle) {
+                const textDecoration = Decoration.mark({
+                    attributes: {
+                        style: generateLabelStyleString(labelSettings.style),
+                    },
+                });
+                builder.add(
+                    comment.position.from,
+                    comment.position.to,
+                    textDecoration,
+                );
+            }
+        }
     }
 
     return builder.finish();

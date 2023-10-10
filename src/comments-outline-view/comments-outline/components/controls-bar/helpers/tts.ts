@@ -1,12 +1,12 @@
 import CommentLabels from '../../../../../main';
 import { visibleComments } from '../../comments-list/comments-list.store';
-import { Comment } from '../../../../helpers/update-comments-outline';
+import { ParsedComment } from '../../../../../editor-plugin/helpers/parse-comments';
 
 type Subscriber = (isReading: boolean) => void;
 
 export class TTS {
     private static instance: TTS;
-    private comments: Comment[];
+    private comments: ParsedComment[];
     private plugin: CommentLabels;
     private isReadingPromise: null | Promise<boolean>;
     #isReading: boolean;

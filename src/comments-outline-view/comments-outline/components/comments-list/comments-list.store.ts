@@ -1,13 +1,13 @@
 import { derived, writable } from 'svelte/store';
 import { searchTerm } from '../controls-bar/components/search-input/search-input.store';
 import { LabelSettings } from '../../../../settings/settings-type';
-import { Comment } from '../../../helpers/update-comments-outline';
 import { hiddenLabels } from '../controls-bar/components/tabs-filter/tabs-filter.store';
+import { ParsedComment } from '../../../../editor-plugin/helpers/parse-comments';
 
 export const labelSettings = writable<Record<string, LabelSettings>>({});
 export type OutlineStore = {
     labels: {
-        [name: string | number]: Comment[];
+        [name: string | number]: ParsedComment[];
     };
 };
 export const outlineComments = writable<OutlineStore>({ labels: {} });
@@ -32,7 +32,7 @@ export const filteredComments = derived(
 export const visibleComments = derived(
     [filteredComments, hiddenLabels],
     ([filteredComments, hiddenLabels]) => {
-        const allComments: Comment[] = [];
+        const allComments: ParsedComment[] = [];
         for (const [label, comments] of Object.entries(
             filteredComments.labels,
         )) {
@@ -40,6 +40,8 @@ export const visibleComments = derived(
                 allComments.push(...comments);
             }
         }
-        return allComments.sort((a, b) => a.position.line - b.position.line);
+        return allComments.sort(
+            (a, b) => a.range.from.line - b.range.from.line,
+        );
     },
 );

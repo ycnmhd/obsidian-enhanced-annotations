@@ -33,6 +33,7 @@ export const insertBlockId = ({ cursor, editor }: Props) => {
 
             const newBlockId = `^${generateBlockId()}`;
             editor.replaceRange(` ${newBlockId}`, newCursor);
+            return newBlockId;
         } else {
             return existingBlockId;
         }
