@@ -53,7 +53,7 @@ export default class CommentLabels extends Plugin {
     onunload() {}
 
     async loadSettings() {
-        const settings = await this.loadData();
+        const settings = (await this.loadData()) || {};
         this.settings = new Store<Settings, SettingsActions>(
             mergeDeep(settings, DEFAULT_SETTINGS()),
             settingsReducer,

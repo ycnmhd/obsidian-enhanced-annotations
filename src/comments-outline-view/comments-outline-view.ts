@@ -3,7 +3,7 @@ import { ItemView, WorkspaceLeaf } from 'obsidian';
 import CommentsOutline from './comments-outline/comments-outline.svelte';
 import { l } from '../lang/lang';
 
-export const COMMENTS_OUTLINE_VIEW_TYPE = 'example-view';
+export const COMMENTS_OUTLINE_VIEW_TYPE = 'comments-outline';
 
 export class CommentsOutlineView extends ItemView {
     component: CommentsOutline | undefined;

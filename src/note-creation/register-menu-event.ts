@@ -14,7 +14,7 @@ export const registerMenuEvent = (plugin: CommentLabels) => {
                 const onClick = async () => {
                     const blockId = insertBlockId({ cursor, editor });
                     if (blockId) {
-                        const currentFileName = view.file?.name as string;
+                        const currentFileName = view.file?.basename as string;
                         await createNoteFile({
                             blockId,
                             currentFileName: currentFileName,

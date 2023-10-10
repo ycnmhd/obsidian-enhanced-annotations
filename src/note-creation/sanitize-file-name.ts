@@ -12,6 +12,7 @@ export function sanitizeFileName(path: string, replacement = '-') {
     const windowsTrailingRe = /[. ]+$/;
 
     let sanitized = path
+        .replace(/"/g, "'")
         .replace(illegalCharacters, replacement)
         .replace(unsafeCharactersForObsidianLinks, replacement)
         .replace(dotAtTheStart, replacement)

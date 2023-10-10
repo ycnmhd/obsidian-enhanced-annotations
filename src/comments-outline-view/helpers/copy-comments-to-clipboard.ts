@@ -8,7 +8,9 @@ import { ParsedComment } from '../../editor-plugin/helpers/parse-comments';
 const state: { comments: ParsedComment[] } = { comments: undefined as any };
 
 filteredComments.subscribe((v) => {
-    state.comments = Object.values(v.labels).flat();
+    state.comments = Object.values(v.labels)
+        .flat()
+        .sort((a, b) => a.position.from - b.position.from);
 });
 export const copyCommentsToClipboard = (e: MouseEvent) => {
     const text = commentsToString(state.comments, e.shiftKey);

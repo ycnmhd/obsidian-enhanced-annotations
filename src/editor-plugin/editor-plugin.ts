@@ -6,12 +6,13 @@ import {
     ViewPlugin,
     ViewUpdate,
 } from '@codemirror/view';
+import { Editor, TFile } from 'obsidian';
+import { decorateComments } from './helpers/decorate-comments';
+import { plugin } from '../main';
 import {
     debouncedUpdateOutline,
     updateOutline,
 } from '../comments-outline-view/helpers/update-comments-outline';
-import { Editor, TFile } from 'obsidian';
-import { decorateComments } from './helpers/decorate-comments';
 
 export const context: {
     currentEditor?: Editor;
@@ -31,22 +32,23 @@ class EditorPlugin implements PluginValue {
     }
 
     update(update: ViewUpdate) {
-        const activeEditor = app.workspace.activeEditor;
+        const activeEditor = plugin.current.app.workspace.activeEditor;
 
         const shouldUpdate =
             !context.currentFile ||
-            activeEditor?.file !== context.currentFile ||
+            context.currentFile !== activeEditor?.file ||
             update.docChanged ||
             update.viewportChanged;
         const canUpdate = activeEditor?.file && activeEditor?.editor;
         if (shouldUpdate && canUpdate) {
-            const editor = activeEditor?.editor as Editor;
-            const file = activeEditor.file;
-            context.currentEditor = editor;
             this.decorations = decorateComments(update.view);
-            if (!context.currentFile || context.currentFile !== file) {
-                context.currentFile = file;
-                if (context.clearTimeout) context.clearTimeout();
+            const immediate =
+                !context.currentFile ||
+                context.currentFile !== activeEditor.file;
+            context.currentEditor = activeEditor.editor;
+            context.currentFile = activeEditor.file;
+            if (context.clearTimeout) context.clearTimeout();
+            if (immediate) {
                 updateOutline(update.view);
             } else {
                 context.clearTimeout = debouncedUpdateOutline(update.view);

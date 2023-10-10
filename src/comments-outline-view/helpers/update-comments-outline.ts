@@ -40,5 +40,5 @@ export const updateOutline = (view: EditorView) => {
 
 export const debouncedUpdateOutline = debounce(
     (view) => updateOutline(view),
-    2000,
+    1000,
 );
