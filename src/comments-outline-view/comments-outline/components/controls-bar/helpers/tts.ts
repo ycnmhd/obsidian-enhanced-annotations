@@ -1,6 +1,6 @@
 import CommentLabels from '../../../../../main';
 import { visibleComments } from '../../comments-list/comments-list.store';
-import { ParsedComment } from '../../../../../editor-plugin/helpers/parse-comments';
+import { ParsedComment } from '../../../../../editor-plugin/helpers/decorate-comments/helpers/parse-comments/parse-multi-line-comments';
 
 type Subscriber = (isReading: boolean) => void;
 

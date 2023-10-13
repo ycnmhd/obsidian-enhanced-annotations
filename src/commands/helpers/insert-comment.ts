@@ -1,5 +1,5 @@
 import CommentLabels from '../../main';
-import { parseComments } from '../../editor-plugin/helpers/parse-comments';
+import { parseMultiLineComments } from '../../editor-plugin/helpers/decorate-comments/helpers/parse-comments/parse-multi-line-comments';
 
 type Props = {
     plugin: CommentLabels;
@@ -58,7 +58,7 @@ export const insertComment = async ({
                 });
             } else {
                 const line = doc.getLine(cursor.line).trim();
-                const comments = parseComments([line]);
+                const comments = parseMultiLineComments([line]);
                 if (comments.length) {
                     const { label } = comments[0];
                     await insertComment({

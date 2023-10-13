@@ -1,4 +1,4 @@
-import { ParsedComment } from '../../editor-plugin/helpers/parse-comments';
+import { ParsedComment } from '../../../../../editor-plugin/helpers/decorate-comments/helpers/parse-comments/parse-multi-line-comments';
 
 export const commentsToString = (
     comments: ParsedComment[],

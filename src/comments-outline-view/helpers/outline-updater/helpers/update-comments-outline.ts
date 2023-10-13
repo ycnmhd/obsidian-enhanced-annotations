@@ -1,15 +1,15 @@
-import { EditorView } from '@codemirror/view';
-import { debounce } from '../../helpers/debounce';
+import { debounce } from '../../../../helpers/debounce';
 import {
     outlineComments,
     OutlineStore,
-} from '../comments-outline/components/comments-list/comments-list.store';
+} from '../../../comments-outline/components/comments-list/comments-list.store';
 import { registerNewLabels } from './register-new-labels';
-import { parseComments } from '../../editor-plugin/helpers/parse-comments';
+import { parseMultiLineComments } from '../../../../editor-plugin/helpers/decorate-comments/helpers/parse-comments/parse-multi-line-comments';
+import { Editor } from 'obsidian';
 
-export const updateOutline = (view: EditorView) => {
-    const lines = view.state.sliceDoc(0).split('\n');
-    const comments = parseComments(lines);
+export const updateOutline = (editor: Editor) => {
+    const lines = editor.getValue().split('\n');
+    const comments = parseMultiLineComments(lines);
 
     const groups = comments.reduce(
         (acc, val) => {

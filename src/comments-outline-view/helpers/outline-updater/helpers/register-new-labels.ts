@@ -1,5 +1,5 @@
-import { plugin } from '../../main';
-import { ParsedComment } from '../../editor-plugin/helpers/parse-comments';
+import { plugin } from '../../../../main';
+import { ParsedComment } from '../../../../editor-plugin/helpers/decorate-comments/helpers/parse-comments/parse-multi-line-comments';
 
 export const registerNewLabels = (comments: ParsedComment[]) => {
     const settings = plugin.current.settings.getValue();

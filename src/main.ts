@@ -11,14 +11,14 @@ import { Store } from './helpers/store';
 import { SettingsActions, settingsReducer } from './settings/settings-reducer';
 import { CommentSuggest } from './editor-suggest/comment-suggest';
 import { DEFAULT_SETTINGS } from './settings/default-settings';
-import {
-    loadOutlineStateFromSettings,
-    subscribeToSettings,
-    syncOutlineStateToSettings,
-} from './settings/helpers/sync-settings-with-outline-ui';
 import { tts } from './comments-outline-view/comments-outline/components/controls-bar/helpers/tts';
 import { mergeDeep } from './settings/helpers/merge-objects';
 import { registerMenuEvent } from './note-creation/register-menu-event';
+
+import { OutlineUpdater } from './comments-outline-view/helpers/outline-updater/outline-updater';
+import { subscribeToSettings } from './settings/helpers/subscribe-to-settings';
+import { loadOutlineStateFromSettings } from './settings/helpers/load-outline-state-from-settings';
+import { syncOutlineStateToSettings } from './settings/helpers/sync-outline-state-to-settings';
 
 export const plugin: {
     current: CommentLabels;
@@ -26,6 +26,7 @@ export const plugin: {
     current: undefined as any,
 };
 export default class CommentLabels extends Plugin {
+    outline: OutlineUpdater;
     settings: Store<Settings, SettingsActions>;
 
     async onload() {
@@ -40,6 +41,7 @@ export default class CommentLabels extends Plugin {
             (leaf) => new CommentsOutlineView(leaf),
         );
 
+        this.outline = new OutlineUpdater(this);
         this.app.workspace.onLayoutReady(async () => {
             await this.activateView();
             loadOutlineStateFromSettings(this);

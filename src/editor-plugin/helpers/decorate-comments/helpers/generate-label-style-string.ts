@@ -1,4 +1,4 @@
-import { LabelStyle } from '../../../settings/settings-type';
+import { LabelStyle } from '../../../../settings/settings-type';
 
 export const generateLabelStyleString = (style: LabelStyle): string => {
     const styleStringParts: string[] = [];

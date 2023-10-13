@@ -1,6 +1,6 @@
 <script>
 
-	import { copyCommentsToClipboard } from "../../../helpers/copy-comments-to-clipboard";
+	import { copyCommentsToClipboard } from "./helpers/copy-comments-to-clipboard";
 	import TabsFilter from "./components/tabs-filter/tabs-filter.svelte";
 	import SearchInput from "./components/search-input/search-input.svelte";
 	import { fontSize, isReading, POSSIBLE_FONT_SIZES, showLabelsFilter, showSearchInput } from "./controls-bar.store";

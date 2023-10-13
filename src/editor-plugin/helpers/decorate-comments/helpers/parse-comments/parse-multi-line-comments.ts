@@ -9,11 +9,17 @@ export type ParsedComment = {
         to: number;
     };
 };
-export const parseComments = (lines: string[], lineNumber = 0, from = 0) => {
+export const parseMultiLineComments = (
+    lines: string[],
+    lineNumber = 0,
+    from = 0,
+) => {
     const comments: ParsedComment[] = [];
 
     const state: {
-        multiLinComment: ParsedComment | null;
+        multiLinComment:
+            | (Omit<ParsedComment, 'text'> & { text: string[] })
+            | null;
         line: number;
         from: number;
     } = { multiLinComment: null, line: lineNumber, from };
@@ -36,14 +42,15 @@ export const parseComments = (lines: string[], lineNumber = 0, from = 0) => {
                 if (state.multiLinComment) startRegex = null;
                 else endRegex = null;
             } else {
+                // single line comment
                 const comment = line.replace(start, '').replace(end, '');
                 const labelRegex = /^([^:\s]+): ?(.+)$/g.exec(comment);
-                const text = labelRegex ? labelRegex[2] : comment;
-                const label = labelRegex ? labelRegex[1] : '';
-                if (text.trim())
+                const text = (labelRegex ? labelRegex[2] : comment).trim();
+                const label = (labelRegex ? labelRegex[1] : '').trim();
+                if (text || label)
                     comments.push({
-                        text,
-                        label,
+                        text: text,
+                        label: label,
                         position: {
                             from: state.from + from,
                             to: state.from + to,
@@ -69,40 +76,49 @@ export const parseComments = (lines: string[], lineNumber = 0, from = 0) => {
 
             const labelRegex = /^([^:\s]+): ?(.+)$/g.exec(comment);
             const text = labelRegex ? labelRegex[2] : comment;
-            const label = labelRegex ? labelRegex[1] : '';
+            const label = (labelRegex ? labelRegex[1] : '').trim();
 
             const from = state.from + line.indexOf(start);
 
-            state.multiLinComment = {
-                label,
-                text,
-                position: {
-                    from,
-                    to: -1,
-                },
-                range: {
-                    from: { line: state.line, ch: line.indexOf(start) },
-                },
-            };
+            if (text || label)
+                state.multiLinComment = {
+                    label,
+                    text: [text],
+                    position: {
+                        from,
+                        to: -1,
+                    },
+                    range: {
+                        from: { line: state.line, ch: line.indexOf(start) },
+                    },
+                };
         }
         // end of multi line comment
         else if (endRegex && state.multiLinComment) {
             const end = endRegex[1];
             const to = line.lastIndexOf(end) + end.length;
-            const text = line.substring(0, line.lastIndexOf(end));
-            if (text.trim()) state.multiLinComment.text += ' ' + text;
+            state.multiLinComment.text.push(
+                line.substring(0, line.lastIndexOf(end)),
+            );
             state.multiLinComment.position.to = state.from + to;
             state.multiLinComment.range.to = {
                 line: state.line,
                 ch: to,
             };
-            if (state.multiLinComment.text.trim())
-                comments.push(state.multiLinComment);
+            const allText = state.multiLinComment.text
+                .map((t) => t.trim())
+                .filter(Boolean)
+                .join(' ');
+            if (allText)
+                comments.push({
+                    ...state.multiLinComment,
+                    text: allText,
+                });
             state.multiLinComment = null;
         }
         // middle of a multi line comment
         else if (state.multiLinComment) {
-            if (line.trim()) state.multiLinComment.text += ' ' + line;
+            state.multiLinComment.text.push(line);
         }
         state.line++;
         state.from += line.length + 1;

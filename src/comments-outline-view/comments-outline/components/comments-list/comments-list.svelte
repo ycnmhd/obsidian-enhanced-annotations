@@ -1,5 +1,5 @@
 <script>
-	import { selectText } from "../../../helpers/focus-text";
+	import { selectText } from "./helpers/focus-text";
 	import { fontSize } from "../controls-bar/controls-bar.store";
 	import { labelSettings, visibleComments } from "./comments-list.store";
 	import NoComments from "../no-comments.svelte";
