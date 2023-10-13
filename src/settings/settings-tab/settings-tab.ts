@@ -18,6 +18,11 @@ export class SettingsTab extends PluginSettingTab {
 
         containerEl.empty();
 
+        NoteSettings({
+            containerEl,
+            plugin: this.plugin,
+            render: this.display,
+        });
         AutoSuggestSettings({
             plugin: this.plugin,
             containerEl,
@@ -27,7 +32,6 @@ export class SettingsTab extends PluginSettingTab {
             containerEl,
             renderSettings: this.display,
         });
-        NoteSettings({ containerEl, plugin: this.plugin });
         LabelsSettings({
             renderSettings: this.display,
             plugin: this.plugin,

@@ -58,4 +58,11 @@ describe('parse multi-line comments', () => {
             expect(output).toEqual(sample.output);
         });
     }
+
+    it('', () => {
+        const comments = parseMultiLineComments([
+            '<!--n: some comment--> [[some link]]',
+        ]);
+        expect(comments[0].text).toBe('some comment');
+    });
 });

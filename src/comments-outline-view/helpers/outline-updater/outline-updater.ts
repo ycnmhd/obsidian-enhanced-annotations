@@ -43,5 +43,10 @@ export class OutlineUpdater {
                 );
             }),
         );
+        setTimeout(() => {
+            this.immediateUpdate(
+                this.plugin.app.workspace.getActiveViewOfType(MarkdownView),
+            );
+        }, 1000);
     }
 }

@@ -17,21 +17,21 @@ export const parseComments = (
     const comments: ParsedComment[] = [];
 
     for (const line of lines) {
-        if (line.startsWith('<!--') || line.startsWith('%%')) {
-            const endRegex = /(-->|%%)/.exec(line);
+        if (line.startsWith('<!--')) {
+            const endRegex = /(-->)/.exec(line);
 
             // single line comment
             if (endRegex) {
-                const startRegex = /(<!--|%%)/.exec(line) as RegExpExecArray;
+                const startRegex = /(<!--)/.exec(line) as RegExpExecArray;
                 const start = startRegex[1];
                 const end = endRegex[1];
-                // todo: make sure comments are of the same type
                 const from = line.indexOf(start);
+                const afterFrom = from + start.length;
                 const beforeTo = line.lastIndexOf(end);
                 const to = beforeTo + end.length;
                 // start of multiline obsidian comment
                 if (beforeTo > from) {
-                    const comment = line.replace(start, '').replace(end, '');
+                    const comment = line.substring(afterFrom, beforeTo);
                     const labelRegex = /^([^:\s]+): ?(.+)$/g.exec(comment);
                     const text = (labelRegex ? labelRegex[2] : comment).trim();
                     const label = (labelRegex ? labelRegex[1] : '').trim();

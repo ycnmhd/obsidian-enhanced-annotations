@@ -1,5 +1,4 @@
 import CommentLabels from '../main';
-import { insertBlockId } from './insert-block-id';
 import { createNoteFile } from './create-note-file';
 import { l } from '../lang/lang';
 import { parseMultiLineComments } from '../editor-plugin/helpers/decorate-comments/helpers/parse-comments/parse-multi-line-comments';
@@ -12,18 +11,18 @@ export const registerMenuEvent = (plugin: CommentLabels) => {
             const comment = parseMultiLineComments([line])[0];
             if (comment) {
                 const onClick = async () => {
-                    const blockId = insertBlockId({ cursor, editor });
-                    if (blockId) {
-                        const currentFileName = view.file?.basename as string;
-                        await createNoteFile({
-                            blockId,
-                            currentFileName: currentFileName,
-                            comment: {
-                                label: comment.label,
-                                text: comment.text,
-                            },
-                        });
-                    }
+                    const currentFileName = view.file?.basename as string;
+                    const currentFileFolder = view.file?.parent?.path as string;
+                    await createNoteFile({
+                        cursor,
+                        editor,
+                        currentFileName: currentFileName,
+                        currentFileFolder,
+                        comment: {
+                            label: comment.label,
+                            text: comment.text,
+                        },
+                    });
                 };
                 menu.addItem((item) => {
                     item.setTitle(l.OUTLINE_EDITOR_CREATE_NOTE)

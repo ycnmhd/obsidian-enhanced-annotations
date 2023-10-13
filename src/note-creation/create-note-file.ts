@@ -1,53 +1,48 @@
 import { ParsedComment } from '../editor-plugin/helpers/decorate-comments/helpers/parse-comments/parse-multi-line-comments';
-import { sanitizeFileName } from './sanitize-file-name';
+import { Editor, EditorPosition } from 'obsidian';
+import { insertBlockId } from './helpers/insert-block-id';
+import { calculateFilePath } from './helpers/calculate-file-path';
+import { writeFile } from './helpers/write-file';
+import { insertLinkToNote } from './helpers/insert-link-to-note';
 import { plugin } from '../main';
-import { Notice } from 'obsidian';
-import { l } from '../lang/lang';
+import { calculateFileContent } from './calculate-file-content';
 
 type Props = {
     comment: Pick<ParsedComment, 'label' | 'text'>;
     currentFileName: string;
-    blockId: string;
+    currentFileFolder: string;
+    cursor: EditorPosition;
+    editor: Editor;
 };
+
 export const createNoteFile = async ({
     comment,
     currentFileName,
-    blockId,
+    currentFileFolder,
+    cursor,
+    editor,
 }: Props) => {
-    const sanitizedComment = sanitizeFileName(comment.text);
-    const sanitizedLabel = sanitizeFileName(comment.label);
-    const fileContent = `![[${currentFileName}#${blockId}]]`;
-
+    const blockId = insertBlockId({ cursor, editor });
+    if (!blockId) return;
     const settings = plugin.current.settings.getValue();
+    const fileContent = calculateFileContent({
+        fileName: currentFileName,
+        blockId,
+        label: comment.label,
+        template: settings.notes.template,
+    });
+    const { filePath, folderPath, fileName } = calculateFilePath(
+        comment,
+        settings.notes,
+        currentFileFolder,
+    );
 
-    const pathParts = [settings.notes.defaultFolder];
-    if (settings.notes.notesNamingMode === 'label - comment') {
-        pathParts.push(`${sanitizedLabel} - ${sanitizedComment}.md`);
-    } else if (settings.notes.notesNamingMode === 'label/comment') {
-        pathParts.push(sanitizedLabel, `${sanitizedComment}.md`);
-    } else {
-        pathParts.push(sanitizedComment + '.md');
-    }
-    const filePath = pathParts.join('/');
-
-    const folderPath = filePath
-        .split('/')
-        .slice(0, pathParts.length - 1)
-        .join('/');
-    try {
-        const maybeFolder =
-            plugin.current.app.vault.getAbstractFileByPath(folderPath);
-        if (!maybeFolder)
-            await plugin.current.app.vault.createFolder(folderPath);
-        const file = await plugin.current.app.vault.create(
-            filePath,
-            fileContent,
-        );
-        if (settings.notes.openNoteAfterCreation) {
-            const leaf = plugin.current.app.workspace.getLeaf(true);
-            await leaf.openFile(file);
-        }
-    } catch (e) {
-        new Notice(l.COMMANDS_COULD_NOT_CREATE_FILE + e.message);
-    }
+    await writeFile({
+        fileContent,
+        filePath,
+        folderPath,
+        openNoteAfterCreation: settings.notes.openNoteAfterCreation,
+    });
+    if (settings.notes.insertLinkToNote)
+        insertLinkToNote({ cursor, editor, fileName });
 };

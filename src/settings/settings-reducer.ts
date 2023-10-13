@@ -1,4 +1,9 @@
-import { CommentType, NotesNamingMode, Settings } from './settings-type';
+import {
+    CommentType,
+    DefaultFolderMode,
+    NotesNamingMode,
+    Settings,
+} from './settings-type';
 import { getDefaultColor } from './helpers/get-default-color';
 import { isValidLabel } from '../helpers/is-valid-label';
 
@@ -75,8 +80,11 @@ export type SettingsActions =
     | { type: 'SET_TTS_PITCH'; payload: { pitch: number } }
     | { type: 'SET_TTS_VOICE'; payload: { voice: string } }
     | { type: 'SET_NOTES_FOLDER'; payload: { folder: string } }
+    | { type: 'SET_NOTES_FOLDER_MODE'; payload: { mode: DefaultFolderMode } }
+    | { type: 'SET_NOTES_TEMPLATE'; payload: { template: string } }
     | { type: 'SET_NOTES_NAMING_MODE'; payload: { folder: NotesNamingMode } }
     | { type: 'SET_NOTES_OPEN_AFTER_CREATION'; payload: { open: boolean } }
+    | { type: 'SET_NOTES_INSERT_LINK_TO_NOTE'; payload: { insert: boolean } }
     | {
           type: 'SET_AUTO_SUGGEST_COMMENT_TYPE';
           payload: { type: CommentType };
@@ -152,11 +160,17 @@ export const settingsReducer = (
         store.tts.voice = action.payload.voice;
     } else if (action.type === 'SET_NOTES_FOLDER')
         store.notes.defaultFolder = action.payload.folder;
+    else if (action.type === 'SET_NOTES_FOLDER_MODE')
+        store.notes.defaultFolderMode = action.payload.mode;
     else if (action.type === 'SET_NOTES_NAMING_MODE')
         store.notes.notesNamingMode = action.payload.folder;
     else if (action.type === 'SET_NOTES_OPEN_AFTER_CREATION')
         store.notes.openNoteAfterCreation = action.payload.open;
     else if (action.type === 'SET_AUTO_SUGGEST_COMMENT_TYPE')
         store.editorSuggest.commentType = action.payload.type;
+    else if (action.type === 'SET_NOTES_INSERT_LINK_TO_NOTE')
+        store.notes.insertLinkToNote = action.payload.insert;
+    else if (action.type === 'SET_NOTES_TEMPLATE')
+        store.notes.template = action.payload.template;
     return store;
 };

@@ -28,6 +28,9 @@ export const DEFAULT_SETTINGS = (): Settings => ({
     notes: {
         defaultFolder: 'notes',
         notesNamingMode: 'label/comment',
-        openNoteAfterCreation: true,
+        openNoteAfterCreation: false,
+        insertLinkToNote: true,
+        defaultFolderMode: 'current folder/notes',
+        template: '{{content}}',
     },
 });

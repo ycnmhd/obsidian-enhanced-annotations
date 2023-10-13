@@ -36,6 +36,7 @@ export const parseMultiLineComments = (
             // todo: make sure comments are of the same type
             const from = line.indexOf(start);
             const beforeTo = line.lastIndexOf(end);
+            const afterFrom = from + start.length;
             const to = beforeTo + end.length;
             // start of multiline obsidian comment
             if (from === beforeTo) {
@@ -43,7 +44,7 @@ export const parseMultiLineComments = (
                 else endRegex = null;
             } else {
                 // single line comment
-                const comment = line.replace(start, '').replace(end, '');
+                const comment = line.substring(afterFrom, beforeTo);
                 const labelRegex = /^([^:\s]+): ?(.+)$/g.exec(comment);
                 const text = (labelRegex ? labelRegex[2] : comment).trim();
                 const label = (labelRegex ? labelRegex[1] : '').trim();
@@ -72,13 +73,12 @@ export const parseMultiLineComments = (
         // start of multiline comment
         if (startRegex && !endRegex) {
             const start = startRegex[1];
-            const comment = line.replace(start, '');
-
+            const from = state.from + line.indexOf(start);
+            const afterFrom = line.indexOf(start) + start.length;
+            const comment = line.substring(afterFrom);
             const labelRegex = /^([^:\s]+): ?(.+)$/g.exec(comment);
             const text = labelRegex ? labelRegex[2] : comment;
             const label = (labelRegex ? labelRegex[1] : '').trim();
-
-            const from = state.from + line.indexOf(start);
 
             if (text || label)
                 state.multiLinComment = {

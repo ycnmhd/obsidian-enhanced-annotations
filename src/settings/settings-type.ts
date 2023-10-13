@@ -16,6 +16,11 @@ export type LabelSettings = {
 };
 export type NotesNamingMode = 'comment' | 'label - comment' | 'label/comment';
 export type CommentType = 'markdown' | 'html';
+export type DefaultFolderMode =
+    | 'vault'
+    | 'current folder'
+    | 'current folder/notes'
+    | 'customFolder';
 export type Settings = {
     labels: Record<string, LabelSettings>;
     editorSuggest: {
@@ -42,8 +47,11 @@ export type Settings = {
         pitch: number;
     };
     notes: {
+        defaultFolderMode: DefaultFolderMode;
         defaultFolder: string;
         notesNamingMode: NotesNamingMode;
         openNoteAfterCreation: boolean;
+        insertLinkToNote: boolean;
+        template: string;
     };
 };
