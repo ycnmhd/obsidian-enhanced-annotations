@@ -7,6 +7,8 @@ export type ParsedComment = {
     position: {
         from: number;
         to: number;
+        beforeTo: number;
+        afterFrom: number;
     };
 };
 export const parseMultiLineComments = (
@@ -55,6 +57,8 @@ export const parseMultiLineComments = (
                         position: {
                             from: state.from + from,
                             to: state.from + to,
+                            afterFrom: state.from + afterFrom,
+                            beforeTo: state.from + beforeTo,
                         },
                         range: {
                             from: {
@@ -86,6 +90,8 @@ export const parseMultiLineComments = (
                     text: [text],
                     position: {
                         from,
+                        afterFrom: state.from + afterFrom,
+                        beforeTo: -1,
                         to: -1,
                     },
                     range: {
@@ -96,11 +102,11 @@ export const parseMultiLineComments = (
         // end of multi line comment
         else if (endRegex && state.multiLinComment) {
             const end = endRegex[1];
-            const to = line.lastIndexOf(end) + end.length;
-            state.multiLinComment.text.push(
-                line.substring(0, line.lastIndexOf(end)),
-            );
+            const beforeTo = line.lastIndexOf(end);
+            const to = beforeTo + end.length;
+            state.multiLinComment.text.push(line.substring(0, beforeTo));
             state.multiLinComment.position.to = state.from + to;
+            state.multiLinComment.position.beforeTo = state.from + beforeTo;
             state.multiLinComment.range.to = {
                 line: state.line,
                 ch: to,

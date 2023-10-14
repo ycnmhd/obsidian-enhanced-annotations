@@ -38,6 +38,10 @@ export type SettingsActions =
     | { type: 'SET_AUTO_SUGGEST_TRIGGER'; payload: { trigger: string } }
     | { type: 'ENABLE_AUTO_REGISTER_LABELS'; payload: { enable: boolean } }
     | {
+          type: 'ENABLE_DECORATE_COMMENT_TAGS';
+          payload: { enable: boolean };
+      }
+    | {
           type: 'ENABLE_LABEL_STYLES';
           payload: { id: string; enable: boolean };
       }
@@ -119,7 +123,7 @@ export const settingsReducer = (
         if (action.payload.trigger)
             store.editorSuggest.triggerPhrase = action.payload.trigger;
     } else if (action.type === 'ENABLE_AUTO_REGISTER_LABELS') {
-        store.parsing.autoRegisterLabels = action.payload.enable;
+        store.decoration.autoRegisterLabels = action.payload.enable;
     } else if (action.type === 'ENABLE_LABEL_STYLES') {
         store.labels[action.payload.id].enableStyle = action.payload.enable;
     } else if (action.type === 'SET_LABEL_UNDERLINE') {
@@ -172,5 +176,7 @@ export const settingsReducer = (
         store.notes.insertLinkToNote = action.payload.insert;
     else if (action.type === 'SET_NOTES_TEMPLATE')
         store.notes.template = action.payload.template;
+    else if (action.type === 'ENABLE_DECORATE_COMMENT_TAGS')
+        store.decoration.decorateCommentTags = action.payload.enable;
     return store;
 };

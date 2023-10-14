@@ -4,13 +4,16 @@
 	import NoComments from "./components/no-comments.svelte";
 	import { searchTerm } from "./components/controls-bar/components/search-input/search-input.store";
 	import { filteredComments } from "./components/comments-list/comments-list.store";
+	import CommentLabels from "../../main";
+
+	export let plugin: CommentLabels;
 </script>
 
 <div class="outline">
 
 	{#if Object.values($filteredComments.labels).flat().length || $searchTerm.length}
 		<ControlsBar />
-		<FlatOutline />
+		<FlatOutline plugin={plugin} />
 
 	{:else }
 		<NoComments />

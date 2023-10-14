@@ -4,7 +4,7 @@ import { insertBlockId } from './helpers/insert-block-id';
 import { calculateFilePath } from './helpers/calculate-file-path';
 import { writeFile } from './helpers/write-file';
 import { insertLinkToNote } from './helpers/insert-link-to-note';
-import { plugin } from '../main';
+import CommentLabels from '../main';
 import { calculateFileContent } from './calculate-file-content';
 
 type Props = {
@@ -13,6 +13,7 @@ type Props = {
     currentFileFolder: string;
     cursor: EditorPosition;
     editor: Editor;
+    plugin: CommentLabels;
 };
 
 export const createNoteFile = async ({
@@ -21,10 +22,11 @@ export const createNoteFile = async ({
     currentFileFolder,
     cursor,
     editor,
+    plugin,
 }: Props) => {
     const blockId = insertBlockId({ cursor, editor });
     if (!blockId) return;
-    const settings = plugin.current.settings.getValue();
+    const settings = plugin.settings.getValue();
     const fileContent = calculateFileContent({
         fileName: currentFileName,
         blockId,
@@ -41,6 +43,7 @@ export const createNoteFile = async ({
         fileContent,
         filePath,
         folderPath,
+        plugin,
         openNoteAfterCreation: settings.notes.openNoteAfterCreation,
     });
     if (settings.notes.insertLinkToNote)

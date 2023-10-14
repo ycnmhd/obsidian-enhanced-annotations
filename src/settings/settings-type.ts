@@ -28,8 +28,9 @@ export type Settings = {
         triggerPhrase: string;
         commentType: CommentType;
     };
-    parsing: {
+    decoration: {
         autoRegisterLabels: boolean;
+        decorateCommentTags: boolean;
     };
     commands: {
         enableLabelCommands: boolean;

@@ -28,7 +28,19 @@ export const LabelsSettings = ({ plugin, containerEl }: Props) => {
                         type: 'ENABLE_AUTO_REGISTER_LABELS',
                     }),
                 )
-                .setValue(settings.parsing.autoRegisterLabels);
+                .setValue(settings.decoration.autoRegisterLabels);
+        });
+    new Setting(containerEl)
+        .setName(l.SETTINGS_DECORATE_COMMENT_TAGS)
+        .addToggle((component) => {
+            component
+                .onChange((value) =>
+                    plugin.settings.dispatch({
+                        payload: { enable: value },
+                        type: 'ENABLE_DECORATE_COMMENT_TAGS',
+                    }),
+                )
+                .setValue(settings.decoration.decorateCommentTags);
         });
     for (const label of Object.values(plugin.settings.getValue().labels)) {
         LabelSettings({

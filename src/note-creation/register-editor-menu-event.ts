@@ -14,6 +14,7 @@ export const registerEditorMenuEvent = (plugin: CommentLabels) => {
                     const currentFileName = view.file?.basename as string;
                     const currentFileFolder = view.file?.parent?.path as string;
                     await createNoteFile({
+                        plugin,
                         cursor,
                         editor,
                         currentFileName: currentFileName,

@@ -6,6 +6,7 @@ import { generateLabelStyleString } from './helpers/generate-label-style-string'
 import { enabledDecoration } from '../../../comments-outline-view/helpers/outline-updater/helpers/update-comments-outline';
 
 let decorations: Record<string, Decoration> = {};
+let decorateCommentTags = false;
 
 export const updateDecorations = (settings: Settings) => {
     const labels = settings.labels;
@@ -22,7 +23,14 @@ export const updateDecorations = (settings: Settings) => {
         },
         {} as Record<string, Decoration>,
     );
+    decorateCommentTags = settings.decoration.decorateCommentTags;
 };
+
+const commentTagsDecoration = Decoration.mark({
+    attributes: {
+        style: 'opacity: 0.4; font-size: 12px',
+    },
+});
 
 export const decorateComments = (view: EditorView) => {
     const builder = new RangeSetBuilder<Decoration>();
@@ -39,6 +47,18 @@ export const decorateComments = (view: EditorView) => {
                         comment.position.to,
                         decoration,
                     );
+                    if (decorateCommentTags) {
+                        builder.add(
+                            comment.position.from,
+                            comment.position.afterFrom,
+                            commentTagsDecoration,
+                        );
+                        builder.add(
+                            comment.position.beforeTo,
+                            comment.position.to,
+                            commentTagsDecoration,
+                        );
+                    }
                 }
             }
         }

@@ -7,8 +7,9 @@ export const DEFAULT_SETTINGS = (): Settings => ({
         triggerPhrase: '//',
         commentType: 'html',
     },
-    parsing: {
+    decoration: {
         autoRegisterLabels: true,
+        decorateCommentTags: false,
     },
     commands: {
         enableLabelCommands: false,

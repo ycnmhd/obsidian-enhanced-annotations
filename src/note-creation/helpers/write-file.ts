@@ -1,4 +1,4 @@
-import { plugin } from '../../main';
+import CommentLabels from '../../main';
 import { Notice } from 'obsidian';
 import { l } from '../../lang/lang';
 
@@ -7,23 +7,20 @@ export const writeFile = async ({
     filePath,
     folderPath,
     openNoteAfterCreation,
+    plugin,
 }: {
     folderPath: string;
     filePath: string;
     fileContent: string;
     openNoteAfterCreation: boolean;
+    plugin: CommentLabels;
 }) => {
     try {
-        const maybeFolder =
-            plugin.current.app.vault.getAbstractFileByPath(folderPath);
-        if (!maybeFolder)
-            await plugin.current.app.vault.createFolder(folderPath);
-        const file = await plugin.current.app.vault.create(
-            filePath,
-            fileContent,
-        );
+        const maybeFolder = plugin.app.vault.getAbstractFileByPath(folderPath);
+        if (!maybeFolder) await plugin.app.vault.createFolder(folderPath);
+        const file = await plugin.app.vault.create(filePath, fileContent);
         if (openNoteAfterCreation) {
-            const leaf = plugin.current.app.workspace.getLeaf(true);
+            const leaf = plugin.app.workspace.getLeaf(true);
             await leaf.openFile(file);
         }
     } catch (e) {

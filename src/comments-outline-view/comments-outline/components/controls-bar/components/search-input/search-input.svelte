@@ -3,7 +3,7 @@
 	import { searchTerm } from "./search-input.store";
 	import { l } from "../../../../../../lang/lang";
 
-	let term = "";
+	let term = $searchTerm;
 	$: searchTerm.set(term);
 </script>
 

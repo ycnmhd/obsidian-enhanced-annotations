@@ -10,3 +10,5 @@ export const showSearchInput = writable<boolean>(false);
 
 export const isReading = writable<boolean>(false);
 tts.subscribe((value) => isReading.set(value));
+
+export const showAllButtons = writable<boolean>(false);

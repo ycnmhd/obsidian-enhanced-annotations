@@ -20,17 +20,11 @@ import { subscribeToSettings } from './settings/helpers/subscribe-to-settings';
 import { loadOutlineStateFromSettings } from './settings/helpers/load-outline-state-from-settings';
 import { syncOutlineStateToSettings } from './settings/helpers/sync-outline-state-to-settings';
 
-export const plugin: {
-    current: CommentLabels;
-} = {
-    current: undefined as any,
-};
 export default class CommentLabels extends Plugin {
     outline: OutlineUpdater;
     settings: Store<Settings, SettingsActions>;
 
     async onload() {
-        plugin.current = this;
         tts.setPlugin = this;
         await this.loadSettings();
         subscribeToSettings(this);
@@ -39,7 +33,7 @@ export default class CommentLabels extends Plugin {
         addInsertCommentCommands(this);
         this.registerView(
             COMMENTS_OUTLINE_VIEW_TYPE,
-            (leaf) => new CommentsOutlineView(leaf),
+            (leaf) => new CommentsOutlineView(leaf, this),
         );
 
         this.outline = new OutlineUpdater(this);

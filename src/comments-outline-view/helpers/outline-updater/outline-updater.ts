@@ -23,10 +23,10 @@ export class OutlineUpdater {
         this.currentView = view;
         if (view instanceof MarkdownView) {
             if (immediate) {
-                updateOutline(view.editor);
+                updateOutline(view.editor, this.plugin);
             } else {
                 this.timeout = setTimeout(() => {
-                    updateOutline(view.editor);
+                    updateOutline(view.editor, this.plugin);
                 }, 2000);
             }
         } else {

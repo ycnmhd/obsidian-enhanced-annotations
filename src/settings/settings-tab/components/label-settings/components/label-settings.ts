@@ -138,7 +138,7 @@ export const LabelSettings = ({
                 });
                 render();
             });
-            button.setTooltip(l.SETTINGS_LABELS_STYLES_TOGGLE_CASE);
+            button.setTooltip('Case: ' + (label.style.case || 'unset'));
         })
         .addDropdown((c) => {
             c.addOptions({

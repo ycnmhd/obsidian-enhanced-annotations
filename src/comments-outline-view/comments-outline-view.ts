@@ -2,6 +2,7 @@ import { ItemView, WorkspaceLeaf } from 'obsidian';
 
 import CommentsOutline from './comments-outline/comments-outline.svelte';
 import { l } from '../lang/lang';
+import CommentLabels from '../main';
 
 export const COMMENTS_OUTLINE_VIEW_TYPE = 'comments-outline';
 
@@ -10,7 +11,10 @@ export class CommentsOutlineView extends ItemView {
 
     icon = 'message-square';
 
-    constructor(leaf: WorkspaceLeaf) {
+    constructor(
+        leaf: WorkspaceLeaf,
+        private plugin: CommentLabels,
+    ) {
         super(leaf);
     }
 
@@ -26,7 +30,7 @@ export class CommentsOutlineView extends ItemView {
         this.component = new CommentsOutline({
             target: this.contentEl,
             props: {
-                variable: 1,
+                plugin: this.plugin,
             },
         });
     }

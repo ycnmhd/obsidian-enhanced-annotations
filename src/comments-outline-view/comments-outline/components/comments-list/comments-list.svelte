@@ -1,8 +1,11 @@
-<script>
+<script lang="ts">
 	import { selectText } from "./helpers/focus-text";
 	import { fontSize } from "../controls-bar/controls-bar.store";
 	import { labelSettings, visibleComments } from "./comments-list.store";
 	import NoComments from "../no-comments.svelte";
+	import CommentLabels from "../../../../main";
+
+	export let plugin: CommentLabels;
 </script>
 
 {#if $visibleComments.length > 0}
@@ -12,7 +15,7 @@
 			<span class="comment-label"
 				  style={`font-size:${$fontSize}px;color: ${$labelSettings[comment.label]?.style?.color||""};`}>{comment.label || "/"}</span>
 			<div class="comment" on:click={()=>{
-				selectText({ comment})
+				selectText(comment,plugin)
 			}}>
 				<span class="comment-text" style={`font-size:${$fontSize}px;`}>{comment.text}</span>
 				<span class="comment-line-number">{comment.range.from.line + 1}</span>
