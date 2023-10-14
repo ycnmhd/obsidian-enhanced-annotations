@@ -5,9 +5,9 @@ import { l } from '../../../../../lang/lang';
 type Props = {
     containerEl: HTMLElement;
     plugin: CommentLabels;
-    renderSettings: () => void;
+    render: () => void;
 };
-export const AddNewLabel = ({ renderSettings, plugin, containerEl }: Props) => {
+export const AddNewLabel = ({ render, plugin, containerEl }: Props) => {
     new Setting(containerEl).addButton((button) => {
         button
             .setIcon('plus')
@@ -16,7 +16,7 @@ export const AddNewLabel = ({ renderSettings, plugin, containerEl }: Props) => {
                     type: 'NEW_GROUP',
                     payload: { pattern: '' },
                 });
-                renderSettings();
+                render();
             })
             .setTooltip(l.SETTINGS_LABELS_STYLES_NEW);
     });

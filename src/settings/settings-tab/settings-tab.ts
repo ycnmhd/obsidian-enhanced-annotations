@@ -19,23 +19,20 @@ export class SettingsTab extends PluginSettingTab {
         containerEl.empty();
 
         NoteSettings({
-            containerEl,
+            containerEl: containerEl.createEl('div'),
             plugin: this.plugin,
-            render: this.display,
         });
         AutoSuggestSettings({
             plugin: this.plugin,
-            containerEl,
+            containerEl: containerEl.createEl('div'),
         });
         TTSSettings({
             plugin: this.plugin,
-            containerEl,
-            renderSettings: this.display,
+            containerEl: containerEl.createEl('div'),
         });
         LabelsSettings({
-            renderSettings: this.display,
             plugin: this.plugin,
-            containerEl,
+            containerEl: containerEl.createEl('div'),
         });
     };
 }

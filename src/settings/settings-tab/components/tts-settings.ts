@@ -6,9 +6,15 @@ import { l } from '../../../lang/lang';
 type Props = {
     containerEl: HTMLElement;
     plugin: CommentLabels;
-    renderSettings: () => void;
 };
-export const TTSSettings = ({ plugin, containerEl, renderSettings }: Props) => {
+export const TTSSettings = ({ plugin, containerEl }: Props) => {
+    const render = () => {
+        containerEl.empty();
+        TTSSettings({
+            plugin,
+            containerEl,
+        });
+    };
     containerEl.createEl('h3', { text: l.SETTINGS_TTS_TITLE });
     new Setting(containerEl)
         .addDropdown((component) => {
@@ -52,7 +58,7 @@ export const TTSSettings = ({ plugin, containerEl, renderSettings }: Props) => {
                         type: 'SET_TTS_VOLUME',
                         payload: { volume: DEFAULT_SETTINGS().tts.volume },
                     });
-                    renderSettings();
+                    render();
                 });
         });
 
@@ -79,7 +85,7 @@ export const TTSSettings = ({ plugin, containerEl, renderSettings }: Props) => {
                         type: 'SET_TTS_RATE',
                         payload: { rate: DEFAULT_SETTINGS().tts.rate },
                     });
-                    renderSettings();
+                    render();
                 });
         });
 
@@ -106,7 +112,7 @@ export const TTSSettings = ({ plugin, containerEl, renderSettings }: Props) => {
                         type: 'SET_TTS_PITCH',
                         payload: { pitch: DEFAULT_SETTINGS().tts.pitch },
                     });
-                    renderSettings();
+                    render();
                 });
         });
 };

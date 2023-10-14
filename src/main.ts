@@ -13,7 +13,7 @@ import { CommentSuggest } from './editor-suggest/comment-suggest';
 import { DEFAULT_SETTINGS } from './settings/default-settings';
 import { tts } from './comments-outline-view/comments-outline/components/controls-bar/helpers/tts';
 import { mergeDeep } from './settings/helpers/merge-objects';
-import { registerMenuEvent } from './note-creation/register-menu-event';
+import { registerEditorMenuEvent } from './note-creation/register-editor-menu-event';
 
 import { OutlineUpdater } from './comments-outline-view/helpers/outline-updater/outline-updater';
 import { subscribeToSettings } from './settings/helpers/subscribe-to-settings';
@@ -33,6 +33,7 @@ export default class CommentLabels extends Plugin {
         plugin.current = this;
         tts.setPlugin = this;
         await this.loadSettings();
+        subscribeToSettings(this);
         this.registerEditorExtension([editorPlugin]);
         this.registerEditorSuggest(new CommentSuggest(this.app, this));
         addInsertCommentCommands(this);
@@ -45,10 +46,9 @@ export default class CommentLabels extends Plugin {
         this.app.workspace.onLayoutReady(async () => {
             await this.activateView();
             loadOutlineStateFromSettings(this);
-            subscribeToSettings(this);
             syncOutlineStateToSettings(this);
             this.addSettingTab(new SettingsTab(this.app, this));
-            registerMenuEvent(this);
+            registerEditorMenuEvent(this);
         });
     }
 

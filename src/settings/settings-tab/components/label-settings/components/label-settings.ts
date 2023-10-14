@@ -31,13 +31,13 @@ type Props = {
     containerEl: HTMLElement;
     label: TLabelSettings;
     plugin: CommentLabels;
-    renderSettings: () => void;
+    render: () => void;
 };
 export const LabelSettings = ({
     containerEl,
     label,
     plugin,
-    renderSettings,
+    render,
 }: Props) => {
     const el = new Setting(containerEl);
 
@@ -90,7 +90,7 @@ export const LabelSettings = ({
                     },
                     type: 'SET_LABEL_ITALIC',
                 });
-                renderSettings();
+                render();
             });
         })
         .addExtraButton((button) => {
@@ -104,7 +104,7 @@ export const LabelSettings = ({
                     },
                     type: 'SET_LABEL_BOLD',
                 });
-                renderSettings();
+                render();
             });
         })
         .addExtraButton((button) => {
@@ -118,7 +118,7 @@ export const LabelSettings = ({
                     },
                     type: 'SET_LABEL_UNDERLINE',
                 });
-                renderSettings();
+                render();
             });
         })
         .addExtraButton((button) => {
@@ -136,7 +136,7 @@ export const LabelSettings = ({
                         id: label.id,
                     },
                 });
-                renderSettings();
+                render();
             });
             button.setTooltip(l.SETTINGS_LABELS_STYLES_TOGGLE_CASE);
         })
@@ -158,7 +158,7 @@ export const LabelSettings = ({
                     type: 'SET_LABEL_FONT_SIZE',
                     payload: { id: label.id, fontSize: value },
                 });
-                renderSettings();
+                render();
             });
 
             c.setValue(String(label.style.fontSize || 'default'));
@@ -182,7 +182,7 @@ export const LabelSettings = ({
                     payload: { id: label.id },
                     type: 'DELETE_GROUP',
                 });
-                renderSettings();
+                render();
             })
             .setTooltip(l.SETTINGS_LABELS_STYLES_DELETE_STYLE);
     });

@@ -8,7 +8,6 @@ import { noteVariables } from '../../../../note-creation/calculate-file-content'
 type Props = {
     containerEl: HTMLElement;
     plugin: CommentLabels;
-    render: () => void;
 };
 const options: Record<DefaultFolderMode, string> = {
     vault: 'Vault folder',
@@ -16,7 +15,14 @@ const options: Record<DefaultFolderMode, string> = {
     'current folder/notes': 'Current folder / Notes',
     customFolder: 'Folder specified below',
 };
-export const NoteSettings = ({ containerEl, plugin, render }: Props) => {
+export const NoteSettings = ({ containerEl, plugin }: Props) => {
+    const render = () => {
+        containerEl.empty();
+        NoteSettings({
+            containerEl,
+            plugin,
+        });
+    };
     containerEl.createEl('h3', { text: l.SETTINGS_NOTE_CREATION_TITLE });
 
     const settings = plugin.settings;

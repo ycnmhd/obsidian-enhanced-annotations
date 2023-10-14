@@ -3,7 +3,7 @@ import { createNoteFile } from './create-note-file';
 import { l } from '../lang/lang';
 import { parseMultiLineComments } from '../editor-plugin/helpers/decorate-comments/helpers/parse-comments/parse-multi-line-comments';
 
-export const registerMenuEvent = (plugin: CommentLabels) => {
+export const registerEditorMenuEvent = (plugin: CommentLabels) => {
     plugin.registerEvent(
         plugin.app.workspace.on('editor-menu', (menu, editor, view) => {
             const cursor = editor.getCursor();

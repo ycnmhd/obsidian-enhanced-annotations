@@ -1,4 +1,3 @@
-import { debounce } from '../../../../helpers/debounce';
 import {
     outlineComments,
     OutlineStore,
@@ -6,39 +5,34 @@ import {
 import { registerNewLabels } from './register-new-labels';
 import { parseMultiLineComments } from '../../../../editor-plugin/helpers/decorate-comments/helpers/parse-comments/parse-multi-line-comments';
 import { Editor } from 'obsidian';
+import { triggerEditorUpdate } from './trigger-editor-update';
 
+export const enabledDecoration = {
+    current: false,
+};
 export const updateOutline = (editor: Editor) => {
     const lines = editor.getValue().split('\n');
     const comments = parseMultiLineComments(lines);
-
-    const groups = comments.reduce(
-        (acc, val) => {
-            if (!val.label) val.label = '/';
-            if (!acc[val.label]) {
-                acc[val.label] = [];
-            }
-            acc[val.label].push(val);
-            return acc;
-        },
-        { '/': [] } as OutlineStore['labels'],
-    );
-    const sorted = Object.keys(groups)
-        .sort()
+    const labels = comments
+        .sort((a, b) => a.label.localeCompare(b.label))
         .reduce(
-            (acc, key) => {
-                if (groups[key].length > 0) {
-                    acc[key] = groups[key];
+            (acc, val) => {
+                if (!val.label) val.label = '/';
+                if (!acc[val.label]) {
+                    acc[val.label] = [];
                 }
+                acc[val.label].push(val);
                 return acc;
             },
-            {} as OutlineStore['labels'],
+            { '/': [] } as OutlineStore['labels'],
         );
 
-    outlineComments.set({ labels: sorted });
-    registerNewLabels(Object.values(sorted).flat());
+    outlineComments.set({ labels });
+    registerNewLabels(comments);
+    const labeledComment = !!comments.find((c) => c.label);
+    const wasDisabled = !enabledDecoration.current;
+    enabledDecoration.current = labeledComment;
+    if (labeledComment && wasDisabled) {
+        triggerEditorUpdate(editor);
+    }
 };
-
-export const debouncedUpdateOutline = debounce(
-    (view) => updateOutline(view),
-    1000,
-);

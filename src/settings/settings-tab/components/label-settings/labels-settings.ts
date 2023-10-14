@@ -7,15 +7,17 @@ import { Setting } from 'obsidian';
 type Props = {
     containerEl: HTMLElement;
     plugin: CommentLabels;
-    renderSettings: () => void;
 };
-export const LabelsSettings = ({
-    renderSettings,
-    plugin,
-    containerEl,
-}: Props) => {
+export const LabelsSettings = ({ plugin, containerEl }: Props) => {
     containerEl.createEl('h3', { text: l.SETTINGS_LABELS_STYLES_TITLE });
     const settings = plugin.settings.getValue();
+    const render = () => {
+        containerEl.empty();
+        LabelsSettings({
+            plugin,
+            containerEl,
+        });
+    };
     new Setting(containerEl)
         .setName(l.SETTINGS_AUTO_SUGGEST_AUTO_REGISTER)
         .addToggle((component) => {
@@ -30,14 +32,14 @@ export const LabelsSettings = ({
         });
     for (const label of Object.values(plugin.settings.getValue().labels)) {
         LabelSettings({
-            renderSettings,
+            render,
             plugin,
             label,
             containerEl,
         });
     }
     AddNewLabel({
-        renderSettings,
+        render,
         plugin,
         containerEl,
     });
