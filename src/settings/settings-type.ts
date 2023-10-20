@@ -1,12 +1,29 @@
-import { POSSIBLE_FONT_SIZES } from '../comments-outline-view/comments-outline/components/controls-bar/controls-bar.store';
+export type Case = 'upper' | 'lower' | 'title';
+export type Opacity = 80 | 60 | 40 | 20;
+export type FontWeight = 'thin' | 'bold';
+export type FontFamily = 'sans-serif' | 'serif' | 'monospace';
+
+export type TagStyle = {
+    fontSize?: number;
+    fontWeight?: FontWeight;
+    fontFamily?: FontFamily;
+    opacity?: Opacity;
+};
+
+export type TagSettings = {
+    style: TagStyle;
+    enableStyle: boolean;
+};
 
 export type LabelStyle = {
     color?: string;
     italic?: boolean;
-    bold?: boolean;
     underline?: boolean;
     fontSize?: number;
-    case?: 'upper' | 'lower' | 'title' | 'unset';
+    case?: Case;
+    fontWeight?: FontWeight;
+    opacity?: Opacity;
+    fontFamily?: FontFamily;
 };
 export type LabelSettings = {
     label: string;
@@ -22,7 +39,6 @@ export type DefaultFolderMode =
     | 'current folder/notes'
     | 'customFolder';
 export type Settings = {
-    labels: Record<string, LabelSettings>;
     editorSuggest: {
         enableAutoSuggest: boolean;
         triggerPhrase: string;
@@ -31,13 +47,17 @@ export type Settings = {
     decoration: {
         autoRegisterLabels: boolean;
         decorateCommentTags: boolean;
+        styles: {
+            labels: Record<string, LabelSettings>;
+            tag: TagSettings;
+        };
     };
     commands: {
         enableLabelCommands: boolean;
     };
     outline: {
         showSearchInput: boolean;
-        fontSize: (typeof POSSIBLE_FONT_SIZES)[number];
+        fontSize: number;
         showLabelsFilter: boolean;
         hiddenLabels: string[];
     };

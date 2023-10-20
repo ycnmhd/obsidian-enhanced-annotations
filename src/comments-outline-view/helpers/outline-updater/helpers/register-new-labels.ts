@@ -9,7 +9,7 @@ export const registerNewLabels = (
     if (!settings.decoration.autoRegisterLabels) return;
     const groups = new Set(comments.map((c) => c.label));
     const existingGroups = new Set(
-        Object.values(settings.labels).map((g) => g.label),
+        Object.values(settings.decoration.styles.labels).map((g) => g.label),
     );
     const newGroups = [...groups].filter((group) => !existingGroups.has(group));
     for (const group of newGroups) {

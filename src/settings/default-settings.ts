@@ -1,7 +1,6 @@
 import { Settings } from './settings-type';
 
 export const DEFAULT_SETTINGS = (): Settings => ({
-    labels: {},
     editorSuggest: {
         enableAutoSuggest: true,
         triggerPhrase: '//',
@@ -10,6 +9,13 @@ export const DEFAULT_SETTINGS = (): Settings => ({
     decoration: {
         autoRegisterLabels: true,
         decorateCommentTags: false,
+        styles: {
+            labels: {},
+            tag: {
+                style: { fontSize: 10, opacity: 40 },
+                enableStyle: true,
+            },
+        },
     },
     commands: {
         enableLabelCommands: false,

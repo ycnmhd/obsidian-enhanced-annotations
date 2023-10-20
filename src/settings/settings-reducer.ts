@@ -1,7 +1,10 @@
 import {
     CommentType,
     DefaultFolderMode,
+    FontFamily,
+    FontWeight,
     NotesNamingMode,
+    Opacity,
     Settings,
 } from './settings-type';
 import { getDefaultColor } from './helpers/get-default-color';
@@ -52,18 +55,37 @@ export type SettingsActions =
               underline: boolean;
           };
       }
+    | { type: 'SET_TAG_FONT_WEIGHT'; payload: { weight?: FontWeight } }
+    | { type: 'SET_TAG_FONT_FAMILY'; payload: { family?: FontFamily } }
+    | { type: 'SET_TAG_FONT_SIZE'; payload: { fontSize?: number } }
+    | { type: 'SET_TAG_OPACITY'; payload: { opacity?: Opacity } }
+    | { type: 'ENABLE_TAG_STYLES'; payload: { enable: boolean } }
     | {
-          type: 'SET_LABEL_BOLD';
+          type: 'SET_LABEL_FONT_WEIGHT';
           payload: {
               id: string;
-              bold: boolean;
+              weight?: FontWeight;
+          };
+      }
+    | {
+          type: 'SET_LABEL_FONT_FAMILY';
+          payload: {
+              id: string;
+              family?: FontFamily;
+          };
+      }
+    | {
+          type: 'SET_LABEL_FONT_OPACITY';
+          payload: {
+              id: string;
+              opacity?: Opacity;
           };
       }
     | {
           type: 'SET_LABEL_FONT_SIZE';
           payload: {
               id: string;
-              fontSize: string;
+              fontSize?: number;
           };
       }
     | {
@@ -74,9 +96,10 @@ export type SettingsActions =
           };
       }
     | {
-          type: 'TOGGLE_LABEL_CASE';
+          type: 'SET_LABEL_CASE';
           payload: {
               id: string;
+              case?: string;
           };
       }
     | { type: 'SET_TTS_VOLUME'; payload: { volume: number } }
@@ -93,27 +116,28 @@ export type SettingsActions =
           type: 'SET_AUTO_SUGGEST_COMMENT_TYPE';
           payload: { type: CommentType };
       };
-export const settingsReducer = (
-    store: Settings,
-    action: SettingsActions,
-): Settings => {
-    store = JSON.parse(JSON.stringify(store));
+
+const updateState = (store: Settings, action: SettingsActions) => {
+    const labels = store.decoration.styles.labels;
+    const tag = store.decoration.styles.tag;
     if (action.type === 'SET_PATTERN') {
         if (isValidLabel(action.payload.pattern))
-            store.labels[action.payload.id].label = action.payload.pattern;
+            labels[action.payload.id].label = action.payload.pattern;
     } else if (action.type === 'SET_COLOR') {
-        store.labels[action.payload.id].style.color = action.payload.color;
+        labels[action.payload.id].style.color = action.payload.color;
     } else if (action.type === 'DELETE_GROUP') {
-        delete store.labels[action.payload.id];
+        delete labels[action.payload.id];
     } else if (action.type === 'NEW_GROUP') {
         if (!action.payload.pattern || isValidLabel(action.payload.pattern)) {
             const id = String(Date.now());
-            store.labels[id] = {
+            labels[id] = {
                 label: action.payload.pattern,
                 id,
                 enableStyle: true,
                 style: {
-                    color: getDefaultColor(Object.values(store.labels))?.hex,
+                    color: getDefaultColor(Object.values(labels)),
+                    italic: true,
+                    fontWeight: 'thin',
                 },
             };
         }
@@ -122,47 +146,33 @@ export const settingsReducer = (
     } else if (action.type === 'SET_AUTO_SUGGEST_TRIGGER') {
         if (action.payload.trigger)
             store.editorSuggest.triggerPhrase = action.payload.trigger;
-    } else if (action.type === 'ENABLE_AUTO_REGISTER_LABELS') {
+    } else if (action.type === 'ENABLE_AUTO_REGISTER_LABELS')
         store.decoration.autoRegisterLabels = action.payload.enable;
-    } else if (action.type === 'ENABLE_LABEL_STYLES') {
-        store.labels[action.payload.id].enableStyle = action.payload.enable;
-    } else if (action.type === 'SET_LABEL_UNDERLINE') {
-        store.labels[action.payload.id].style.underline =
-            action.payload.underline;
-    } else if (action.type === 'SET_LABEL_BOLD') {
-        store.labels[action.payload.id].style.bold = action.payload.bold;
-    } else if (action.type === 'SET_LABEL_FONT_SIZE') {
-        store.labels[action.payload.id].style.fontSize = isNaN(
-            +action.payload.fontSize,
-        )
-            ? undefined
-            : +action.payload.fontSize;
-    } else if (action.type === 'SET_LABEL_ITALIC') {
-        store.labels[action.payload.id].style.italic = action.payload.italic;
-    } else if (action.type === 'TOGGLE_LABEL_CASE') {
-        const label = store.labels[action.payload.id];
-        const currentCase = label.style.case || 'unset';
-
-        if (currentCase === 'unset') {
-            label.style.case = 'upper';
-        } else if (currentCase === 'upper') {
-            label.style.case = 'title';
-        } else if (currentCase === 'title') {
-            label.style.case = 'lower';
-        } else if (currentCase === 'lower') {
-            label.style.case = 'unset';
-        } else {
-            label.style.case = 'unset';
-        }
-    } else if (action.type === 'SET_TTS_PITCH') {
+    else if (action.type === 'ENABLE_LABEL_STYLES')
+        labels[action.payload.id].enableStyle = action.payload.enable;
+    else if (action.type === 'SET_LABEL_UNDERLINE')
+        labels[action.payload.id].style.underline = action.payload.underline;
+    else if (action.type === 'SET_LABEL_FONT_WEIGHT')
+        labels[action.payload.id].style.fontWeight = action.payload.weight;
+    else if (action.type === 'SET_LABEL_FONT_OPACITY')
+        labels[action.payload.id].style.opacity = action.payload.opacity;
+    else if (action.type === 'SET_LABEL_FONT_FAMILY')
+        labels[action.payload.id].style.fontFamily = action.payload.family;
+    else if (action.type === 'SET_LABEL_FONT_SIZE')
+        labels[action.payload.id].style.fontSize = action.payload.fontSize;
+    else if (action.type === 'SET_LABEL_ITALIC')
+        labels[action.payload.id].style.italic = action.payload.italic;
+    else if (action.type === 'SET_LABEL_CASE')
+        labels[action.payload.id].style.case = action.payload.case as any;
+    else if (action.type === 'SET_TTS_PITCH')
         store.tts.pitch = action.payload.pitch;
-    } else if (action.type === 'SET_TTS_RATE') {
+    else if (action.type === 'SET_TTS_RATE')
         store.tts.rate = action.payload.rate;
-    } else if (action.type === 'SET_TTS_VOLUME') {
+    else if (action.type === 'SET_TTS_VOLUME')
         store.tts.volume = action.payload.volume;
-    } else if (action.type === 'SET_TTS_VOICE') {
+    else if (action.type === 'SET_TTS_VOICE')
         store.tts.voice = action.payload.voice;
-    } else if (action.type === 'SET_NOTES_FOLDER')
+    else if (action.type === 'SET_NOTES_FOLDER')
         store.notes.defaultFolder = action.payload.folder;
     else if (action.type === 'SET_NOTES_FOLDER_MODE')
         store.notes.defaultFolderMode = action.payload.mode;
@@ -178,5 +188,21 @@ export const settingsReducer = (
         store.notes.template = action.payload.template;
     else if (action.type === 'ENABLE_DECORATE_COMMENT_TAGS')
         store.decoration.decorateCommentTags = action.payload.enable;
+    else if (action.type === 'ENABLE_TAG_STYLES')
+        tag.enableStyle = action.payload.enable;
+    else if (action.type === 'SET_TAG_FONT_FAMILY')
+        tag.style.fontFamily = action.payload.family;
+    else if (action.type === 'SET_TAG_FONT_SIZE')
+        tag.style.fontSize = action.payload.fontSize;
+    else if (action.type === 'SET_TAG_FONT_WEIGHT')
+        tag.style.fontWeight = action.payload.weight;
+    else if (action.type === 'SET_TAG_OPACITY')
+        tag.style.opacity = action.payload.opacity;
+};
+export const settingsReducer = (
+    store: Settings,
+    action: SettingsActions,
+): Settings => {
+    updateState(store, action);
     return store;
 };

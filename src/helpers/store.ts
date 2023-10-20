@@ -19,7 +19,7 @@ export class Store<T, U> implements Writable<T> {
     }
 
     getValue(): T {
-        return JSON.parse(JSON.stringify(this.value));
+        return this.value;
     }
 
     dispatch(action: U) {

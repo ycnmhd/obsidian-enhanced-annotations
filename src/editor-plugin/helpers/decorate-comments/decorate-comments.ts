@@ -5,32 +5,39 @@ import { Settings } from '../../../settings/settings-type';
 import { generateLabelStyleString } from './helpers/generate-label-style-string';
 import { enabledDecoration } from '../../../comments-outline-view/helpers/outline-updater/helpers/update-comments-outline';
 
-let decorations: Record<string, Decoration> = {};
-let decorateCommentTags = false;
+let decorations: Record<string, { comment: Decoration; tag: Decoration }> = {};
+let decorateCommentTags: boolean;
 
 export const updateDecorations = (settings: Settings) => {
-    const labels = settings.labels;
+    const labels = settings.decoration.styles.labels;
     decorations = Object.values(labels).reduce(
         (acc, val) => {
             if (val.enableStyle) {
-                acc[val.label] = Decoration.mark({
-                    attributes: {
-                        style: generateLabelStyleString(val.style),
-                    },
-                });
+                acc[val.label] = {
+                    comment: Decoration.mark({
+                        attributes: {
+                            style: generateLabelStyleString(val.style),
+                        },
+                    }),
+                    tag: Decoration.mark({
+                        attributes: {
+                            style: generateLabelStyleString({
+                                ...val.style,
+                                ...settings.decoration.styles.tag.style,
+                            }),
+                        },
+                    }),
+                };
             }
             return acc;
         },
-        {} as Record<string, Decoration>,
+        {} as Record<string, { comment: Decoration; tag: Decoration }>,
     );
-    decorateCommentTags = settings.decoration.decorateCommentTags;
+    decorateCommentTags = settings.decoration.styles.tag.enableStyle;
+    if (!Object.keys(decorations).length) {
+        enabledDecoration.current = true;
+    }
 };
-
-const commentTagsDecoration = Decoration.mark({
-    attributes: {
-        style: 'opacity: 0.4; font-size: 12px',
-    },
-});
 
 export const decorateComments = (view: EditorView) => {
     const builder = new RangeSetBuilder<Decoration>();
@@ -42,21 +49,27 @@ export const decorateComments = (view: EditorView) => {
             for (const comment of comments) {
                 const decoration = decorations[comment.label];
                 if (decoration) {
-                    builder.add(
-                        comment.position.from,
-                        comment.position.to,
-                        decoration,
-                    );
                     if (decorateCommentTags) {
                         builder.add(
                             comment.position.from,
                             comment.position.afterFrom,
-                            commentTagsDecoration,
+                            decoration.tag,
+                        );
+                        builder.add(
+                            comment.position.afterFrom,
+                            comment.position.beforeTo,
+                            decoration.comment,
                         );
                         builder.add(
                             comment.position.beforeTo,
                             comment.position.to,
-                            commentTagsDecoration,
+                            decoration.tag,
+                        );
+                    } else {
+                        builder.add(
+                            comment.position.from,
+                            comment.position.to,
+                            decoration.comment,
                         );
                     }
                 }

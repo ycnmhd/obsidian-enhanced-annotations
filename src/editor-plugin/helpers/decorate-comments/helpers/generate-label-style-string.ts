@@ -11,8 +11,19 @@ export const generateLabelStyleString = (style: LabelStyle): string => {
         styleStringParts.push('font-style: italic');
     }
 
-    if (style.bold) {
-        styleStringParts.push('font-weight: bold');
+    if (style.fontFamily) {
+        styleStringParts.push('font-family: ' + style.fontFamily);
+    }
+
+    if (style.fontWeight) {
+        styleStringParts.push(
+            'font-weight: ' +
+                (style.fontWeight === 'thin' ? 'lighter' : 'bolder'),
+        );
+    }
+
+    if (style.opacity) {
+        styleStringParts.push('opacity: ' + style.opacity / 100);
     }
 
     if (style.underline) {

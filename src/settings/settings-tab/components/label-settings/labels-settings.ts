@@ -3,6 +3,7 @@ import CommentLabels from '../../../../main';
 import { LabelSettings } from './components/label-settings';
 import { l } from '../../../../lang/lang';
 import { Setting } from 'obsidian';
+import { TagSettings } from './components/tag-settings';
 
 type Props = {
     containerEl: HTMLElement;
@@ -18,6 +19,13 @@ export const LabelsSettings = ({ plugin, containerEl }: Props) => {
             containerEl,
         });
     };
+
+    TagSettings({
+        tag: plugin.settings.getValue().decoration.styles.tag,
+        plugin,
+        containerEl,
+        render,
+    });
     new Setting(containerEl)
         .setName(l.SETTINGS_AUTO_SUGGEST_AUTO_REGISTER)
         .addToggle((component) => {
@@ -30,19 +38,9 @@ export const LabelsSettings = ({ plugin, containerEl }: Props) => {
                 )
                 .setValue(settings.decoration.autoRegisterLabels);
         });
-    new Setting(containerEl)
-        .setName(l.SETTINGS_DECORATE_COMMENT_TAGS)
-        .addToggle((component) => {
-            component
-                .onChange((value) =>
-                    plugin.settings.dispatch({
-                        payload: { enable: value },
-                        type: 'ENABLE_DECORATE_COMMENT_TAGS',
-                    }),
-                )
-                .setValue(settings.decoration.decorateCommentTags);
-        });
-    for (const label of Object.values(plugin.settings.getValue().labels)) {
+    for (const label of Object.values(
+        plugin.settings.getValue().decoration.styles.labels,
+    )) {
         LabelSettings({
             render,
             plugin,

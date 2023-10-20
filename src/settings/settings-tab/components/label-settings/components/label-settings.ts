@@ -1,14 +1,14 @@
 import { Notice, Setting } from 'obsidian';
-import { LabelSettings as TLabelSettings } from '../../../../settings-type';
+import {
+    FontFamily,
+    FontWeight,
+    LabelSettings as TLabelSettings,
+    Opacity,
+} from '../../../../settings-type';
 import CommentLabels from '../../../../../main';
 import { l } from '../../../../../lang/lang';
-
-const rec = {
-    upper: 'case-upper',
-    lower: 'case-lower',
-    title: 'case-sensitive',
-    unset: 'case-upper',
-};
+import { TextSVG } from './text-svg';
+import { MultiOptionExtraButton } from './multi-option-extra-button';
 
 const styleToggleButton = (button: HTMLElement, enabled?: boolean) => {
     button.setCssStyles({
@@ -80,34 +80,6 @@ export const LabelSettings = ({
         });
     })
         .addExtraButton((button) => {
-            button.setIcon('italic');
-            styleToggleButton(button.extraSettingsEl, label.style.italic);
-            button.onClick(() => {
-                plugin.settings.dispatch({
-                    payload: {
-                        id: label.id,
-                        italic: !label.style.italic,
-                    },
-                    type: 'SET_LABEL_ITALIC',
-                });
-                render();
-            });
-        })
-        .addExtraButton((button) => {
-            button.setIcon('bold');
-            styleToggleButton(button.extraSettingsEl, label.style.bold);
-            button.onClick(() => {
-                plugin.settings.dispatch({
-                    payload: {
-                        id: label.id,
-                        bold: !label.style.bold,
-                    },
-                    type: 'SET_LABEL_BOLD',
-                });
-                render();
-            });
-        })
-        .addExtraButton((button) => {
             button.setIcon('underline');
             styleToggleButton(button.extraSettingsEl, label.style.underline);
             button.onClick(() => {
@@ -120,48 +92,144 @@ export const LabelSettings = ({
                 });
                 render();
             });
+            button.setTooltip('Underline');
         })
         .addExtraButton((button) => {
-            button.setIcon(
-                label.style.case ? rec[label.style.case] : 'case-upper',
-            );
-            styleToggleButton(
-                button.extraSettingsEl,
-                !(!label.style.case || label.style.case === 'unset'),
-            );
+            button.setIcon('italic');
+            styleToggleButton(button.extraSettingsEl, label.style.italic);
             button.onClick(() => {
                 plugin.settings.dispatch({
-                    type: 'TOGGLE_LABEL_CASE',
                     payload: {
                         id: label.id,
+                        italic: !label.style.italic,
                     },
+                    type: 'SET_LABEL_ITALIC',
                 });
                 render();
             });
-            button.setTooltip('Case: ' + (label.style.case || 'unset'));
+            button.setTooltip('Italic');
         })
-        .addDropdown((c) => {
-            c.addOptions({
-                default: 'default',
-                '12': '12px',
-                '16': '16px',
-                '18': '18px',
-                '20': '20px',
-                '24': '24px',
-                '32': '32px',
+        .addExtraButton((button) => {
+            MultiOptionExtraButton({
+                name: 'Font weight',
+                options: [
+                    {
+                        value: 'thin' as FontWeight,
+                        iconContent: TextSVG('B', { fontWeight: 400 }),
+                        iconType: 'svg-html',
+                    },
+                    {
+                        value: 'bold' as FontWeight,
+                        iconContent: TextSVG('B', { fontWeight: 600 }),
+                        iconType: 'svg-html',
+                    },
+                ],
+                button,
+                value: label.style.fontWeight,
+                onChange: (value) => {
+                    plugin.settings.dispatch({
+                        payload: {
+                            id: label.id,
+                            weight: value,
+                        },
+                        type: 'SET_LABEL_FONT_WEIGHT',
+                    });
+                },
             });
-            c.selectEl.setCssStyles({
-                width: 'auto',
+        })
+        .addExtraButton((button) => {
+            MultiOptionExtraButton({
+                name: 'Font family',
+                options: (
+                    ['sans-serif', 'serif', 'monospace'] as FontFamily[]
+                ).map((f) => ({
+                    value: f as FontFamily,
+                    iconContent: TextSVG('F', {
+                        fontFamily: f as FontFamily,
+                    }),
+                    iconType: 'svg-html',
+                })),
+                value: label.style.fontFamily,
+                button,
+                onChange: (value) => {
+                    plugin.settings.dispatch({
+                        payload: {
+                            id: label.id,
+                            family: value,
+                        },
+                        type: 'SET_LABEL_FONT_FAMILY',
+                    });
+                },
             });
-            c.onChange((value) => {
-                plugin.settings.dispatch({
-                    type: 'SET_LABEL_FONT_SIZE',
-                    payload: { id: label.id, fontSize: value },
-                });
-                render();
-            });
+        })
 
-            c.setValue(String(label.style.fontSize || 'default'));
+        .addExtraButton((button) => {
+            MultiOptionExtraButton({
+                button,
+                options: [
+                    {
+                        iconType: 'svg-name',
+                        iconContent: 'case-sensitive',
+                        value: 'title',
+                    },
+                    {
+                        iconType: 'svg-name',
+                        iconContent: 'case-upper',
+                        value: 'upper',
+                    },
+                    {
+                        iconType: 'svg-name',
+                        iconContent: 'case-lower',
+                        value: 'lower',
+                    },
+                ],
+                value: label.style.case,
+                name: 'Case',
+                onChange: (value) =>
+                    plugin.settings.dispatch({
+                        type: 'SET_LABEL_CASE',
+                        payload: {
+                            id: label.id,
+                            case: value,
+                        },
+                    }),
+            });
+        })
+        .addExtraButton((button) => {
+            MultiOptionExtraButton({
+                button,
+                onChange: (value) =>
+                    plugin.settings.dispatch({
+                        type: 'SET_LABEL_FONT_SIZE',
+                        payload: { id: label.id, fontSize: value },
+                    }),
+                options: [12, 16, 20, 24, 32].map((n) => ({
+                    name: n + 'px',
+                    value: n,
+                    iconContent: TextSVG(String(n)),
+                    iconType: 'svg-html',
+                })),
+                value: label.style.fontSize,
+                name: 'Font size',
+            });
+        })
+        .addExtraButton((button) => {
+            MultiOptionExtraButton({
+                button,
+                onChange: (value) =>
+                    plugin.settings.dispatch({
+                        type: 'SET_LABEL_FONT_OPACITY',
+                        payload: { id: label.id, opacity: value as Opacity },
+                    }),
+                options: ([80, 60, 40, 20] as Opacity[]).map((n) => ({
+                    name: n + '%',
+                    value: n,
+                    iconContent: TextSVG(String(n)),
+                    iconType: 'svg-html',
+                })),
+                value: label.style.opacity,
+                name: 'Text opacity',
+            });
         });
 
     el.addToggle((toggle) => {

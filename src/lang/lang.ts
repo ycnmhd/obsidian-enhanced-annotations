@@ -1,4 +1,5 @@
 export const l = {
+    TAG_STYLE: 'Comment tag style',
     OUTLINE_FILTER_LABELS: 'Filter labels',
     OUTLINE_FILTER_COMMENTS: 'Filter comments',
     OUTLINE_FILTER_COMMENTS_CLEAR: 'Clear',
@@ -13,7 +14,7 @@ export const l = {
     SETTINGS_AUTO_SUGGEST_TITLE: 'Auto suggest',
     SETTINGS_AUTO_SUGGEST_ENABLE: 'Suggest labels',
     SETTINGS_AUTO_SUGGEST_TRIGGER_PHRASE: 'Trigger phrase',
-    SETTINGS_AUTO_SUGGEST_AUTO_REGISTER: 'Index existing labels',
+    SETTINGS_AUTO_SUGGEST_AUTO_REGISTER: 'Create styles for new labels',
     SETTINGS_DECORATE_COMMENT_TAGS: 'Make comment tags less prominent',
     SETTINGS_TTS_TITLE: 'Text to speech',
     SETTINGS_TTS_VOICE: 'Voice',
@@ -32,7 +33,7 @@ export const l = {
         'Template to use when creating files. Available variables: ',
     SETTINGS_NOTE_CREATION_INSERT: 'Insert link next to comment',
     SETTINGS_LABELS_STYLES_TITLE: 'Labels styles',
-    SETTINGS_LABELS_STYLES_NEW: 'Create a new style',
+    SETTINGS_LABELS_STYLES_NEW: 'New style',
     SETTINGS_LABELS_STYLES_NAME_PLACE_HOLDER: 'Label',
     SETTINGS_LABELS_STYLES_ENABLE_STYLE: 'Enable style',
     SETTINGS_LABELS_STYLES_TOGGLE_CASE: 'Toggle Case',

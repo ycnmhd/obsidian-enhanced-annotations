@@ -9,7 +9,7 @@ export const subscribeToSettings = (plugin: CommentLabels) => {
         current: undefined,
     };
     settings.subscribe((value) => {
-        const labels = value.labels;
+        const labels = value.decoration.styles.labels;
         if (labels !== previousValue.current) {
             previousValue.current = labels as any;
             labelSettings.set(
