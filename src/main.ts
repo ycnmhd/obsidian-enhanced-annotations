@@ -19,6 +19,7 @@ import { OutlineUpdater } from './comments-outline-view/helpers/outline-updater/
 import { subscribeToSettings } from './settings/helpers/subscribe-to-settings';
 import { loadOutlineStateFromSettings } from './settings/helpers/load-outline-state-from-settings';
 import { syncOutlineStateToSettings } from './settings/helpers/sync-outline-state-to-settings';
+import { decorationState } from './editor-plugin/helpers/decorate-comments/decoration-state';
 
 export default class CommentLabels extends Plugin {
     outline: OutlineUpdater;
@@ -27,6 +28,8 @@ export default class CommentLabels extends Plugin {
     async onload() {
         tts.setPlugin = this;
         await this.loadSettings();
+        this.outline = new OutlineUpdater(this);
+        decorationState.plugin = this;
         subscribeToSettings(this);
         this.registerEditorExtension([editorPlugin]);
         this.registerEditorSuggest(new CommentSuggest(this.app, this));
@@ -36,7 +39,6 @@ export default class CommentLabels extends Plugin {
             (leaf) => new CommentsOutlineView(leaf, this),
         );
 
-        this.outline = new OutlineUpdater(this);
         this.app.workspace.onLayoutReady(async () => {
             await this.activateView();
             loadOutlineStateFromSettings(this);

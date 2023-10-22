@@ -1,18 +1,19 @@
-import { Editor, EditorPosition } from 'obsidian';
+import { Editor } from 'obsidian';
+import { BlockId } from './insert-block-id';
 
 export const insertLinkToNote = ({
-    fileName,
-    cursor,
+    fileBasename,
+    blockId,
     editor,
 }: {
-    fileName: string;
-    cursor: EditorPosition;
+    fileBasename: string;
+    blockId: BlockId;
     editor: Editor;
 }) => {
-    const lineText = editor.getLine(cursor.line);
+    const lineText = editor.getLine(blockId.cursor.line);
     if (!lineText.includes('|↗]]'))
-        editor.replaceRange(` [[${fileName}|↗]]`, {
-            line: cursor.line,
-            ch: lineText.length,
+        editor.replaceRange(` [[${fileBasename}|↗]] `, {
+            line: blockId.cursor.line,
+            ch: lineText.length - blockId.blockId.length,
         });
 };

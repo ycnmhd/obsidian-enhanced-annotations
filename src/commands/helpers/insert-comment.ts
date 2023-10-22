@@ -1,5 +1,6 @@
 import CommentLabels from '../../main';
 import { parseMultiLineComments } from '../../editor-plugin/helpers/decorate-comments/helpers/parse-comments/parse-multi-line-comments';
+import { decorationState } from '../../editor-plugin/helpers/decorate-comments/decoration-state';
 
 type Props = {
     plugin: CommentLabels;
@@ -76,5 +77,7 @@ export const insertComment = async ({
                 }
             }
         }
+        if (!noComment && afterStart)
+            decorationState.fileHasLabeledComments = true;
     }
 };

@@ -3,7 +3,7 @@ import { EditorRange, EditorRangeOrCaret } from 'obsidian';
 import CommentLabels from '../../../../../main';
 
 export const selectText = (comment: ParsedComment, plugin: CommentLabels) => {
-    const view = plugin.outline.currentView;
+    const view = plugin.outline.view;
     if (view) {
         const editor = view.editor;
         const selection: EditorRangeOrCaret = {

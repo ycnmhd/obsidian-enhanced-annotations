@@ -20,22 +20,28 @@ type Props = {
     editor: Editor;
     cursor: EditorPosition;
 };
-export const insertBlockId = ({ cursor, editor }: Props) => {
+export type BlockId = { blockId: string; cursor: EditorPosition };
+export const insertBlockId = ({
+    cursor,
+    editor,
+}: Props): undefined | BlockId => {
     const idLineNumber = findNextEmptyLine({ cursor, editor });
     if (idLineNumber > cursor.line) {
         const idLineText = editor.getLine(idLineNumber);
         const existingBlockId = getExistingBlockId(idLineText);
+        const blockIdCursor: EditorPosition = {
+            line: idLineNumber,
+            ch: idLineText.length,
+        };
         if (!existingBlockId) {
-            const newCursor: EditorPosition = {
-                line: idLineNumber,
-                ch: idLineText.length,
-            };
-
             const newBlockId = `^${generateBlockId()}`;
-            editor.replaceRange(` ${newBlockId}`, newCursor);
-            return newBlockId;
+            editor.replaceRange(` ${newBlockId}`, blockIdCursor);
+            return {
+                blockId: newBlockId,
+                cursor: blockIdCursor,
+            };
         } else {
-            return existingBlockId;
+            return { blockId: existingBlockId, cursor: blockIdCursor };
         }
     }
 };

@@ -27,12 +27,11 @@ export const calculateFilePath = (
     } else {
         nameParts.push(sanitizedComment + '.md');
     }
-
-    const folderPath = folderParts.join('/');
+    const folderPath = folderParts.filter((p) => p && p !== '/').join('/');
     const fileName = nameParts.join('/');
     return {
         filePath: `${folderPath}/${fileName}`,
         folderPath,
-        fileName,
+        fileBasename: fileName.replace(/\.md$/, ''),
     };
 };

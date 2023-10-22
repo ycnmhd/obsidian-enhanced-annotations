@@ -15,7 +15,8 @@
 	import NavButton from "./components/clickable-icon.svelte";
 	import { l } from "../../../../lang/lang";
 	import { searchTerm } from "./components/search-input/search-input.store";
-	import { hiddenLabels } from "./components/tabs-filter/tabs-filter.store";
+
+	import { filteredHiddenLabels } from "../comments-list/comments-list.store";
 
 	const toggleFontSize = (e) => {
 		const delta = e.shiftKey ? -1 : 1;
@@ -51,7 +52,7 @@
 			isActive={$showLabelsFilter}
 			label={l.OUTLINE_FILTER_LABELS}
 			onClick={toggleLabelsFilter}
-			hasEnabledItems={$hiddenLabels.size>0}
+			hasEnabledItems={$filteredHiddenLabels.size>0}
 		>
 			<svg
 				class="svg-icon"

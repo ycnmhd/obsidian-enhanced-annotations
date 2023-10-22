@@ -7,6 +7,7 @@ import {
     ViewUpdate,
 } from '@codemirror/view';
 import { decorateComments } from './helpers/decorate-comments/decorate-comments';
+import { outlineAnnotation } from '../comments-outline-view/helpers/outline-updater/helpers/trigger-editor-update';
 
 class EditorPlugin implements PluginValue {
     decorations: DecorationSet;
@@ -16,7 +17,12 @@ class EditorPlugin implements PluginValue {
     }
 
     update(update: ViewUpdate) {
-        if (update.docChanged || update.viewportChanged) {
+        if (
+            update.docChanged ||
+            update.viewportChanged ||
+            (update.transactions as any)?.[0]?.annotations?.[0] ===
+                outlineAnnotation
+        ) {
             this.decorations = decorateComments(update.view);
         }
     }

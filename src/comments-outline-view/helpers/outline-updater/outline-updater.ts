@@ -12,15 +12,19 @@ const getViewOfFile = (plugin: CommentLabels, file: TFile) => {
 export class OutlineUpdater {
     timeout: ReturnType<typeof setTimeout>;
 
-    currentView?: MarkdownView | null;
+    private _view: MarkdownView | null;
 
     constructor(private plugin: CommentLabels) {
         this.onLoad();
     }
 
-    private updateOutline(view?: MarkdownView | null, immediate = false) {
+    get view(): MarkdownView | null {
+        return this._view;
+    }
+
+    private updateOutline(view: MarkdownView | null, immediate = false) {
         clearTimeout(this.timeout);
-        this.currentView = view;
+        this._view = view;
         if (view instanceof MarkdownView) {
             if (immediate) {
                 updateOutline(view.editor, this.plugin);

@@ -4,7 +4,7 @@ import {
     showLabelsFilter,
     showSearchInput,
 } from '../../comments-outline-view/comments-outline/components/controls-bar/controls-bar.store';
-import { hiddenLabels } from '../../comments-outline-view/comments-outline/components/controls-bar/components/tabs-filter/tabs-filter.store';
+import { hiddenLabels } from '../../comments-outline-view/comments-outline/components/comments-list/comments-list.store';
 import { searchTerm } from '../../comments-outline-view/comments-outline/components/controls-bar/components/search-input/search-input.store';
 
 export const syncOutlineStateToSettings = (plugin: CommentLabels) => {

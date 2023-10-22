@@ -29,11 +29,11 @@ export const createNoteFile = async ({
     const settings = plugin.settings.getValue();
     const fileContent = calculateFileContent({
         fileName: currentFileName,
-        blockId,
+        blockId: blockId.blockId,
         label: comment.label,
         template: settings.notes.template,
     });
-    const { filePath, folderPath, fileName } = calculateFilePath(
+    const { filePath, folderPath, fileBasename } = calculateFilePath(
         comment,
         settings.notes,
         currentFileFolder,
@@ -47,5 +47,5 @@ export const createNoteFile = async ({
         openNoteAfterCreation: settings.notes.openNoteAfterCreation,
     });
     if (settings.notes.insertLinkToNote)
-        insertLinkToNote({ cursor, editor, fileName });
+        insertLinkToNote({ blockId, editor, fileBasename });
 };

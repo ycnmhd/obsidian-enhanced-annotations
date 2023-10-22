@@ -1,7 +1,6 @@
 import CommentLabels from '../../main';
 import { labelSettings } from '../../comments-outline-view/comments-outline/components/comments-list/comments-list.store';
-import { updateDecorations } from '../../editor-plugin/helpers/decorate-comments/decorate-comments';
-import { triggerEditorUpdate } from '../../comments-outline-view/helpers/outline-updater/helpers/trigger-editor-update';
+import { decorationState } from '../../editor-plugin/helpers/decorate-comments/decoration-state';
 
 export const subscribeToSettings = (plugin: CommentLabels) => {
     const settings = plugin.settings;
@@ -18,8 +17,6 @@ export const subscribeToSettings = (plugin: CommentLabels) => {
                 ),
             );
         }
-        updateDecorations(value);
-        const editor = plugin.app.workspace.activeEditor?.editor;
-        if (editor) triggerEditorUpdate(editor);
+        decorationState.setSettings(value.decoration.styles);
     });
 };

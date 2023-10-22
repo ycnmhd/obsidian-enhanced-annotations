@@ -1,7 +1,6 @@
 import { derived, writable } from 'svelte/store';
 import { searchTerm } from '../controls-bar/components/search-input/search-input.store';
 import { LabelSettings } from '../../../../settings/settings-type';
-import { hiddenLabels } from '../controls-bar/components/tabs-filter/tabs-filter.store';
 import { ParsedComment } from '../../../../editor-plugin/helpers/decorate-comments/helpers/parse-comments/parse-multi-line-comments';
 
 export const labelSettings = writable<Record<string, LabelSettings>>({});
@@ -29,6 +28,16 @@ export const filteredComments = derived(
     },
 );
 
+export const hiddenLabels = writable<Set<string>>(new Set<string>());
+// hiddenLabels may contain labels that are not be present in filtered comments
+// filteredHiddenLabels should contain only hidden labels that are present in filtered coments
+export const filteredHiddenLabels = derived(
+    [hiddenLabels, filteredComments],
+    ([hiddenLabels, filteredComments]) => {
+        const existingLabels = new Set(Object.keys(filteredComments.labels));
+        return new Set([...hiddenLabels].filter((l) => existingLabels.has(l)));
+    },
+);
 export const visibleComments = derived(
     [filteredComments, hiddenLabels],
     ([filteredComments, hiddenLabels]) => {
