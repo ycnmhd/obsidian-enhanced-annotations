@@ -20,10 +20,12 @@ import { subscribeToSettings } from './settings/helpers/subscribe-to-settings';
 import { loadOutlineStateFromSettings } from './settings/helpers/load-outline-state-from-settings';
 import { syncOutlineStateToSettings } from './settings/helpers/sync-outline-state-to-settings';
 import { decorationState } from './editor-plugin/helpers/decorate-comments/decoration-state';
+import { StatusBar } from './stats-bar/status-bar';
 
 export default class CommentLabels extends Plugin {
     outline: OutlineUpdater;
     settings: Store<Settings, SettingsActions>;
+    statusBar: StatusBar;
 
     async onload() {
         tts.setPlugin = this;
@@ -34,6 +36,8 @@ export default class CommentLabels extends Plugin {
         this.registerEditorExtension([editorPlugin]);
         this.registerEditorSuggest(new CommentSuggest(this.app, this));
         addInsertCommentCommands(this);
+        this.statusBar = new StatusBar(this);
+
         this.registerView(
             COMMENTS_OUTLINE_VIEW_TYPE,
             (leaf) => new CommentsOutlineView(leaf, this),

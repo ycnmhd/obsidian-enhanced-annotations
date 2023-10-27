@@ -23,7 +23,7 @@ export const l = {
     SETTINGS_TTS_PITCH: 'Pitch',
     SETTINGS_TTS_RATE: 'Rate',
     SETTINGS_TTS_RESTORE_DEFAULTS: 'Restore defaults',
-    SETTINGS_TTS_FOCUS_COMMENT_IN_EDITOR: 'Focus comments',
+    SETTINGS_TTS_FOCUS_COMMENT_IN_EDITOR: 'Focus active comment',
     SETTINGS_NOTE_CREATION_TITLE: 'Note creation',
     SETTINGS_NOTE_CREATION_FOLDER: 'Custom folder',
     SETTINGS_NOTE_CREATION_FOLDER_MODE: 'Default folder',
