@@ -115,4 +115,15 @@ export const TTSSettings = ({ plugin, containerEl }: Props) => {
                     render();
                 });
         });
+    new Setting(containerEl)
+        .addToggle((c) => {
+            c.setValue(plugin.settings.getValue().tts.focusCommentInEditor);
+            c.onChange((v) => {
+                plugin.settings.dispatch({
+                    type: 'SET_TTS_FOCUS_COMMENT_IN_EDITOR',
+                    payload: { enable: v },
+                });
+            });
+        })
+        .setName(l.SETTINGS_TTS_FOCUS_COMMENT_IN_EDITOR);
 };

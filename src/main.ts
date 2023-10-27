@@ -48,7 +48,9 @@ export default class CommentLabels extends Plugin {
         });
     }
 
-    onunload() {}
+    onunload() {
+        tts.stop();
+    }
 
     async loadSettings() {
         const settings = (await this.loadData()) || {};

@@ -12,7 +12,7 @@ export const insertLinkToNote = ({
 }) => {
     const lineText = editor.getLine(blockId.cursor.line);
     if (!lineText.includes('|↗]]'))
-        editor.replaceRange(` [[${fileBasename}|↗]] `, {
+        editor.replaceRange(`[[${fileBasename}|↗]] `, {
             line: blockId.cursor.line,
             ch: lineText.length - blockId.blockId.length,
         });

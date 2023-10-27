@@ -13,6 +13,7 @@
 
 	{#if Object.values($filteredComments.labels).flat().length || $searchTerm.length}
 		<ControlsBar />
+
 		<FlatOutline plugin={plugin} />
 
 	{:else }

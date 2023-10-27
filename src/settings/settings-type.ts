@@ -66,6 +66,7 @@ export type Settings = {
         rate: number;
         voice?: string;
         pitch: number;
+        focusCommentInEditor: boolean;
     };
     notes: {
         defaultFolderMode: DefaultFolderMode;

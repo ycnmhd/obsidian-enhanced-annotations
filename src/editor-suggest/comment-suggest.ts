@@ -62,8 +62,13 @@ export class CommentSuggest extends EditorSuggest<CommentCompletion> {
     private usedSuggestions: Record<string, number> = {};
     private recordUsedSuggestion = (suggestion: string) => {
         if (!this.usedSuggestions[suggestion])
-            this.usedSuggestions[suggestion] = 0;
-        this.usedSuggestions[suggestion] = this.usedSuggestions[suggestion] + 1;
+            this.usedSuggestions[suggestion] = 1;
+        else if (this.usedSuggestions[suggestion] < 3)
+            this.usedSuggestions[suggestion]++;
+        for (const label of Object.keys(this.usedSuggestions)) {
+            if (label !== suggestion && this.usedSuggestions[label] > 0)
+                this.usedSuggestions[label]--;
+        }
     };
 
     selectSuggestion(

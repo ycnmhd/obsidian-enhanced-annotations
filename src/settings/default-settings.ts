@@ -31,6 +31,7 @@ export const DEFAULT_SETTINGS = (): Settings => ({
         pitch: 1.0,
         volume: 1,
         voice: window.speechSynthesis.getVoices().find((v) => v.default)?.name,
+        focusCommentInEditor: false,
     },
     notes: {
         defaultFolder: 'notes',

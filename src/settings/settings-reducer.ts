@@ -106,6 +106,7 @@ export type SettingsActions =
     | { type: 'SET_TTS_RATE'; payload: { rate: number } }
     | { type: 'SET_TTS_PITCH'; payload: { pitch: number } }
     | { type: 'SET_TTS_VOICE'; payload: { voice: string } }
+    | { type: 'SET_TTS_FOCUS_COMMENT_IN_EDITOR'; payload: { enable: boolean } }
     | { type: 'SET_NOTES_FOLDER'; payload: { folder: string } }
     | { type: 'SET_NOTES_FOLDER_MODE'; payload: { mode: DefaultFolderMode } }
     | { type: 'SET_NOTES_TEMPLATE'; payload: { template: string } }
@@ -198,6 +199,8 @@ const updateState = (store: Settings, action: SettingsActions) => {
         tag.style.fontWeight = action.payload.weight;
     else if (action.type === 'SET_TAG_OPACITY')
         tag.style.opacity = action.payload.opacity;
+    else if (action.type === 'SET_TTS_FOCUS_COMMENT_IN_EDITOR')
+        store.tts.focusCommentInEditor = action.payload.enable;
 };
 export const settingsReducer = (
     store: Settings,

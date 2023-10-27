@@ -1,6 +1,10 @@
 import CommentLabels from '../../../../../main';
-import { visibleComments } from '../../comments-list/comments-list.store';
+import {
+    activeCommentIndex,
+    visibleComments,
+} from '../../comments-list/comments-list.store';
 import { ParsedComment } from '../../../../../editor-plugin/helpers/decorate-comments/helpers/parse-comments/parse-multi-line-comments';
+import { selectText } from '../../comments-list/helpers/focus-text';
 
 type Subscriber = (isReading: boolean) => void;
 
@@ -8,15 +12,23 @@ export class TTS {
     private static instance: TTS;
     private comments: ParsedComment[];
     private plugin: CommentLabels;
-    private isReadingPromise: null | Promise<boolean>;
     #isReading: boolean;
     private subscribers: Set<Subscriber> = new Set();
-    private interval: ReturnType<typeof setInterval>;
+    private utterance: SpeechSynthesisUtterance;
 
     private constructor() {
+        this.onLoad();
+    }
+
+    private onLoad() {
         visibleComments.subscribe((v) => {
             this.comments = v;
         });
+        this.utterance = new SpeechSynthesisUtterance();
+        this.utterance.onpause = this.updateState;
+        this.utterance.onend = this.updateState;
+        this.utterance.onstart = this.updateState;
+        this.utterance.onresume = this.updateState;
     }
 
     static getInstance() {
@@ -31,51 +43,52 @@ export class TTS {
     }
 
     read() {
-        const msg = new SpeechSynthesisUtterance();
-        msg.text = this.comments.map((c) => c.text).join('.\n');
+        const commentsDictionary = this.comments.reduce(
+            (acc, v, i) => {
+                acc.comments[acc.c] = v;
+                acc.c += v.text.length + 2;
+                return acc;
+            },
+            { comments: {} as Record<number, ParsedComment>, c: 0 },
+        );
+        this.utterance.text = this.comments.map((c) => c.text).join('.\n');
         const settings = this.plugin.settings.getValue().tts;
-        msg.volume = settings.volume;
-        msg.rate = settings.rate;
-        msg.pitch = settings.pitch;
-        msg.voice = window.speechSynthesis
+        this.utterance.volume = settings.volume;
+        this.utterance.rate = settings.rate;
+        this.utterance.pitch = settings.pitch;
+        this.utterance.voice = window.speechSynthesis
             .getVoices()
             .filter((otherVoice) => otherVoice.name === settings.voice)[0];
         window.speechSynthesis.cancel();
-        window.speechSynthesis.speak(msg);
-        this.updateState();
+        window.speechSynthesis.speak(this.utterance);
+
+        let commentIndex = 0;
+        this.utterance.onboundary = (e) => {
+            if (e.name === 'sentence') {
+                const comment = commentsDictionary.comments[
+                    e.charIndex
+                ] as ParsedComment;
+                if (comment) {
+                    if (settings.focusCommentInEditor)
+                        selectText(comment, this.plugin);
+                    activeCommentIndex.set(commentIndex++);
+                }
+            }
+        };
     }
 
     stop() {
         window.speechSynthesis.cancel();
         this.updateState();
+        activeCommentIndex.set(-1);
     }
 
     private updateState = () => {
-        const isReading =
+        this.#isReading =
             window.speechSynthesis.speaking ||
             window.speechSynthesis.pending ||
             window.speechSynthesis.paused;
-        this.#isReading = isReading;
         this.invokeSubscribers();
-        if (isReading) {
-            if (!this.isReadingPromise) {
-                this.isReadingPromise = new Promise((res) => {
-                    clearInterval(this.interval);
-                    this.interval = setInterval(() => {
-                        const isReading =
-                            window.speechSynthesis.speaking ||
-                            window.speechSynthesis.pending ||
-                            window.speechSynthesis.paused;
-                        if (!isReading) {
-                            clearInterval(this.interval);
-                            this.isReadingPromise = null;
-                            res(isReading);
-                        }
-                    }, 250);
-                });
-            }
-            this.isReadingPromise.finally(() => this.updateState());
-        }
     };
 
     get isReading() {

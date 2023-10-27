@@ -54,3 +54,5 @@ export const visibleComments = derived(
         );
     },
 );
+
+export const activeCommentIndex = writable(-1);

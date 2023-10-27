@@ -3,9 +3,10 @@
 	export let label: string;
 	export let isActive: boolean;
 	export let hasEnabledItems: boolean;
+	export let disabled: boolean;
 </script>
-<button aria-label={label} style="position:relative"
-		class={"clickable-icon nav-action-button "+(isActive?"is-active":"")}
+<button aria-label={label} style="position:relative" disabled={disabled}
+		class={"clickable-icon nav-action-button "+(isActive?"is-active ":"")}
 		on:click={onClick}>
 	{#if hasEnabledItems}
 		<span class="asterisk">*</span>
