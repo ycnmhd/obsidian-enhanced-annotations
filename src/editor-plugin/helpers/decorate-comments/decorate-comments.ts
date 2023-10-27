@@ -7,9 +7,12 @@ export const decorateComments = (view: EditorView) => {
     const builder = new RangeSetBuilder<Decoration>();
     if (decorationState.enabled)
         for (const { from, to } of view.visibleRanges) {
-            const lines = view.state.sliceDoc(from, to).split('\n');
             const line = view.state.doc.lineAt(from);
-            const comments = parseMultiLineComments(lines, line.number, from);
+            const comments = parseMultiLineComments(
+                view.state.sliceDoc(from, to),
+                line.number,
+                from,
+            );
             for (const comment of comments) {
                 const decoration = decorationState.decorations[comment.label];
                 if (decoration) {

@@ -8,7 +8,7 @@ export const registerEditorMenuEvent = (plugin: CommentLabels) => {
         plugin.app.workspace.on('editor-menu', (menu, editor, view) => {
             const cursor = editor.getCursor();
             const line = editor.getLine(cursor.line);
-            const comment = parseMultiLineComments([line])[0];
+            const comment = parseMultiLineComments(line)[0];
             if (comment) {
                 const onClick = async () => {
                     const currentFileName = view.file?.basename as string;

@@ -12,10 +12,11 @@ export type ParsedComment = {
     };
 };
 export const parseMultiLineComments = (
-    lines: string[],
+    text: string,
     lineNumber = 0,
     from = 0,
 ) => {
+    const lines = text.split('\n');
     const comments: ParsedComment[] = [];
 
     const state: {

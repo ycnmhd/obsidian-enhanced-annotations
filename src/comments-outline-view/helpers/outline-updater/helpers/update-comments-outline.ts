@@ -3,14 +3,14 @@ import {
     OutlineStore,
 } from '../../../comments-outline/components/comments-list/comments-list.store';
 import { registerNewLabels } from './register-new-labels';
-import { parseMultiLineComments } from '../../../../editor-plugin/helpers/decorate-comments/helpers/parse-comments/parse-multi-line-comments';
-import { Editor } from 'obsidian';
+import { ParsedComment } from '../../../../editor-plugin/helpers/decorate-comments/helpers/parse-comments/parse-multi-line-comments';
 import CommentLabels from '../../../../main';
 import { decorationState } from '../../../../editor-plugin/helpers/decorate-comments/decoration-state';
 
-export const updateOutline = (editor: Editor, plugin: CommentLabels) => {
-    const lines = editor.getValue().split('\n');
-    const comments = parseMultiLineComments(lines);
+export const updateOutline = (
+    comments: ParsedComment[],
+    plugin: CommentLabels,
+) => {
     let fileHasLabeledComments = false;
     const labels = comments
         .sort((a, b) => a.label.localeCompare(b.label))

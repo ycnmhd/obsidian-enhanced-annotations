@@ -48,7 +48,7 @@ describe('parse multi-line comments', () => {
     for (const sample of samples) {
         it(`sample ${samples.indexOf(sample)}`, () => {
             const comments = parseMultiLineComments(
-                sample1(...sample.input).split('\n'),
+                sample1(...sample.input),
                 0,
                 0,
             );
@@ -60,9 +60,9 @@ describe('parse multi-line comments', () => {
     }
 
     it('', () => {
-        const comments = parseMultiLineComments([
+        const comments = parseMultiLineComments(
             '<!--n: some comment--> [[some link]]',
-        ]);
+        );
         expect(comments[0].text).toBe('some comment');
     });
 });

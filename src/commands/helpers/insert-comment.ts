@@ -59,7 +59,7 @@ export const insertComment = async ({
                 });
             } else {
                 const line = doc.getLine(cursor.line).trim();
-                const comments = parseMultiLineComments([line]);
+                const comments = parseMultiLineComments(line);
                 if (comments.length) {
                     const { label } = comments[0];
                     await insertComment({

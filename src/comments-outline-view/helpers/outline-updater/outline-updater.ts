@@ -2,6 +2,8 @@ import { MarkdownView, TFile } from 'obsidian';
 import CommentLabels from '../../../main';
 import { updateOutline } from './helpers/update-comments-outline';
 import { resetOutline } from './helpers/reset-outline';
+// @ts-ignore
+import W from 'src/editor-plugin/helpers/decorate-comments/helpers/parse-comments/parse-multi-line-comments.worker.ts';
 
 const getViewOfFile = (plugin: CommentLabels, file: TFile) => {
     return plugin.app.workspace
@@ -11,7 +13,7 @@ const getViewOfFile = (plugin: CommentLabels, file: TFile) => {
 
 export class OutlineUpdater {
     timeout: ReturnType<typeof setTimeout>;
-
+    private worker: Worker;
     private _view: MarkdownView | null;
 
     constructor(private plugin: CommentLabels) {
@@ -27,10 +29,10 @@ export class OutlineUpdater {
         this._view = view;
         if (view instanceof MarkdownView) {
             if (immediate) {
-                updateOutline(view.editor, this.plugin);
+                this.worker.postMessage(view.editor.getValue());
             } else {
                 this.timeout = setTimeout(() => {
-                    updateOutline(view.editor, this.plugin);
+                    this.worker.postMessage(view.editor.getValue());
                 }, 2000);
             }
         } else {
@@ -49,6 +51,10 @@ export class OutlineUpdater {
 
     private onLoad() {
         const app = this.plugin.app;
+        this.worker = new W();
+        this.worker.onmessage = (e) => {
+            updateOutline(e.data, this.plugin);
+        };
         this.plugin.registerEvent(
             app.workspace.on('editor-change', (editor, view) => {
                 this.updateOutline(view as MarkdownView);
