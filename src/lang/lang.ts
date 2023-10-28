@@ -6,7 +6,7 @@ export const l = {
     OUTLINE_INCREASE_FONT_SIZE: 'Increase font size',
     OUTLINE_DECREASE_FONT_SIZE: 'Decrease font size',
     OUTLINE_SHOW_ALL_CONTROLS: 'Show more controls',
-    OUTLINE_COPY_COMMENTS_TO_CLIPBOARD: 'Copy to clipboard',
+    OUTLINE_COPY_COMMENTS_TO_CLIPBOARD: 'Copy comments to clipboard',
     OUTLINE_FILTER_COMMENTS_PLACEHOLDER: 'Filter comments...',
     OUTLINE_NO_COMMENTS_FOUND: 'No comments found.',
     OUTLINE_NOTICE_COPIED_TO_CLIPBOARD: 'Copied to clipboard',

@@ -21,6 +21,7 @@ import { loadOutlineStateFromSettings } from './settings/helpers/load-outline-st
 import { syncOutlineStateToSettings } from './settings/helpers/sync-outline-state-to-settings';
 import { decorationState } from './editor-plugin/helpers/decorate-comments/decoration-state';
 import { StatusBar } from './stats-bar/status-bar';
+import { fileMenuItems } from './clipboard/file-menu-items';
 
 export default class CommentLabels extends Plugin {
     outline: OutlineUpdater;
@@ -35,6 +36,13 @@ export default class CommentLabels extends Plugin {
         subscribeToSettings(this);
         this.registerEditorExtension([editorPlugin]);
         this.registerEditorSuggest(new CommentSuggest(this.app, this));
+        this.registerEvent(
+            this.app.workspace.on('file-menu', fileMenuItems(this)),
+        );
+        this.registerEvent(
+            this.app.workspace.on('files-menu', fileMenuItems(this)),
+        );
+
         addInsertCommentCommands(this);
         this.statusBar = new StatusBar(this);
 

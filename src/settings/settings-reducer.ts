@@ -8,7 +8,7 @@ import {
     Settings,
 } from './settings-type';
 import { getDefaultColor } from './helpers/get-default-color';
-import { isValidLabel } from '../helpers/is-valid-label';
+import { isValidLabel } from '../editor-suggest/helpers/is-valid-label';
 
 export type SettingsActions =
     | {

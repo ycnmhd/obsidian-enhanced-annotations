@@ -9,7 +9,7 @@ import {
     TFile,
 } from 'obsidian';
 import CommentLabels from 'src/main';
-import { isValidLabel } from '../helpers/is-valid-label';
+import { isValidLabel } from './helpers/is-valid-label';
 import { decorationState } from '../editor-plugin/helpers/decorate-comments/decoration-state';
 
 export type CommentCompletion = {
