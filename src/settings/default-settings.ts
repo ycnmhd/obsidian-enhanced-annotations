@@ -8,7 +8,7 @@ export const DEFAULT_SETTINGS = (): Settings => ({
     },
     decoration: {
         autoRegisterLabels: true,
-        decorateCommentTags: false,
+        decorateCommentTags: true,
         styles: {
             labels: {},
             tag: {

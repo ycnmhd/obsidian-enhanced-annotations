@@ -1,5 +1,5 @@
 {
-	"name": "comment-groups",
+	"name": "labeled-annotations",
 	"version": "0.1.0",
 	"description": "",
 	"main": "main.js",
@@ -7,31 +7,37 @@
 		"dev": "node esbuild.config.mjs",
 		"build": "tsc -noEmit -skipLibCheck && node esbuild.config.mjs production",
 		"version": "node version-bump.mjs && git add manifest.json versions.json",
-		"test": "vitest"
+		"test:watch": "vitest",
+		"test": "vitest run",
+		"prepare": "husky install"
 	},
 	"keywords": [],
 	"author": "",
 	"license": "MIT",
 	"devDependencies": {
-		"@tsconfig/svelte": "^5.0.2",
-		"@types/node": "^16.11.6",
+		"@tsconfig/svelte": "5.0.2",
+		"@types/node": "16.11.6",
 		"@typescript-eslint/eslint-plugin": "5.29.0",
 		"@typescript-eslint/parser": "5.29.0",
 		"builtin-modules": "3.3.0",
 		"esbuild": "0.17.3",
-		"esbuild-svelte": "^0.8.0",
+		"esbuild-svelte": "0.8.0",
 		"obsidian": "latest",
 		"prettier": "3.0.3",
-		"svelte": "^4.2.1",
-		"svelte-preprocess": "^5.0.4",
+		"svelte": "4.2.1",
+		"svelte-preprocess": "5.0.4",
 		"tslib": "2.4.0",
-		"typescript": "4.7.4"
+		"typescript": "4.7.4",
+		"vitest": "0.34.5",
+		"@codemirror/language": "6.9.1",
+		"@types/electron": "1.6.10",
+		"esbuild-plugin-inline-worker": "0.1.1",
+		"@commitlint/cli": "17.4.0",
+		"@commitlint/config-conventional": "17.4.0",
+		"husky": "8.0.3",
+		"lint-staged": "13.1.0"
 	},
 	"dependencies": {
-		"@codemirror/language": "^6.9.1",
-		"@popperjs/core": "^2.11.8",
-		"@types/electron": "^1.6.10",
-		"esbuild-plugin-inline-worker": "^0.1.1",
-		"vitest": "^0.34.5"
+		"@popperjs/core": "2.11.8"
 	}
 }

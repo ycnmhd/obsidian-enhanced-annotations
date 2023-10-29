@@ -1,4 +1,9 @@
 {
+	"endOfLine": "lf",
+	"singleQuote": true,
 	"useTabs": false,
-	"singleQuote": true
+	"tabWidth": 4,
+	"indent": 4,
+	"semi": true,
+	"printWidth": 80
 }
