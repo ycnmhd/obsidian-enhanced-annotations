@@ -200,7 +200,7 @@ const updateState = (store: Settings, action: SettingsActions) => {
     else if (action.type === 'SET_TAG_OPACITY')
         tag.style.opacity = action.payload.opacity;
     else if (action.type === 'SET_TTS_FOCUS_COMMENT_IN_EDITOR')
-        store.tts.focusCommentInEditor = action.payload.enable;
+        store.tts.focusAnnotationInEditor = action.payload.enable;
 };
 export const settingsReducer = (
     store: Settings,

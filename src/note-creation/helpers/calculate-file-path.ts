@@ -1,14 +1,14 @@
-import { ParsedComment } from '../../editor-plugin/helpers/decorate-comments/helpers/parse-comments/parse-multi-line-comments';
+import { Annotation } from '../../editor-plugin/helpers/decorate-annotations/helpers/parse-annotations/parse-annotations';
 import { sanitizeFileName } from './sanitize-file-name';
 import { Settings } from '../../settings/settings-type';
 
 export const calculateFilePath = (
-    comment: Pick<ParsedComment, 'label' | 'text'>,
+    annotation: Pick<Annotation, 'label' | 'text'>,
     settings: Settings['notes'],
     currentFolder: string,
 ) => {
-    const sanitizedComment = sanitizeFileName(comment.text);
-    const sanitizedLabel = sanitizeFileName(comment.label);
+    const sanitizedAnnotation = sanitizeFileName(annotation.text);
+    const sanitizedLabel = sanitizeFileName(annotation.label);
 
     const folderParts = [];
     const nameParts = [];
@@ -19,13 +19,13 @@ export const calculateFilePath = (
     } else if (settings.defaultFolderMode === 'current folder/notes') {
         folderParts.push(currentFolder, 'notes');
     }
-    if (settings.notesNamingMode === 'label - comment') {
-        nameParts.push(`${sanitizedLabel} - ${sanitizedComment}.md`);
-    } else if (settings.notesNamingMode === 'label/comment') {
+    if (settings.notesNamingMode === 'label - annotation') {
+        nameParts.push(`${sanitizedLabel} - ${sanitizedAnnotation}.md`);
+    } else if (settings.notesNamingMode === 'label/annotation') {
         folderParts.push(sanitizedLabel);
-        nameParts.push(`${sanitizedComment}.md`);
+        nameParts.push(`${sanitizedAnnotation}.md`);
     } else {
-        nameParts.push(sanitizedComment + '.md');
+        nameParts.push(sanitizedAnnotation + '.md');
     }
     const folderPath = folderParts.filter((p) => p && p !== '/').join('/');
     const fileName = nameParts.join('/');

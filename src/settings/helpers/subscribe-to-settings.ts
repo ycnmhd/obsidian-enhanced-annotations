@@ -1,8 +1,8 @@
-import CommentLabels from '../../main';
-import { labelSettings } from '../../comments-outline-view/comments-outline/components/comments-list/comments-list.store';
-import { decorationState } from '../../editor-plugin/helpers/decorate-comments/decoration-state';
+import LabeledAnnotations from '../../main';
+import { labelSettings } from '../../sidebar-outline/components/components/annotations-list/annotations-list.store';
+import { decorationState } from '../../editor-plugin/helpers/decorate-annotations/decoration-state';
 
-export const subscribeToSettings = (plugin: CommentLabels) => {
+export const subscribeToSettings = (plugin: LabeledAnnotations) => {
     const settings = plugin.settings;
     const previousValue = {
         current: undefined,

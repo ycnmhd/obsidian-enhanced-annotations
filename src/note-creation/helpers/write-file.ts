@@ -1,4 +1,4 @@
-import CommentLabels from '../../main';
+import LabeledAnnotations from '../../main';
 import { Notice } from 'obsidian';
 import { l } from '../../lang/lang';
 
@@ -13,7 +13,7 @@ export const writeFile = async ({
     filePath: string;
     fileContent: string;
     openNoteAfterCreation: boolean;
-    plugin: CommentLabels;
+    plugin: LabeledAnnotations;
 }) => {
     try {
         const maybeFolder = plugin.app.vault.getAbstractFileByPath(folderPath);

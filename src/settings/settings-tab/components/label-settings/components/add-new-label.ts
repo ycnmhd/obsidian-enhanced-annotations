@@ -1,10 +1,10 @@
 import { Setting } from 'obsidian';
-import CommentLabels from '../../../../../main';
+import LabeledAnnotations from '../../../../../main';
 import { l } from '../../../../../lang/lang';
 
 type Props = {
     containerEl: HTMLElement;
-    plugin: CommentLabels;
+    plugin: LabeledAnnotations;
     render: () => void;
 };
 export const AddNewLabel = ({ render, plugin, containerEl }: Props) => {

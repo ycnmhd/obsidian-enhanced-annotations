@@ -5,7 +5,7 @@ import {
     Opacity,
     TagSettings as TTagSettings,
 } from '../../../../settings-type';
-import CommentLabels from '../../../../../main';
+import LabeledAnnotations from '../../../../../main';
 import { l } from '../../../../../lang/lang';
 import { TextSVG } from './text-svg';
 import { MultiOptionExtraButton } from './multi-option-extra-button';
@@ -13,7 +13,7 @@ import { MultiOptionExtraButton } from './multi-option-extra-button';
 type Props = {
     containerEl: HTMLElement;
     tag: TTagSettings;
-    plugin: CommentLabels;
+    plugin: LabeledAnnotations;
     render: () => void;
 };
 export const TagSettings = ({ containerEl, tag, plugin, render }: Props) => {

@@ -1,5 +1,5 @@
 import { AddNewLabel } from './components/add-new-label';
-import CommentLabels from '../../../../main';
+import LabeledAnnotations from '../../../../main';
 import { LabelSettings } from './components/label-settings';
 import { l } from '../../../../lang/lang';
 import { Setting } from 'obsidian';
@@ -7,7 +7,7 @@ import { TagSettings } from './components/tag-settings';
 
 type Props = {
     containerEl: HTMLElement;
-    plugin: CommentLabels;
+    plugin: LabeledAnnotations;
 };
 export const LabelsSettings = ({ plugin, containerEl }: Props) => {
     containerEl.createEl('h3', { text: l.SETTINGS_LABELS_STYLES_TITLE });

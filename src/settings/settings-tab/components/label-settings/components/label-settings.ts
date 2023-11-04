@@ -5,7 +5,7 @@ import {
     LabelSettings as TLabelSettings,
     Opacity,
 } from '../../../../settings-type';
-import CommentLabels from '../../../../../main';
+import LabeledAnnotations from '../../../../../main';
 import { l } from '../../../../../lang/lang';
 import { TextSVG } from './text-svg';
 import { MultiOptionExtraButton } from './multi-option-extra-button';
@@ -30,7 +30,7 @@ const styleToggleButton = (button: HTMLElement, enabled?: boolean) => {
 type Props = {
     containerEl: HTMLElement;
     label: TLabelSettings;
-    plugin: CommentLabels;
+    plugin: LabeledAnnotations;
     render: () => void;
 };
 export const LabelSettings = ({

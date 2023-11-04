@@ -15,29 +15,30 @@
 	"author": "",
 	"license": "MIT",
 	"devDependencies": {
+		"@codemirror/language": "6.9.1",
+		"@commitlint/cli": "17.4.0",
+		"@commitlint/config-conventional": "17.4.0",
 		"@tsconfig/svelte": "5.0.2",
+		"@types/electron": "1.6.10",
 		"@types/node": "16.11.6",
 		"@typescript-eslint/eslint-plugin": "5.29.0",
 		"@typescript-eslint/parser": "5.29.0",
 		"builtin-modules": "3.3.0",
 		"esbuild": "0.17.3",
+		"esbuild-plugin-inline-worker": "0.1.1",
 		"esbuild-svelte": "0.8.0",
+		"husky": "8.0.3",
+		"lint-staged": "13.1.0",
 		"obsidian": "latest",
 		"prettier": "3.0.3",
 		"svelte": "4.2.1",
 		"svelte-preprocess": "5.0.4",
 		"tslib": "2.4.0",
 		"typescript": "4.7.4",
-		"vitest": "0.34.5",
-		"@codemirror/language": "6.9.1",
-		"@types/electron": "1.6.10",
-		"esbuild-plugin-inline-worker": "0.1.1",
-		"@commitlint/cli": "17.4.0",
-		"@commitlint/config-conventional": "17.4.0",
-		"husky": "8.0.3",
-		"lint-staged": "13.1.0"
+		"vitest": "0.34.5"
 	},
 	"dependencies": {
+		"lucide-svelte": "0.292.0",
 		"@popperjs/core": "2.11.8"
 	}
 }

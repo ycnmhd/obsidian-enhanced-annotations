@@ -1,11 +1,11 @@
 import { Setting } from 'obsidian';
-import CommentLabels from '../../../main';
+import LabeledAnnotations from '../../../main';
 import { DEFAULT_SETTINGS } from '../../default-settings';
 import { l } from '../../../lang/lang';
 
 type Props = {
     containerEl: HTMLElement;
-    plugin: CommentLabels;
+    plugin: LabeledAnnotations;
 };
 export const TTSSettings = ({ plugin, containerEl }: Props) => {
     const render = () => {
@@ -117,7 +117,7 @@ export const TTSSettings = ({ plugin, containerEl }: Props) => {
         });
     new Setting(containerEl)
         .addToggle((c) => {
-            c.setValue(plugin.settings.getValue().tts.focusCommentInEditor);
+            c.setValue(plugin.settings.getValue().tts.focusAnnotationInEditor);
             c.onChange((v) => {
                 plugin.settings.dispatch({
                     type: 'SET_TTS_FOCUS_COMMENT_IN_EDITOR',
@@ -125,5 +125,5 @@ export const TTSSettings = ({ plugin, containerEl }: Props) => {
                 });
             });
         })
-        .setName(l.SETTINGS_TTS_FOCUS_COMMENT_IN_EDITOR);
+        .setName(l.SETTINGS_TTS_FOCUS_ANNOTATION_IN_EDITOR);
 };

@@ -1,3 +1,5 @@
+import { AnnotationCategory } from '../sidebar-outline/components/components/annotations-list/annotations-list.store';
+
 export type Case = 'upper' | 'lower' | 'title';
 export type Opacity = 80 | 60 | 40 | 20;
 export type FontWeight = 'thin' | 'bold';
@@ -31,7 +33,10 @@ export type LabelSettings = {
     style: LabelStyle;
     enableStyle: boolean;
 };
-export type NotesNamingMode = 'comment' | 'label - comment' | 'label/comment';
+export type NotesNamingMode =
+    | 'annotation'
+    | 'label - annotation'
+    | 'label/annotation';
 export type CommentType = 'markdown' | 'html';
 export type DefaultFolderMode =
     | 'vault'
@@ -60,13 +65,14 @@ export type Settings = {
         fontSize: number;
         showLabelsFilter: boolean;
         hiddenLabels: string[];
+        hiddenCategories: AnnotationCategory[];
     };
     tts: {
         volume: number;
         rate: number;
         voice?: string;
         pitch: number;
-        focusCommentInEditor: boolean;
+        focusAnnotationInEditor: boolean;
     };
     notes: {
         defaultFolderMode: DefaultFolderMode;

@@ -1,16 +1,20 @@
-import CommentLabels from '../../main';
+import LabeledAnnotations from '../../main';
 import {
     fontSize,
     showLabelsFilter,
     showSearchInput,
-} from '../../comments-outline-view/comments-outline/components/controls-bar/controls-bar.store';
+} from '../../sidebar-outline/components/components/controls-bar/controls-bar.store';
 
-import { hiddenLabels } from '../../comments-outline-view/comments-outline/components/comments-list/comments-list.store';
+import {
+    hiddenCategories,
+    hiddenLabels,
+} from '../../sidebar-outline/components/components/annotations-list/annotations-list.store';
 
-export const loadOutlineStateFromSettings = (plugin: CommentLabels) => {
+export const loadOutlineStateFromSettings = (plugin: LabeledAnnotations) => {
     const settings = plugin.settings.getValue().outline;
     fontSize.set(settings.fontSize as any);
     showLabelsFilter.set(settings.showLabelsFilter);
     hiddenLabels.set(new Set(settings.hiddenLabels));
+    hiddenCategories.set(new Set(settings.hiddenCategories));
     showSearchInput.set(settings.showSearchInput);
 };

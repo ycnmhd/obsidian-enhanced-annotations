@@ -1,13 +1,16 @@
-import CommentLabels from '../../main';
+import LabeledAnnotations from '../../main';
 import {
     fontSize,
     showLabelsFilter,
     showSearchInput,
-} from '../../comments-outline-view/comments-outline/components/controls-bar/controls-bar.store';
-import { hiddenLabels } from '../../comments-outline-view/comments-outline/components/comments-list/comments-list.store';
-import { searchTerm } from '../../comments-outline-view/comments-outline/components/controls-bar/components/search-input/search-input.store';
+} from '../../sidebar-outline/components/components/controls-bar/controls-bar.store';
+import {
+    hiddenCategories,
+    hiddenLabels,
+} from '../../sidebar-outline/components/components/annotations-list/annotations-list.store';
+import { searchTerm } from '../../sidebar-outline/components/components/controls-bar/components/search-input.store';
 
-export const syncOutlineStateToSettings = (plugin: CommentLabels) => {
+export const syncOutlineStateToSettings = (plugin: LabeledAnnotations) => {
     const settings = plugin.settings;
     fontSize.subscribe((fontSize) => {
         settings.update((s) => ({
@@ -33,6 +36,15 @@ export const syncOutlineStateToSettings = (plugin: CommentLabels) => {
             outline: {
                 ...s.outline,
                 hiddenLabels: [...hiddenLabels],
+            },
+        }));
+    });
+    hiddenCategories.subscribe((newVal) => {
+        settings.update((s) => ({
+            ...s,
+            outline: {
+                ...s.outline,
+                hiddenCategories: [...newVal],
             },
         }));
     });

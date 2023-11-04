@@ -1,15 +1,15 @@
-import CommentLabels from '../main';
+import LabeledAnnotations from '../main';
 import { createNoteFile } from './create-note-file';
 import { l } from '../lang/lang';
-import { parseMultiLineComments } from '../editor-plugin/helpers/decorate-comments/helpers/parse-comments/parse-multi-line-comments';
+import { parseAnnotations } from '../editor-plugin/helpers/decorate-annotations/helpers/parse-annotations/parse-annotations';
 
-export const registerEditorMenuEvent = (plugin: CommentLabels) => {
+export const registerEditorMenuEvent = (plugin: LabeledAnnotations) => {
     plugin.registerEvent(
         plugin.app.workspace.on('editor-menu', (menu, editor, view) => {
             const cursor = editor.getCursor();
             const line = editor.getLine(cursor.line);
-            const comment = parseMultiLineComments(line)[0];
-            if (comment) {
+            const annotation = parseAnnotations(line)[0];
+            if (annotation) {
                 const onClick = async () => {
                     const currentFileName = view.file?.basename as string;
                     const currentFileFolder = view.file?.parent?.path as string;
@@ -19,14 +19,18 @@ export const registerEditorMenuEvent = (plugin: CommentLabels) => {
                         editor,
                         currentFileName: currentFileName,
                         currentFileFolder,
-                        comment: {
-                            label: comment.label,
-                            text: comment.text,
+                        annotation: {
+                            label: annotation.label,
+                            text: annotation.text,
                         },
                     });
                 };
                 menu.addItem((item) => {
-                    item.setTitle(l.OUTLINE_EDITOR_CREATE_NOTE)
+                    item.setTitle(
+                        annotation.isHighlight
+                            ? l.OUTLINE_EDITOR_CREATE_NOTE_FROM_HIGHLIGHT
+                            : l.OUTLINE_EDITOR_CREATE_NOTE_FROM_COMMENT,
+                    )
                         .setIcon('links-coming-in')
                         .onClick(() => onClick());
                 });

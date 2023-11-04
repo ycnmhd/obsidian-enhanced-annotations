@@ -1,16 +1,16 @@
-import CommentLabels from '../main';
+import LabeledAnnotations from '../main';
 import { Menu, TAbstractFile } from 'obsidian';
 import { l } from '../lang/lang';
-import { copyCommentsToClipboard } from './helpers/copy-comments-to-clipboard';
+import { copyAnnotationsToClipboard } from './helpers/copy-annotations-to-clipboard';
 
 export const fileMenuItems =
-    (plugin: CommentLabels) =>
+    (plugin: LabeledAnnotations) =>
     async (menu: Menu, abstractFiles: TAbstractFile | TAbstractFile[]) => {
         menu.addItem((m) => {
-            m.setTitle(l.OUTLINE_COPY_COMMENTS_TO_CLIPBOARD);
+            m.setTitle(l.OUTLINE_COPY_ANNOTATIONS_TO_CLIPBOARD);
             m.setIcon('clipboard-copy');
             m.onClick(() => {
-                copyCommentsToClipboard(abstractFiles, plugin);
+                copyAnnotationsToClipboard(abstractFiles, plugin);
             });
         });
     };

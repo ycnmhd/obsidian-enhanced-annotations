@@ -3,7 +3,7 @@ import { generateBlockId } from './generate-block-id';
 
 const findNextEmptyLine = ({ cursor, editor }: Props) => {
     for (let i = cursor.line + 1; i < editor.lineCount() - 1; i++) {
-        const line = editor.getLine(i);
+        const line = editor.getLine(i).trim();
         if (!line) {
             return i - 1;
         }

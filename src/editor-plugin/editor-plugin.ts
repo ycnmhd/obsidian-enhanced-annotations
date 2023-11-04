@@ -6,14 +6,14 @@ import {
     ViewPlugin,
     ViewUpdate,
 } from '@codemirror/view';
-import { decorateComments } from './helpers/decorate-comments/decorate-comments';
-import { outlineAnnotation } from '../comments-outline-view/helpers/outline-updater/helpers/trigger-editor-update';
+import { decorateAnnotations } from './helpers/decorate-annotations/decorate-annotations';
+import { outlineAnnotation } from '../sidebar-outline/helpers/outline-updater/helpers/trigger-editor-update';
 
 class EditorPlugin implements PluginValue {
     decorations: DecorationSet;
 
     constructor(view: EditorView) {
-        this.decorations = decorateComments(view);
+        this.decorations = decorateAnnotations(view);
     }
 
     update(update: ViewUpdate) {
@@ -23,7 +23,7 @@ class EditorPlugin implements PluginValue {
             (update.transactions as any)?.[0]?.annotations?.[0] ===
                 outlineAnnotation
         ) {
-            this.decorations = decorateComments(update.view);
+            this.decorations = decorateAnnotations(update.view);
         }
     }
 

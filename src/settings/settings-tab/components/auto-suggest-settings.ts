@@ -1,11 +1,11 @@
 import { Setting } from 'obsidian';
-import CommentLabels from '../../../main';
+import LabeledAnnotations from '../../../main';
 import { l } from '../../../lang/lang';
 import { CommentType } from '../../settings-type';
 
 type Props = {
     containerEl: HTMLElement;
-    plugin: CommentLabels;
+    plugin: LabeledAnnotations;
 };
 export const AutoSuggestSettings = ({ plugin, containerEl }: Props) => {
     containerEl.createEl('h3', { text: l.SETTINGS_AUTO_SUGGEST_TITLE });

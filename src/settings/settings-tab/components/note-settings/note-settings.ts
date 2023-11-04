@@ -1,4 +1,4 @@
-import CommentLabels from '../../../../main';
+import LabeledAnnotations from '../../../../main';
 import { Setting } from 'obsidian';
 import { FolderSuggest } from './helpers/folder-suggestions';
 import { DefaultFolderMode, NotesNamingMode } from '../../../settings-type';
@@ -7,7 +7,7 @@ import { noteVariables } from '../../../../note-creation/calculate-file-content'
 
 type Props = {
     containerEl: HTMLElement;
-    plugin: CommentLabels;
+    plugin: LabeledAnnotations;
 };
 const options: Record<DefaultFolderMode, string> = {
     vault: 'Vault folder',
@@ -63,9 +63,9 @@ export const NoteSettings = ({ containerEl, plugin }: Props) => {
         .setName(l.SETTINGS_NOTE_CREATION_NAME)
         .addDropdown((c) => {
             c.addOptions({
-                comment: 'comment',
-                'label/comment': 'label / comment',
-                'label - comment': 'label - comment',
+                annotation: 'annotation',
+                'label/annotation': 'label / annotation',
+                'label - annotation': 'label - annotation',
             } as Record<NotesNamingMode, string>);
             c.setValue(noteSettings.notesNamingMode);
             c.onChange((v) => {

@@ -1,14 +1,14 @@
 import { App, PluginSettingTab } from 'obsidian';
-import CommentLabels from '../../main';
+import LabeledAnnotations from '../../main';
 import { AutoSuggestSettings } from './components/auto-suggest-settings';
 import { TTSSettings } from './components/tts-settings';
 import { NoteSettings } from './components/note-settings/note-settings';
 import { LabelsSettings } from './components/label-settings/labels-settings';
 
 export class SettingsTab extends PluginSettingTab {
-    plugin: CommentLabels;
+    plugin: LabeledAnnotations;
 
-    constructor(app: App, plugin: CommentLabels) {
+    constructor(app: App, plugin: LabeledAnnotations) {
         super(app, plugin);
         this.plugin = plugin;
     }

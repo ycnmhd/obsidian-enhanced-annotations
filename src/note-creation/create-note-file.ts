@@ -1,23 +1,23 @@
-import { ParsedComment } from '../editor-plugin/helpers/decorate-comments/helpers/parse-comments/parse-multi-line-comments';
+import { Annotation } from '../editor-plugin/helpers/decorate-annotations/helpers/parse-annotations/parse-annotations';
 import { Editor, EditorPosition } from 'obsidian';
 import { insertBlockId } from './helpers/insert-block-id';
 import { calculateFilePath } from './helpers/calculate-file-path';
 import { writeFile } from './helpers/write-file';
 import { insertLinkToNote } from './helpers/insert-link-to-note';
-import CommentLabels from '../main';
+import LabeledAnnotations from '../main';
 import { calculateFileContent } from './calculate-file-content';
 
 type Props = {
-    comment: Pick<ParsedComment, 'label' | 'text'>;
+    annotation: Pick<Annotation, 'label' | 'text'>;
     currentFileName: string;
     currentFileFolder: string;
     cursor: EditorPosition;
     editor: Editor;
-    plugin: CommentLabels;
+    plugin: LabeledAnnotations;
 };
 
 export const createNoteFile = async ({
-    comment,
+    annotation,
     currentFileName,
     currentFileFolder,
     cursor,
@@ -30,11 +30,11 @@ export const createNoteFile = async ({
     const fileContent = calculateFileContent({
         fileName: currentFileName,
         blockId: blockId.blockId,
-        label: comment.label,
+        label: annotation.label,
         template: settings.notes.template,
     });
     const { filePath, folderPath, fileBasename } = calculateFilePath(
-        comment,
+        annotation,
         settings.notes,
         currentFileFolder,
     );
