@@ -12,12 +12,14 @@ export const updateOutline = (
     plugin: LabeledAnnotations,
 ) => {
     let fileHasLabeledAnnotations = false;
+    let fileHasHighlight = false;
     const labels = annotations
         .sort((a, b) => a.label.localeCompare(b.label))
         .reduce(
             (acc, val) => {
                 if (val.label) fileHasLabeledAnnotations = true;
                 else val.label = '/';
+                if (val.isHighlight) fileHasHighlight = true;
                 if (val.text) {
                     if (!acc[val.label]) {
                         acc[val.label] = [];
@@ -32,4 +34,5 @@ export const updateOutline = (
     fileAnnotations.set({ labels });
     registerNewLabels(annotations, plugin);
     decorationState.fileHasLabeledAnnotations = fileHasLabeledAnnotations;
+    decorationState.fileHasHighlight = fileHasHighlight;
 };

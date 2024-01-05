@@ -18,6 +18,8 @@ export type Annotation = {
         afterFrom: number;
     };
 };
+const startPattern = /(<!--|%%|==)/g;
+const endPattern = /(-->|%%|==)/g;
 export const parseAnnotations = (text: string, lineNumber = 0, from = 0) => {
     const lines = text.split('\n');
     const annotations: Annotation[] = [];
@@ -31,40 +33,53 @@ export const parseAnnotations = (text: string, lineNumber = 0, from = 0) => {
         line: number;
         from: number;
         multiLineStart: string | null;
+        multiAnnotationLine: boolean;
     } = {
         multiLineAnnotation: null,
         line: lineNumber,
         from,
         multiLineStart: '',
+        multiAnnotationLine: false,
     };
-    for (const line of lines) {
-        let startRegex = /(<!--|%%|==)/.exec(line);
-        let endRegex =
-            startRegex || state.multiLineAnnotation
-                ? /(-->|%%|==)/.exec(line)
-                : undefined;
+    for (let i = 0; i < lines.length; i++) {
+        const line = lines[i];
+        if (state.multiAnnotationLine) {
+            state.multiAnnotationLine = false;
+        } else {
+            startPattern.lastIndex = 0;
+            endPattern.lastIndex = 0;
+        }
+
+        const startRegex = startPattern.exec(line);
+
+        let endRegex: RegExpExecArray | null | undefined = undefined;
+
+        if (startRegex || state.multiLineAnnotation) {
+            // to handle identical tags `%% comment %%`
+            if (!state.multiLineAnnotation)
+                endPattern.lastIndex = startPattern.lastIndex;
+            endRegex = endPattern.exec(line);
+        }
+
         // single line annotation
         if (startRegex && endRegex) {
             const start = startRegex[1];
             const end = endRegex[1];
+            // tags match
             if (pairs[start] === end) {
-                const from = line.indexOf(start);
-                const beforeTo = line.lastIndexOf(end);
+                const from = startRegex.index;
+                const beforeTo = endRegex.index;
                 const afterFrom = from + start.length;
                 const to = beforeTo + end.length;
-                // start of multiline obsidian annotation
-                if (from === beforeTo) {
-                    if (state.multiLineAnnotation) startRegex = null;
-                    else endRegex = null;
-                } else {
-                    // single line annotation
+                // single line annotation
+                if (from < beforeTo) {
                     const annotation = line.substring(afterFrom, beforeTo);
                     const labelRegex = /^([^:\s]+): ?(.+)$/g.exec(annotation);
                     const text = (
                         labelRegex ? labelRegex[2] : annotation
                     ).trim();
                     const label = (labelRegex ? labelRegex[1] : '').trim();
-                    if (text || label)
+                    if (text || label) {
                         annotations.push({
                             text: text,
                             label: label,
@@ -86,6 +101,14 @@ export const parseAnnotations = (text: string, lineNumber = 0, from = 0) => {
                                 },
                             },
                         });
+                    }
+                    // multi comment line
+                    if (startPattern.exec(line) !== null) {
+                        state.multiAnnotationLine = true;
+                        startPattern.lastIndex = endPattern.lastIndex;
+                        i = i - 1;
+                        continue;
+                    }
                     state.multiLineAnnotation = null;
                 }
             }
@@ -93,8 +116,8 @@ export const parseAnnotations = (text: string, lineNumber = 0, from = 0) => {
         // start of multiline annotation
         if (startRegex && !endRegex) {
             const start = startRegex[1];
-            const from = state.from + line.indexOf(start);
-            const afterFrom = line.indexOf(start) + start.length;
+            const from = state.from + startRegex.index;
+            const afterFrom = startRegex.index + start.length;
             const annotation = line.substring(afterFrom);
             const labelRegex = /^([^:\s]+): ?(.+)$/g.exec(annotation);
             const text = labelRegex ? labelRegex[2] : annotation;
@@ -112,7 +135,7 @@ export const parseAnnotations = (text: string, lineNumber = 0, from = 0) => {
                         to: -1,
                     },
                     range: {
-                        from: { line: state.line, ch: line.indexOf(start) },
+                        from: { line: state.line, ch: startRegex.index },
                     },
                 };
                 state.multiLineStart = start;
@@ -122,7 +145,7 @@ export const parseAnnotations = (text: string, lineNumber = 0, from = 0) => {
         else if (endRegex && state.multiLineAnnotation) {
             const end = endRegex[1];
             if (pairs[state.multiLineStart as string] === end) {
-                const beforeTo = line.lastIndexOf(end);
+                const beforeTo = endRegex.index;
                 const to = beforeTo + end.length;
                 state.multiLineAnnotation.text.push(
                     line.substring(0, beforeTo),
@@ -145,6 +168,12 @@ export const parseAnnotations = (text: string, lineNumber = 0, from = 0) => {
                     });
                 state.multiLineAnnotation = null;
                 state.multiLineStart = null;
+                // end of multiline annotation and start of another annotation in the same line
+                if (startRegex) {
+                    startPattern.lastIndex = endPattern.lastIndex;
+                    i = i - 1;
+                    continue;
+                }
             }
         }
         // middle of a multi line annotation

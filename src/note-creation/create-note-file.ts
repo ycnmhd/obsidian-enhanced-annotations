@@ -1,5 +1,5 @@
 import { Annotation } from '../editor-plugin/helpers/decorate-annotations/helpers/parse-annotations/parse-annotations';
-import { Editor, EditorPosition } from 'obsidian';
+import { Editor, EditorPosition, Notice } from 'obsidian';
 import { insertBlockId } from './helpers/insert-block-id';
 import { calculateFilePath } from './helpers/calculate-file-path';
 import { writeFile } from './helpers/write-file';
@@ -8,7 +8,7 @@ import LabeledAnnotations from '../main';
 import { calculateFileContent } from './calculate-file-content';
 
 type Props = {
-    annotation: Pick<Annotation, 'label' | 'text'>;
+    annotation: Annotation;
     currentFileName: string;
     currentFileFolder: string;
     cursor: EditorPosition;
@@ -24,8 +24,11 @@ export const createNoteFile = async ({
     editor,
     plugin,
 }: Props) => {
-    const blockId = insertBlockId({ cursor, editor });
-    if (!blockId) return;
+    const blockId = insertBlockId({ cursor, editor, annotation });
+    if (!blockId) {
+        new Notice('Could not create a block ID');
+        return;
+    }
     const settings = plugin.settings.getValue();
     const fileContent = calculateFileContent({
         fileName: currentFileName,

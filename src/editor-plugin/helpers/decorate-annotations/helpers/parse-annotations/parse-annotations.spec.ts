@@ -1,4 +1,4 @@
-import { parseAnnotations } from './parse-annotations';
+import { Annotation, parseAnnotations } from './parse-annotations';
 import { describe, expect, it } from 'vitest';
 import { sample1 } from './parse-annotation-samples';
 
@@ -36,11 +36,11 @@ first-->`,
 second-->`,
                 `%%n: 
 
-third%%`,
+third!%%`,
                 `<!-- forth-->`,
             ],
         ],
-        output: [`n: first`, `n : second`, `n: third`, `forth`],
+        output: [`n: first`, `n : second`, `n: third!`, `forth`],
     },
     {
         input: [
@@ -55,7 +55,35 @@ second==`,
         ],
         output: [],
     },
+
+    {
+        input: [
+            [
+                `<!--n: first--> <!--n: first b-->`,
+                `<!--n: second-->
+<!--n: second b-->
+`,
+                `==n: third== text ==n: third b==`,
+                `<!--n: 
+first --> text <!--d: 
+first b--> `,
+            ],
+        ],
+        output: [
+            `n: first`,
+            'n: first b',
+            `n: second`,
+            'n: second b',
+            `n: third`,
+            `n: third b`,
+            'n: first',
+            'd: first b',
+        ],
+    },
 ];
+
+const concatenate = (annotations: Annotation[]) =>
+    annotations.map((c) => (c.label ? c.label + ': ' + c.text : c.text));
 
 describe('parse multi-line annotations', () => {
     for (const sample of samples) {
@@ -65,14 +93,13 @@ describe('parse multi-line annotations', () => {
                 0,
                 0,
             );
-            const output = annotations.map((c) =>
-                c.label ? c.label + ': ' + c.text : c.text,
-            );
+
+            const output = concatenate(annotations);
             expect(output).toEqual(sample.output);
         });
     }
 
-    it('', () => {
+    it('should handle text after a comment', () => {
         const annotations = parseAnnotations(
             '<!--n: some comment--> [[some link]]',
         );

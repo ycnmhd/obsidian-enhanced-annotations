@@ -6,7 +6,7 @@ export const selectText = (
     annotation: Annotation,
     plugin: LabeledAnnotations,
 ) => {
-    const view = plugin.outline.view;
+    const view = plugin.outline.getValue().view;
     if (view) {
         const editor = view.editor;
         const selection: EditorRangeOrCaret = {

@@ -5,6 +5,7 @@ import {
 } from '../../annotations-list/annotations-list.store';
 import { Annotation } from '../../../../../editor-plugin/helpers/decorate-annotations/helpers/parse-annotations/parse-annotations';
 import { selectText } from '../../annotations-list/helpers/focus-text';
+import { TFile } from 'obsidian';
 
 type Subscriber = (isReading: boolean) => void;
 
@@ -15,6 +16,8 @@ export class TTS {
     #isReading: boolean;
     private subscribers: Set<Subscriber> = new Set();
     private utterance: SpeechSynthesisUtterance;
+    private file: TFile | null;
+    private fileHasChanged = false;
 
     private constructor() {
         this.onLoad();
@@ -38,9 +41,15 @@ export class TTS {
         return TTS.instance;
     }
 
-    set setPlugin(value: LabeledAnnotations) {
+    setPlugin = (value: LabeledAnnotations) => {
         this.plugin = value;
-    }
+        this.plugin.outline.subscribe((v) => {
+            if (v.view?.file !== this.file) {
+                this.file = v.view?.file || null;
+                this.fileHasChanged = true;
+            }
+        });
+    };
 
     read() {
         const dict = this.annotations.reduce(
@@ -60,6 +69,7 @@ export class TTS {
             .getVoices()
             .filter((otherVoice) => otherVoice.name === settings.voice)[0];
         window.speechSynthesis.cancel();
+        this.fileHasChanged = false;
         window.speechSynthesis.speak(this.utterance);
         this.updateState();
         let annotationIndex = 0;
@@ -67,7 +77,10 @@ export class TTS {
             if (e.name === 'sentence') {
                 const annotation = dict.annotations[e.charIndex] as Annotation;
                 if (annotation) {
-                    if (settings.focusAnnotationInEditor)
+                    if (
+                        !this.fileHasChanged &&
+                        settings.focusAnnotationInEditor
+                    )
                         selectText(annotation, this.plugin);
                     activeAnnotationIndex.set(annotationIndex++);
                 }

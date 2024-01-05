@@ -19,10 +19,7 @@ export const registerEditorMenuEvent = (plugin: LabeledAnnotations) => {
                         editor,
                         currentFileName: currentFileName,
                         currentFileFolder,
-                        annotation: {
-                            label: annotation.label,
-                            text: annotation.text,
-                        },
+                        annotation,
                     });
                 };
                 menu.addItem((item) => {

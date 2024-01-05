@@ -6,11 +6,11 @@ import {
     EditorSuggestContext,
     EditorSuggestTriggerInfo,
     MarkdownView,
-    TFile,
 } from 'obsidian';
 import LabeledAnnotations from 'src/main';
 import { isValidLabel } from './helpers/is-valid-label';
 import { decorationState } from '../editor-plugin/helpers/decorate-annotations/decoration-state';
+import { isInsideAnnotation } from './helpers/is-inside-annotation';
 
 export type AnnotationCompletion = {
     label: string;
@@ -105,7 +105,6 @@ export class AnnotationSuggest extends EditorSuggest<AnnotationCompletion> {
     onTrigger(
         cursor: EditorPosition,
         editor: Editor,
-        file: TFile,
     ): EditorSuggestTriggerInfo | null {
         const settings = this.plugin.settings.getValue();
         if (!settings.editorSuggest.enableAutoSuggest) {
@@ -133,7 +132,8 @@ export class AnnotationSuggest extends EditorSuggest<AnnotationCompletion> {
         if (precedingChar && /[`a-zA-Z0-9]/.test(precedingChar)) {
             return null;
         }
-
+        const line = editor.getLine(cursor.line);
+        if (isInsideAnnotation(line, '//', startPos.ch)) return null;
         return {
             start: startPos,
             end: cursor,

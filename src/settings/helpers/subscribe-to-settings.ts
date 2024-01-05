@@ -5,18 +5,22 @@ import { decorationState } from '../../editor-plugin/helpers/decorate-annotation
 export const subscribeToSettings = (plugin: LabeledAnnotations) => {
     const settings = plugin.settings;
     const previousValue = {
-        current: undefined,
+        current: '',
     };
     settings.subscribe((value) => {
-        const labels = value.decoration.styles.labels;
-        if (labels !== previousValue.current) {
-            previousValue.current = labels as any;
+        const styles = value.decoration.styles;
+        const stylesStr = JSON.stringify(styles);
+        if (stylesStr !== previousValue.current) {
+            previousValue.current = stylesStr;
             labelSettings.set(
                 Object.fromEntries(
-                    Object.values(labels).map((label) => [label.label, label]),
+                    Object.values(styles.labels).map((label) => [
+                        label.label,
+                        label,
+                    ]),
                 ),
             );
+            decorationState.setSettings(value.decoration.styles);
         }
-        decorationState.setSettings(value.decoration.styles);
     });
 };

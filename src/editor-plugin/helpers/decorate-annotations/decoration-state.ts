@@ -2,10 +2,7 @@ import { Decoration } from '@codemirror/view';
 import { Settings } from '../../../settings/settings-type';
 import { generateLabelStyleString } from './helpers/generate-label-style-string';
 import LabeledAnnotations from '../../../main';
-import {
-    debouncedTriggerEditorUpdate,
-    triggerEditorUpdate,
-} from '../../../sidebar-outline/helpers/outline-updater/helpers/trigger-editor-update';
+import { triggerEditorUpdate } from '../../../sidebar-outline/helpers/outline-updater/helpers/trigger-editor-update';
 
 export class DecorationState {
     private _decorations: Record<
@@ -16,9 +13,9 @@ export class DecorationState {
             highlight: Decoration;
         }
     >;
-    private _defaultHighlightDecoration: Decoration;
     private _decorateTags: boolean;
     private _fileHasLabeledAnnotations: boolean;
+    private _fileHasHighlight: boolean;
     private _userHasLabels: boolean;
     private _plugin: LabeledAnnotations;
 
@@ -27,7 +24,10 @@ export class DecorationState {
     }
 
     get enabled() {
-        return this._fileHasLabeledAnnotations && this._userHasLabels;
+        return (
+            (this._fileHasLabeledAnnotations && this._userHasLabels) ||
+            this._fileHasHighlight
+        );
     }
 
     get decorateTags() {
@@ -38,30 +38,35 @@ export class DecorationState {
         const wasDisabled = !this.enabled;
         this._fileHasLabeledAnnotations = value;
         if (wasDisabled && this.enabled) {
-            const editor = this._plugin.outline.view?.editor;
-            if (editor) {
-                triggerEditorUpdate(editor);
-            }
+            this.decorate();
         }
     }
 
-    set userHasLabels(userHasLabels: boolean) {
+    set fileHasHighlight(value: boolean) {
+        const wasDisabled = !this.enabled;
+        this._fileHasHighlight = value;
+        if (wasDisabled && this.enabled) {
+            this.decorate();
+        }
+    }
+
+    private set userHasLabels(userHasLabels: boolean) {
         const wasDisabled = !this.enabled;
         this._userHasLabels = userHasLabels;
         if (wasDisabled && this.enabled) {
-            const editor = this._plugin.outline.view?.editor;
-            if (editor) {
-                debouncedTriggerEditorUpdate(editor);
-            }
+            this.decorate();
+        }
+    }
+
+    private decorate() {
+        const editor = this._plugin.outline.getValue().view?.editor;
+        if (editor) {
+            triggerEditorUpdate(editor);
         }
     }
 
     get decorations() {
         return this._decorations;
-    }
-
-    get defaultHighlightDecoration(): Decoration {
-        return this._defaultHighlightDecoration;
     }
 
     setSettings(styles: Settings['decoration']['styles']) {
@@ -110,21 +115,9 @@ export class DecorationState {
             >,
         );
         this._decorateTags = styles.tag.enableStyle;
-        this.userHasLabels = Object.keys(this._decorations).length > 0;
 
-        const view = this._plugin.outline.view;
-        if (view) {
-            const bg = getComputedStyle(view.contentEl).getPropertyValue(
-                '--text-highlight-bg',
-            );
-            if (bg) {
-                this._defaultHighlightDecoration = Decoration.mark({
-                    attributes: {
-                        style: `background-color: ${bg}`,
-                    },
-                });
-            }
-        }
+        this.userHasLabels = Object.keys(this._decorations).length > 0;
+        this.decorate();
     }
 }
 

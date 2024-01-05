@@ -7,3 +7,11 @@ If your plugin does not need CSS, delete this file.
 
 */
 
+.cm-highlight {
+	background-color: transparent !important;
+}
+
+.cm-highlight-default {
+	background-color: var(--text-highlight-bg);
+}
+

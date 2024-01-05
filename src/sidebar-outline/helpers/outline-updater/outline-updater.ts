@@ -4,6 +4,7 @@ import { updateOutline } from './helpers/update-outline';
 import { resetOutline } from './helpers/reset-outline';
 // @ts-ignore
 import W from 'src/editor-plugin/helpers/decorate-annotations/helpers/parse-annotations/parse-annotations.worker.ts';
+import { Store } from '../../../helpers/store';
 
 const getViewOfFile = (plugin: LabeledAnnotations, file: TFile) => {
     return plugin.app.workspace
@@ -11,22 +12,22 @@ const getViewOfFile = (plugin: LabeledAnnotations, file: TFile) => {
         .find((l) => l.view instanceof MarkdownView && l.view.file === file);
 };
 
-export class OutlineUpdater {
+type OutlineState = {
+    view: MarkdownView | null;
+};
+
+export class OutlineUpdater extends Store<OutlineState, never> {
     timeout: ReturnType<typeof setTimeout>;
     private worker: Worker;
-    private _view: MarkdownView | null;
 
     constructor(private plugin: LabeledAnnotations) {
+        super({ view: null });
         this.onLoad();
-    }
-
-    get view(): MarkdownView | null {
-        return this._view;
     }
 
     private updateOutline(view: MarkdownView | null, immediate = false) {
         clearTimeout(this.timeout);
-        this._view = view;
+        this.set({ view });
         if (view instanceof MarkdownView) {
             if (immediate) {
                 this.worker.postMessage(view.editor.getValue());

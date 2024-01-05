@@ -139,6 +139,7 @@ const updateState = (store: Settings, action: SettingsActions) => {
                     color: getDefaultColor(Object.values(labels)),
                     italic: true,
                     fontWeight: 'thin',
+                    opacity: 80,
                 },
             };
         }

@@ -29,9 +29,9 @@ export default class LabeledAnnotations extends Plugin {
     statusBar: StatusBar;
 
     async onload() {
-        tts.setPlugin = this;
         await this.loadSettings();
         this.outline = new OutlineUpdater(this);
+        tts.setPlugin(this);
         decorationState.plugin = this;
         subscribeToSettings(this);
         this.registerEditorExtension([editorPlugin]);

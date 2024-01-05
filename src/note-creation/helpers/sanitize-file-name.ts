@@ -1,7 +1,7 @@
 // copied from https://github.com/RafaelGB/obsidian-db-folder/blob/075ba07b17c1fd5418241daa31d591a3d1a7166a/src/helpers/FileManagement.ts#L81
 export function sanitizeFileName(path: string, replacement = '-') {
     const illegalCharacters = /[*"\\/<>:|?]/g;
-    const unsafeCharactersForObsidianLinks = /[#^[]\|]/g;
+    const unsafeCharactersForObsidianLinks = /[#^[\]|]/g;
     const dotAtTheStart = /^\./g;
 
     // credit: https://github.com/parshap/node-sanitize-filename/blob/209c39b914c8eb48ee27bcbde64b2c7822fdf3de/index.js#L33
