@@ -12,3 +12,5 @@ export const isReading = writable<boolean>(false);
 tts.subscribe((value) => isReading.set(value));
 
 export const showSecondaryControlsBar = writable<boolean>(false);
+
+export const pluginIdle = writable<boolean>(false);

@@ -8,24 +8,28 @@ import {
 } from '@codemirror/view';
 import { decorateAnnotations } from './helpers/decorate-annotations/decorate-annotations';
 import { outlineAnnotation } from '../sidebar-outline/helpers/outline-updater/helpers/trigger-editor-update';
-import { decorationState } from './helpers/decorate-annotations/decoration-state';
+import LabeledAnnotations from '../main';
 
-class EditorPlugin implements PluginValue {
+export class EditorPlugin implements PluginValue {
     decorations: DecorationSet;
 
+    static plugin: LabeledAnnotations;
+
     constructor(view: EditorView) {
-        this.decorations = decorateAnnotations(view);
+        this.decorations = decorateAnnotations(view, EditorPlugin.plugin);
     }
 
     update(update: ViewUpdate) {
         if (
-            decorationState.enabled &&
-            (update.docChanged ||
-                update.viewportChanged ||
-                (update.transactions as any)?.[0]?.annotations?.[0] ===
-                    outlineAnnotation)
+            update.docChanged ||
+            update.viewportChanged ||
+            (update.transactions as any)?.[0]?.annotations?.[0] ===
+                outlineAnnotation
         ) {
-            this.decorations = decorateAnnotations(update.view);
+            this.decorations = decorateAnnotations(
+                update.view,
+                EditorPlugin.plugin,
+            );
         }
     }
 

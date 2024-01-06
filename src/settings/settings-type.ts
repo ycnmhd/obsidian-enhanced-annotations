@@ -43,6 +43,9 @@ export type DefaultFolderMode =
     | 'current folder'
     | 'current folder/notes'
     | 'customFolder';
+
+export type DateString = `${number}-${number}-${number}`;
+
 export type Settings = {
     editorSuggest: {
         enableAutoSuggest: boolean;
@@ -81,5 +84,8 @@ export type Settings = {
         openNoteAfterCreation: boolean;
         insertLinkToNote: boolean;
         template: string;
+    };
+    idling: {
+        daysUnused: [DateString?, DateString?, DateString?];
     };
 };

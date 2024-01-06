@@ -42,4 +42,7 @@ export const DEFAULT_SETTINGS = (): Settings => ({
         defaultFolderMode: 'current folder/notes',
         template: `#annotation/{{label}}\n\n{{content}}`,
     },
+    idling: {
+        daysUnused: [],
+    },
 });

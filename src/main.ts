@@ -1,5 +1,4 @@
 import { Plugin } from 'obsidian';
-import { editorPlugin } from './editor-plugin/editor-plugin';
 import { addInsertCommentCommands } from './commands/commands';
 import { Settings } from './settings/settings-type';
 import {
@@ -16,25 +15,25 @@ import { mergeDeep } from './settings/helpers/merge-objects';
 import { registerEditorMenuEvent } from './note-creation/register-editor-menu-event';
 
 import { OutlineUpdater } from './sidebar-outline/helpers/outline-updater/outline-updater';
-import { subscribeToSettings } from './settings/helpers/subscribe-to-settings';
 import { loadOutlineStateFromSettings } from './settings/helpers/load-outline-state-from-settings';
-import { syncOutlineStateToSettings } from './settings/helpers/sync-outline-state-to-settings';
-import { decorationState } from './editor-plugin/helpers/decorate-annotations/decoration-state';
+import { subscribeSettingsToOutlineState } from './settings/helpers/subscribe-settings-to-outline-state';
 import { StatusBar } from './stats-bar/status-bar';
 import { fileMenuItems } from './clipboard/file-menu-items';
+import { subscribeDecorationStateToSettings } from './settings/helpers/subscribe-decoration-state-to-settings';
+import { DecorationSettings } from './editor-plugin/helpers/decorate-annotations/decoration-settings';
+import { EditorPlugin, editorPlugin } from './editor-plugin/editor-plugin';
+import { Idling } from './idling/idling';
 
 export default class LabeledAnnotations extends Plugin {
     outline: OutlineUpdater;
     settings: Store<Settings, SettingsActions>;
     statusBar: StatusBar;
+    idling: Idling;
+    decorationSettings: DecorationSettings;
 
     async onload() {
         await this.loadSettings();
-        this.outline = new OutlineUpdater(this);
-        tts.setPlugin(this);
-        decorationState.plugin = this;
-        subscribeToSettings(this);
-        this.registerEditorExtension([editorPlugin]);
+
         this.registerEditorSuggest(new AnnotationSuggest(this.app, this));
         this.registerEvent(
             this.app.workspace.on('file-menu', fileMenuItems(this)),
@@ -44,17 +43,17 @@ export default class LabeledAnnotations extends Plugin {
         );
 
         addInsertCommentCommands(this);
-        this.statusBar = new StatusBar(this);
 
         this.registerView(
             SIDEBAR_OUTLINE_VIEW_TYPE,
             (leaf) => new SidebarOutlineView(leaf, this),
         );
 
+        this.idling = new Idling(this);
         this.app.workspace.onLayoutReady(async () => {
             await this.activateView();
             loadOutlineStateFromSettings(this);
-            syncOutlineStateToSettings(this);
+            subscribeSettingsToOutlineState(this);
             this.addSettingTab(new SettingsTab(this.app, this));
             registerEditorMenuEvent(this);
         });
@@ -62,6 +61,16 @@ export default class LabeledAnnotations extends Plugin {
 
     onunload() {
         tts.stop();
+    }
+
+    loadPlugin() {
+        this.decorationSettings = new DecorationSettings(this);
+        EditorPlugin.plugin = this;
+        this.outline = new OutlineUpdater(this);
+        tts.setPlugin(this);
+        subscribeDecorationStateToSettings(this);
+        this.registerEditorExtension([editorPlugin]);
+        this.statusBar = new StatusBar(this);
     }
 
     async loadSettings() {

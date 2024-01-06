@@ -11,6 +11,8 @@ export const l = {
     OUTLINE_NO_ANNOTATIONS_FOUND: 'No annotations found.',
     OUTLINE_NOTICE_COPIED_TO_CLIPBOARD: 'Copied to clipboard',
     OUTLINE_READ_ANNOTATIONS: 'Read annotations',
+    OUTLINE_PLUGIN_IS_IDLE: ' plugin is idle',
+    OUTLINE_ENABLE_PLUGIN: 'Enable',
     PLUGIN_NAME: '?',
     SETTINGS_AUTO_SUGGEST_TITLE: 'Auto suggest',
     SETTINGS_AUTO_SUGGEST_ENABLE: 'Suggest labels',

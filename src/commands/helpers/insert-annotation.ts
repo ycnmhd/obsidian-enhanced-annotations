@@ -1,6 +1,5 @@
 import LabeledAnnotations from '../../main';
 import { parseAnnotations } from '../../editor-plugin/helpers/decorate-annotations/helpers/parse-annotations/parse-annotations';
-import { decorationState } from '../../editor-plugin/helpers/decorate-annotations/decoration-state';
 import { AnnotationCategory } from '../../sidebar-outline/components/components/annotations-list/annotations-list.store';
 import { CommentType } from '../../settings/settings-type';
 
@@ -92,5 +91,5 @@ export const insertAnnotation = async ({
             }
         }
     }
-    if (type && label) decorationState.fileHasLabeledAnnotations = true;
+    if (type && label) plugin.idling.logActivity();
 };

@@ -5,20 +5,26 @@
   import { searchTerm } from "./components/controls-bar/components/search-input.store";
   import { filteredBySearch } from "./components/annotations-list/annotations-list.store";
   import LabeledAnnotations from "../../main";
+  import { pluginIdle } from "./components/controls-bar/controls-bar.store";
+  import PluginIdle from "./components/plugin-idle.svelte";
 
   export let plugin: LabeledAnnotations;
 </script>
 
 <div class="outline">
-
-  {#if Object.values($filteredBySearch.labels).flat().length || $searchTerm.length}
-    <ControlsBar />
-
-    <FlatOutline plugin={plugin} />
-
+  {#if $pluginIdle}
+    <PluginIdle plugin={plugin} />
   {:else }
-    <NoAnnotations />
+    {#if Object.values($filteredBySearch.labels).flat().length || $searchTerm.length}
+      <ControlsBar plugin={plugin} />
+
+      <FlatOutline plugin={plugin} />
+
+    {:else }
+      <NoAnnotations />
+    {/if}
   {/if}
+
 </div>
 
 <style>

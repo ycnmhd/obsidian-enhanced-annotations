@@ -9,7 +9,6 @@ import {
 } from 'obsidian';
 import LabeledAnnotations from 'src/main';
 import { isValidLabel } from './helpers/is-valid-label';
-import { decorationState } from '../editor-plugin/helpers/decorate-annotations/decoration-state';
 import { isInsideAnnotation } from './helpers/is-inside-annotation';
 
 export type AnnotationCompletion = {
@@ -99,7 +98,7 @@ export class AnnotationSuggest extends EditorSuggest<AnnotationCompletion> {
         });
 
         this.recordUsedSuggestion(label);
-        decorationState.fileHasLabeledAnnotations = true;
+        this.plugin.idling.logActivity();
     }
 
     onTrigger(

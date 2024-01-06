@@ -9,6 +9,8 @@ import {
 } from './settings-type';
 import { getDefaultColor } from './helpers/get-default-color';
 import { isValidLabel } from '../editor-suggest/helpers/is-valid-label';
+import { formattedDate } from '../helpers/formatted-date';
+import { pluginIsIdle } from './settings-selectors';
 
 export type SettingsActions =
     | {
@@ -116,7 +118,9 @@ export type SettingsActions =
     | {
           type: 'SET_AUTO_SUGGEST_COMMENT_TYPE';
           payload: { type: CommentType };
-      };
+      }
+    | { type: 'LOG_PLUGIN_USED' }
+    | { type: 'LOG_PLUGIN_STARTED' };
 
 const updateState = (store: Settings, action: SettingsActions) => {
     const labels = store.decoration.styles.labels;
@@ -202,6 +206,18 @@ const updateState = (store: Settings, action: SettingsActions) => {
         tag.style.opacity = action.payload.opacity;
     else if (action.type === 'SET_TTS_FOCUS_COMMENT_IN_EDITOR')
         store.tts.focusAnnotationInEditor = action.payload.enable;
+    else if (action.type === 'LOG_PLUGIN_USED') {
+        store.idling.daysUnused = [];
+    } else if (action.type === 'LOG_PLUGIN_STARTED') {
+        if (!pluginIsIdle(store)) {
+            const date = formattedDate();
+            const daysUnused = store.idling.daysUnused.sort();
+            if (!daysUnused.includes(date)) {
+                daysUnused.push(date);
+                store.idling.daysUnused = daysUnused;
+            }
+        }
+    }
 };
 export const settingsReducer = (
     store: Settings,

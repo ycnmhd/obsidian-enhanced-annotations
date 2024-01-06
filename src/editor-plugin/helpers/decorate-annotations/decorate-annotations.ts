@@ -1,13 +1,16 @@
 import { RangeSetBuilder } from '@codemirror/state';
 import { Decoration, EditorView } from '@codemirror/view';
 import { parseAnnotations } from './helpers/parse-annotations/parse-annotations';
-import { decorationState } from './decoration-state';
+import LabeledAnnotations from '../../../main';
 
 const defaultHighlightDecoration = Decoration.mark({
     class: 'cm-highlight-default',
 });
 
-export const decorateAnnotations = (view: EditorView) => {
+export const decorateAnnotations = (
+    view: EditorView,
+    plugin: LabeledAnnotations,
+) => {
     const builder = new RangeSetBuilder<Decoration>();
 
     for (const { from, to } of view.visibleRanges) {
@@ -19,9 +22,13 @@ export const decorateAnnotations = (view: EditorView) => {
         );
 
         for (const annotation of annotations) {
-            const decoration = decorationState.decorations[annotation.label];
+            const decoration =
+                plugin.decorationSettings.decorations[annotation.label];
             if (decoration) {
-                if (decorationState.decorateTags && !annotation.isHighlight) {
+                if (
+                    plugin.decorationSettings.decorateTags &&
+                    !annotation.isHighlight
+                ) {
                     builder.add(
                         annotation.position.from,
                         annotation.position.afterFrom,

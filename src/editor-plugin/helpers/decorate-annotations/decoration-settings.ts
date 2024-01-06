@@ -4,7 +4,7 @@ import { generateLabelStyleString } from './helpers/generate-label-style-string'
 import LabeledAnnotations from '../../../main';
 import { triggerEditorUpdate } from '../../../sidebar-outline/helpers/outline-updater/helpers/trigger-editor-update';
 
-export class DecorationState {
+export class DecorationSettings {
     private _decorations: Record<
         string,
         {
@@ -14,52 +14,15 @@ export class DecorationState {
         }
     >;
     private _decorateTags: boolean;
-    private _fileHasLabeledAnnotations: boolean;
-    private _fileHasHighlight: boolean;
-    private _userHasLabels: boolean;
-    private _plugin: LabeledAnnotations;
 
-    set plugin(value: LabeledAnnotations) {
-        this._plugin = value;
-    }
-
-    get enabled() {
-        return (
-            (this._fileHasLabeledAnnotations && this._userHasLabels) ||
-            this._fileHasHighlight
-        );
-    }
+    constructor(private plugin: LabeledAnnotations) {}
 
     get decorateTags() {
         return this._decorateTags;
     }
 
-    set fileHasLabeledAnnotations(value: boolean) {
-        const wasDisabled = !this.enabled;
-        this._fileHasLabeledAnnotations = value;
-        if (wasDisabled && this.enabled) {
-            this.decorate();
-        }
-    }
-
-    set fileHasHighlight(value: boolean) {
-        const wasDisabled = !this.enabled;
-        this._fileHasHighlight = value;
-        if (wasDisabled && this.enabled) {
-            this.decorate();
-        }
-    }
-
-    private set userHasLabels(userHasLabels: boolean) {
-        const wasDisabled = !this.enabled;
-        this._userHasLabels = userHasLabels;
-        if (wasDisabled && this.enabled) {
-            this.decorate();
-        }
-    }
-
     private decorate() {
-        const editor = this._plugin.outline.getValue().view?.editor;
+        const editor = this.plugin.outline.getValue().view?.editor;
         if (editor) {
             triggerEditorUpdate(editor);
         }
@@ -116,9 +79,6 @@ export class DecorationState {
         );
         this._decorateTags = styles.tag.enableStyle;
 
-        this.userHasLabels = Object.keys(this._decorations).length > 0;
         this.decorate();
     }
 }
-
-export const decorationState = new DecorationState();

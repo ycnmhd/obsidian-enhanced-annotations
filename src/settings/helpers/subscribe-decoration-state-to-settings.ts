@@ -1,8 +1,9 @@
 import LabeledAnnotations from '../../main';
 import { labelSettings } from '../../sidebar-outline/components/components/annotations-list/annotations-list.store';
-import { decorationState } from '../../editor-plugin/helpers/decorate-annotations/decoration-state';
 
-export const subscribeToSettings = (plugin: LabeledAnnotations) => {
+export const subscribeDecorationStateToSettings = (
+    plugin: LabeledAnnotations,
+) => {
     const settings = plugin.settings;
     const previousValue = {
         current: '',
@@ -20,7 +21,7 @@ export const subscribeToSettings = (plugin: LabeledAnnotations) => {
                     ]),
                 ),
             );
-            decorationState.setSettings(value.decoration.styles);
+            plugin.decorationSettings.setSettings(value.decoration.styles);
         }
     });
 };
