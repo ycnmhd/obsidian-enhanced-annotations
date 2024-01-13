@@ -47,7 +47,11 @@ export const l = {
     SETTINGS_LABELS_STYLES_LABEL_INVALID: 'Invalid label',
     COMMANDS_JUMP_TO_NEXT_LINE: 'Jump to the next line',
     COMMANDS_INSERT_COMMENT: 'Insert a comment',
-    COMMANDS_INSERT_COMMENT_NEXT_LINE: 'Insert a comment in a new line',
+    COMMANDS_INSERT_COMMENT_NEXT_LINE: 'Insert a comment after a new line',
+    COMMANDS_INSERT_COMMENT_WITH_PREVIOUS_LABEL:
+        'Insert a comment with the most recent label',
+    COMMANDS_INSERT_COMMENT_WITH_PREVIOUS_LABEL_NEXT_LINE:
+        'Insert a comment with the most recent label after a new line',
     COMMANDS_COULD_NOT_CREATE_FILE: 'Could not create note: ',
     OUTLINE_EDITOR_CREATE_NOTE_FROM_COMMENT: 'Create note from comment',
     OUTLINE_EDITOR_CREATE_NOTE_FROM_HIGHLIGHT: 'Create note from highlight',

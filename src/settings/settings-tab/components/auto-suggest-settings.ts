@@ -1,7 +1,7 @@
 import { Setting } from 'obsidian';
 import LabeledAnnotations from '../../../main';
 import { l } from '../../../lang/lang';
-import { CommentType } from '../../settings-type';
+import { CommentFormat } from '../../settings-type';
 
 type Props = {
     containerEl: HTMLElement;
@@ -44,10 +44,10 @@ export const AutoSuggestSettings = ({ plugin, containerEl }: Props) => {
             component
                 .onChange((value) =>
                     plugin.settings.dispatch({
-                        payload: { type: value as CommentType },
+                        payload: { type: value as CommentFormat },
                         type: 'SET_AUTO_SUGGEST_COMMENT_TYPE',
                     }),
                 )
-                .setValue(settings.editorSuggest.commentType);
+                .setValue(settings.editorSuggest.commentFormat);
         });
 };

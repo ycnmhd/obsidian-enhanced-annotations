@@ -17,8 +17,10 @@ export type AnnotationCompletion = {
 };
 
 export class AnnotationSuggest extends EditorSuggest<AnnotationCompletion> {
-    private plugin: LabeledAnnotations;
     readonly app: App;
+    mostRecentSuggestion: string;
+    private plugin: LabeledAnnotations;
+    private usedSuggestions: Record<string, number> = {};
 
     constructor(app: App, plugin: LabeledAnnotations) {
         super(app);
@@ -58,18 +60,6 @@ export class AnnotationSuggest extends EditorSuggest<AnnotationCompletion> {
         el.setText(suggestion.label);
     }
 
-    private usedSuggestions: Record<string, number> = {};
-    private recordUsedSuggestion = (suggestion: string) => {
-        if (!this.usedSuggestions[suggestion])
-            this.usedSuggestions[suggestion] = 1;
-        else if (this.usedSuggestions[suggestion] < 3)
-            this.usedSuggestions[suggestion]++;
-        for (const label of Object.keys(this.usedSuggestions)) {
-            if (label !== suggestion && this.usedSuggestions[label] > 0)
-                this.usedSuggestions[label]--;
-        }
-    };
-
     selectSuggestion(
         suggestion: AnnotationCompletion,
         event: KeyboardEvent | MouseEvent,
@@ -81,7 +71,7 @@ export class AnnotationSuggest extends EditorSuggest<AnnotationCompletion> {
         const settings = this.plugin.settings.getValue();
         const label = suggestion.label.trim();
         const text =
-            settings.editorSuggest.commentType === 'html'
+            settings.editorSuggest.commentFormat === 'html'
                 ? `<!--${label}: -->`
                 : `%%${label}: %%`;
         activeView.editor.replaceRange(
@@ -94,7 +84,7 @@ export class AnnotationSuggest extends EditorSuggest<AnnotationCompletion> {
             line: cursor.line,
             ch:
                 cursor.ch -
-                (settings.editorSuggest.commentType === 'html' ? 3 : 2),
+                (settings.editorSuggest.commentFormat === 'html' ? 3 : 2),
         });
 
         this.recordUsedSuggestion(label);
@@ -141,4 +131,16 @@ export class AnnotationSuggest extends EditorSuggest<AnnotationCompletion> {
                 .substring(triggerPhrase.length),
         };
     }
+
+    private recordUsedSuggestion = (suggestion: string) => {
+        if (!this.usedSuggestions[suggestion])
+            this.usedSuggestions[suggestion] = 1;
+        else if (this.usedSuggestions[suggestion] < 3)
+            this.usedSuggestions[suggestion]++;
+        for (const label of Object.keys(this.usedSuggestions)) {
+            if (label !== suggestion && this.usedSuggestions[label] > 0)
+                this.usedSuggestions[label]--;
+        }
+        this.mostRecentSuggestion = suggestion;
+    };
 }

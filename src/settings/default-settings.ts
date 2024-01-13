@@ -4,7 +4,7 @@ export const DEFAULT_SETTINGS = (): Settings => ({
     editorSuggest: {
         enableAutoSuggest: true,
         triggerPhrase: '//',
-        commentType: 'html',
+        commentFormat: 'html',
     },
     decoration: {
         autoRegisterLabels: true,
@@ -25,7 +25,7 @@ export const DEFAULT_SETTINGS = (): Settings => ({
         showLabelsFilter: false,
         showSearchInput: false,
         hiddenLabels: [],
-        hiddenCategories: [],
+        hiddenTypes: [],
     },
     tts: {
         rate: 1.1,

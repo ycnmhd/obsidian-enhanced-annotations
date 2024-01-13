@@ -1,4 +1,4 @@
-import { AnnotationCategory } from '../sidebar-outline/components/components/annotations-list/annotations-list.store';
+import { AnnotationType } from '../sidebar-outline/components/components/annotations-list/annotations-list.store';
 
 export type Case = 'upper' | 'lower' | 'title';
 export type Opacity = 80 | 60 | 40 | 20;
@@ -37,7 +37,7 @@ export type NotesNamingMode =
     | 'annotation'
     | 'label - annotation'
     | 'label/annotation';
-export type CommentType = 'markdown' | 'html';
+export type CommentFormat = 'markdown' | 'html';
 export type DefaultFolderMode =
     | 'vault'
     | 'current folder'
@@ -50,7 +50,7 @@ export type Settings = {
     editorSuggest: {
         enableAutoSuggest: boolean;
         triggerPhrase: string;
-        commentType: CommentType;
+        commentFormat: CommentFormat;
     };
     decoration: {
         autoRegisterLabels: boolean;
@@ -68,7 +68,7 @@ export type Settings = {
         fontSize: number;
         showLabelsFilter: boolean;
         hiddenLabels: string[];
-        hiddenCategories: AnnotationCategory[];
+        hiddenTypes: AnnotationType[];
     };
     tts: {
         volume: number;

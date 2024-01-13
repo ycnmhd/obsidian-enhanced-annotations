@@ -1,92 +1,63 @@
 import LabeledAnnotations from '../../main';
 import { parseAnnotations } from '../../editor-plugin/helpers/decorate-annotations/helpers/parse-annotations/parse-annotations';
-import { AnnotationCategory } from '../../sidebar-outline/components/components/annotations-list/annotations-list.store';
-import { CommentType } from '../../settings/settings-type';
-
-const cursorPosition = (
-    text: string,
-    commentType: CommentType,
-    type?: AnnotationCategory,
-) => {
-    return text.length - (type ? (commentType === 'html' ? 3 : 2) : 0);
-};
-const wrapText = ({
-    text,
-    type,
-    commentType,
-    label,
-}: {
-    label?: string;
-    text: string;
-    type?: AnnotationCategory;
-    commentType: CommentType;
-}) => {
-    if (label) label = label + ': ';
-    if (type === 'highlight') {
-        return `==${label}${text}==`;
-    } else if (type) {
-        if (commentType === 'html') {
-            return `<!--${label}${text}-->`;
-        } else return `%%${label}${text}%%`;
-    } else return text;
-};
+import { AnnotationType } from '../../sidebar-outline/components/components/annotations-list/annotations-list.store';
+import { wrapSelectedTextInAnAnnotation } from './wrap-selected-text-in-an-annotation';
+import { insertNewAnnotationNextLine } from './insert-new-annotation-next-line';
+import { insertAnnotationInCurrentLine } from './insert-annotation-in-current-line';
 
 type Props = {
     plugin: LabeledAnnotations;
     label?: string;
-    newLine?: boolean;
-    type?: AnnotationCategory;
+    spaceAbove?: number;
+    type?: AnnotationType;
 };
-export const insertAnnotation = async ({
+export const insertAnnotation = ({
     plugin,
-    newLine,
+    spaceAbove,
     label = '',
     type,
 }: Props) => {
     const editor = plugin.app.workspace.activeEditor?.editor;
     if (!editor) return;
-    const commentType = plugin.settings.getValue().editorSuggest.commentType;
+    const format = plugin.settings.getValue().editorSuggest.commentFormat;
     const doc = editor.getDoc();
     const cursor = doc.getCursor();
     const selection = doc.getSelection();
     if (selection) {
-        // Wrap the selected text
-        let text = selection;
-        if (type) text = wrapText({ type, commentType, text, label });
-        doc.replaceSelection(text);
-        doc.setCursor({
-            line: cursor.line,
-            ch: cursor.ch + cursorPosition(text, commentType, type),
+        wrapSelectedTextInAnAnnotation({
+            type,
+            format,
+            label,
+            doc,
+            selection,
         });
     } else {
-        // Insert an empty annotation at the current cursor position
-        const text = wrapText({ text: '', label, type, commentType });
-        if (newLine) {
-            const lineText = doc.getLine(cursor.line);
-            doc.replaceRange('\n' + text, {
-                line: cursor.line,
-                ch: lineText.length,
-            });
-            doc.setCursor({
-                line: cursor.line + 1,
-                ch: cursorPosition(text, commentType, type),
+        if (spaceAbove) {
+            insertNewAnnotationNextLine({
+                type,
+                format,
+                label,
+                doc,
+                spaceAbove,
             });
         } else {
             const line = doc.getLine(cursor.line).trim();
-            const annotations = parseAnnotations(line);
+            const annotations = parseAnnotations(line, 0, 0, true);
             if (annotations.length) {
                 const { label, isHighlight } = annotations[0];
-                await insertAnnotation({
-                    plugin,
-                    newLine: true,
+                insertNewAnnotationNextLine({
+                    doc,
+                    format,
                     label,
                     type: isHighlight ? 'highlight' : 'comment',
+                    spaceAbove: 1,
                 });
             } else {
-                doc.replaceRange(text, cursor);
-                doc.setCursor({
-                    line: cursor.line,
-                    ch: cursor.ch + cursorPosition(text, commentType, type),
+                insertAnnotationInCurrentLine({
+                    doc,
+                    format,
+                    label,
+                    type,
                 });
             }
         }

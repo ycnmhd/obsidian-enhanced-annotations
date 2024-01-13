@@ -5,8 +5,8 @@ import {
     showSearchInput,
 } from '../../sidebar-outline/components/components/controls-bar/controls-bar.store';
 import {
-    hiddenCategories,
     hiddenLabels,
+    hiddenTypes,
 } from '../../sidebar-outline/components/components/annotations-list/annotations-list.store';
 
 export const subscribeSettingsToOutlineState = (plugin: LabeledAnnotations) => {
@@ -26,9 +26,9 @@ export const subscribeSettingsToOutlineState = (plugin: LabeledAnnotations) => {
         value.outline.hiddenLabels = [...hiddenLabels];
         settings.set(value);
     });
-    hiddenCategories.subscribe((hiddenCategories) => {
+    hiddenTypes.subscribe((hiddenCategories) => {
         const value = settings.getValue();
-        value.outline.hiddenCategories = [...hiddenCategories];
+        value.outline.hiddenTypes = [...hiddenCategories];
         settings.set(value);
     });
     showSearchInput.subscribe((showSearchInput) => {

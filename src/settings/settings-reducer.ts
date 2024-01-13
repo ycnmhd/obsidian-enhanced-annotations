@@ -1,5 +1,5 @@
 import {
-    CommentType,
+    CommentFormat,
     DefaultFolderMode,
     FontFamily,
     FontWeight,
@@ -117,7 +117,7 @@ export type SettingsActions =
     | { type: 'SET_NOTES_INSERT_LINK_TO_NOTE'; payload: { insert: boolean } }
     | {
           type: 'SET_AUTO_SUGGEST_COMMENT_TYPE';
-          payload: { type: CommentType };
+          payload: { type: CommentFormat };
       }
     | { type: 'LOG_PLUGIN_USED' }
     | { type: 'LOG_PLUGIN_STARTED' };
@@ -187,7 +187,7 @@ const updateState = (store: Settings, action: SettingsActions) => {
     else if (action.type === 'SET_NOTES_OPEN_AFTER_CREATION')
         store.notes.openNoteAfterCreation = action.payload.open;
     else if (action.type === 'SET_AUTO_SUGGEST_COMMENT_TYPE')
-        store.editorSuggest.commentType = action.payload.type;
+        store.editorSuggest.commentFormat = action.payload.type;
     else if (action.type === 'SET_NOTES_INSERT_LINK_TO_NOTE')
         store.notes.insertLinkToNote = action.payload.insert;
     else if (action.type === 'SET_NOTES_TEMPLATE')

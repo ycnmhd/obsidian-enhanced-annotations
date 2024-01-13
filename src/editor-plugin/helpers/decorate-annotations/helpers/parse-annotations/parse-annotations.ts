@@ -20,7 +20,12 @@ export type Annotation = {
 };
 const startPattern = /(<!--|%%|==)/g;
 const endPattern = /(-->|%%|==)/g;
-export const parseAnnotations = (text: string, lineNumber = 0, from = 0) => {
+export const parseAnnotations = (
+    text: string,
+    lineNumber = 0,
+    from = 0,
+    includeEmptyAnnotations = false,
+) => {
     const lines = text.split('\n');
     const annotations: Annotation[] = [];
 
@@ -79,7 +84,7 @@ export const parseAnnotations = (text: string, lineNumber = 0, from = 0) => {
                         labelRegex ? labelRegex[2] : annotation
                     ).trim();
                     const label = (labelRegex ? labelRegex[1] : '').trim();
-                    if (text || label) {
+                    if (text || label || includeEmptyAnnotations) {
                         annotations.push({
                             text: text,
                             label: label,
@@ -161,7 +166,7 @@ export const parseAnnotations = (text: string, lineNumber = 0, from = 0) => {
                     .map((t) => t.trim())
                     .filter(Boolean)
                     .join(' ');
-                if (allText)
+                if (allText || includeEmptyAnnotations)
                     annotations.push({
                         ...state.multiLineAnnotation,
                         text: allText,

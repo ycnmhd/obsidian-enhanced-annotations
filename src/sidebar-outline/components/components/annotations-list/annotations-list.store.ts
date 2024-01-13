@@ -11,8 +11,8 @@ export type OutlineStore = {
 };
 export const fileAnnotations = writable<OutlineStore>({ labels: {} });
 
-export type AnnotationCategory = 'comment' | 'highlight';
-export const hiddenCategories = writable<Set<AnnotationCategory>>(new Set());
+export type AnnotationType = 'comment' | 'highlight';
+export const hiddenTypes = writable<Set<AnnotationType>>(new Set());
 
 export const hiddenLabels = writable<Set<string>>(new Set<string>());
 
@@ -36,7 +36,7 @@ export const filteredBySearch = derived(
     },
 );
 export const filteredBySearchAndCategory = derived(
-    [filteredBySearch, hiddenCategories],
+    [filteredBySearch, hiddenTypes],
     ([$items, categories]) => {
         if (!categories.size) return $items;
         const filteredDictionary = { labels: {} } as typeof $items;
@@ -77,7 +77,7 @@ export const filteredHiddenLabels = derived(
     },
 );
 export const filteredHiddenCategories = derived(
-    [hiddenCategories, filteredBySearch],
+    [hiddenTypes, filteredBySearch],
     ([hiddenCategories, filteredAnnotations]) => {
         const existing = new Set() as typeof hiddenCategories;
         const annotations = Object.values(filteredAnnotations.labels).flat();

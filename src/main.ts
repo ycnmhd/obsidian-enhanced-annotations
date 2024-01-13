@@ -30,11 +30,13 @@ export default class LabeledAnnotations extends Plugin {
     statusBar: StatusBar;
     idling: Idling;
     decorationSettings: DecorationSettings;
+    editorSuggest: AnnotationSuggest;
 
     async onload() {
         await this.loadSettings();
 
-        this.registerEditorSuggest(new AnnotationSuggest(this.app, this));
+        this.editorSuggest = new AnnotationSuggest(this.app, this);
+        this.registerEditorSuggest(this.editorSuggest);
         this.registerEvent(
             this.app.workspace.on('file-menu', fileMenuItems(this)),
         );
