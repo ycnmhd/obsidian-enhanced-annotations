@@ -5,6 +5,8 @@ import LabeledAnnotations from '../../../main';
 import { triggerEditorUpdate } from '../../../sidebar-outline/helpers/outline-updater/helpers/trigger-editor-update';
 
 export class DecorationSettings {
+    constructor(private plugin: LabeledAnnotations) {}
+
     private _decorations: Record<
         string,
         {
@@ -13,23 +15,15 @@ export class DecorationSettings {
             highlight: Decoration;
         }
     >;
-    private _decorateTags: boolean;
-
-    constructor(private plugin: LabeledAnnotations) {}
-
-    get decorateTags() {
-        return this._decorateTags;
-    }
-
-    private decorate() {
-        const editor = this.plugin.outline.getValue().view?.editor;
-        if (editor) {
-            triggerEditorUpdate(editor);
-        }
-    }
 
     get decorations() {
         return this._decorations;
+    }
+
+    private _decorateTags: boolean;
+
+    get decorateTags() {
+        return this._decorateTags;
     }
 
     setSettings(styles: Settings['decoration']['styles']) {
@@ -80,5 +74,12 @@ export class DecorationSettings {
         this._decorateTags = styles.tag.enableStyle;
 
         this.decorate();
+    }
+
+    private decorate() {
+        const editor = this.plugin.outline.getValue().view?.editor;
+        if (editor) {
+            triggerEditorUpdate(editor);
+        }
     }
 }

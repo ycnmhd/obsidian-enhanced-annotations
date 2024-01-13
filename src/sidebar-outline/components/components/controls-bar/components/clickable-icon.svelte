@@ -1,18 +1,24 @@
 <script lang="ts">
-	export let onClick: (e: MouseEvent) => void;
+	import type { MouseEventHandler } from 'svelte/elements';
+
+	export let onClick: MouseEventHandler<any>;
 	export let label: string;
-	export let isActive: boolean;
-	export let hasEnabledItems: boolean;
-	export let disabled: boolean;
+	export let isActive = false;
+	export let hasEnabledItems = false;
+	export let disabled = false;
 </script>
-<button aria-label={label} style="position:relative" disabled={disabled}
-		class={"clickable-icon nav-action-button "+(isActive?"is-active ":"")}
-		on:click={onClick}>
+
+<button
+	aria-label={label}
+	class={'clickable-icon nav-action-button ' + (isActive ? 'is-active ' : '')}
+	{disabled}
+	on:click={onClick}
+	style="position:relative"
+>
 	{#if hasEnabledItems}
 		<span class="asterisk">*</span>
 	{/if}
 	<slot />
-
 </button>
 
 <style>

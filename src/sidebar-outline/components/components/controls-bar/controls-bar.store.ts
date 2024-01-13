@@ -13,4 +13,25 @@ tts.subscribe((value) => isReading.set(value));
 
 export const showSecondaryControlsBar = writable<boolean>(false);
 
-export const pluginIdle = writable<boolean>(false);
+export const pluginIdle = writable(false);
+
+export const showStylesSettings = writable(false);
+
+// hide style settings
+showSecondaryControlsBar.subscribe((v) => {
+    if (!v) showStylesSettings.set(false);
+});
+showSearchInput.subscribe((v) => {
+    if (v) showStylesSettings.set(false);
+});
+showLabelsFilter.subscribe((v) => {
+    if (v) showStylesSettings.set(false);
+});
+
+// hide filters
+showStylesSettings.subscribe((v) => {
+    if (v) {
+        showSearchInput.set(false);
+        showLabelsFilter.set(false);
+    }
+});

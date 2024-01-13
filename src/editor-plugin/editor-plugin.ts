@@ -11,9 +11,8 @@ import { outlineAnnotation } from '../sidebar-outline/helpers/outline-updater/he
 import LabeledAnnotations from '../main';
 
 export class EditorPlugin implements PluginValue {
-    decorations: DecorationSet;
-
     static plugin: LabeledAnnotations;
+    decorations: DecorationSet;
 
     constructor(view: EditorView) {
         this.decorations = decorateAnnotations(view, EditorPlugin.plugin);

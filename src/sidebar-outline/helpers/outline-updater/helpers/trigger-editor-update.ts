@@ -1,7 +1,6 @@
 import { Editor } from 'obsidian';
 import { EditorView } from '@codemirror/view';
 import { Annotation } from '@codemirror/state';
-import { debounce } from '../../../../helpers/debounce';
 
 export const outlineAnnotation =
     Annotation.define<string>().of('outline update');
@@ -16,5 +15,3 @@ export const triggerEditorUpdate = (editor: Editor) => {
     });
     view.dispatch(update);
 };
-
-export const debouncedTriggerEditorUpdate = debounce(triggerEditorUpdate, 5000);
