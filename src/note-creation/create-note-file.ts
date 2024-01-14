@@ -5,7 +5,20 @@ import { calculateFilePath } from './helpers/calculate-file-path';
 import { writeFile } from './helpers/write-file';
 import { insertLinkToNote } from './helpers/insert-link-to-note';
 import LabeledAnnotations from '../main';
-import { calculateFileContent } from './calculate-file-content';
+import { applyVariablesToTemplate } from '../clipboard/helpers/apply-variables-to-template';
+import { formattedDate, formattedTime, timeTag } from '../helpers/date-utils';
+
+export const noteTemplate = `{{link}}`;
+
+export const noteVariables = [
+    'name',
+    'link',
+    'label',
+    'date',
+    'time',
+    'time_tag',
+] as const;
+type NoteVariables = (typeof noteVariables)[number];
 
 type Props = {
     annotation: Annotation;
@@ -30,12 +43,20 @@ export const createNoteFile = async ({
         return;
     }
     const settings = plugin.settings.getValue();
-    const fileContent = calculateFileContent({
-        fileName: currentFileName,
-        blockId: blockId.blockId,
+
+    const variables: Record<NoteVariables, string> = {
+        name: currentFileName,
         label: annotation.label,
+        link: `![[${currentFileName}#${blockId.blockId}]]`,
+        time_tag: timeTag(),
+        date: formattedDate(),
+        time: formattedTime(),
+    };
+    const fileContent = applyVariablesToTemplate({
         template: settings.notes.template,
+        variables: variables,
     });
+
     const { filePath, folderPath, fileBasename } = calculateFilePath(
         annotation,
         settings.notes,

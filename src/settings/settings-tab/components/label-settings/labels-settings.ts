@@ -1,6 +1,4 @@
-import { AddNewLabel } from './components/add-new-label';
 import LabeledAnnotations from '../../../../main';
-import { LabelSettings } from './components/label-settings';
 import { l } from '../../../../lang/lang';
 import { Setting } from 'obsidian';
 import { TagSettings } from './components/tag-settings';
@@ -38,19 +36,4 @@ export const LabelsSettings = ({ plugin, containerEl }: Props) => {
                 )
                 .setValue(settings.decoration.autoRegisterLabels);
         });
-    for (const label of Object.values(
-        plugin.settings.getValue().decoration.styles.labels,
-    )) {
-        LabelSettings({
-            render,
-            plugin,
-            label,
-            containerEl,
-        });
-    }
-    AddNewLabel({
-        render,
-        plugin,
-        containerEl,
-    });
 };

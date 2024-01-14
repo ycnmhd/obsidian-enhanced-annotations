@@ -9,8 +9,9 @@ import {
 } from './settings-type';
 import { getDefaultColor } from './helpers/get-default-color';
 import { isValidLabel } from '../editor-suggest/helpers/is-valid-label';
-import { formattedDate } from '../helpers/formatted-date';
+import { formattedDate } from '../helpers/date-utils';
 import { pluginIsIdle } from './settings-selectors';
+import { ClipboardTemplateSection } from '../clipboard/helpers/annotations-to-text';
 
 export type SettingsActions =
     | {
@@ -120,7 +121,11 @@ export type SettingsActions =
           payload: { type: CommentFormat };
       }
     | { type: 'LOG_PLUGIN_USED' }
-    | { type: 'LOG_PLUGIN_STARTED' };
+    | { type: 'LOG_PLUGIN_STARTED' }
+    | {
+          type: 'SET_CLIPBOARD_TEMPLATE';
+          payload: { template: string; name: ClipboardTemplateSection };
+      };
 
 const updateState = (store: Settings, action: SettingsActions) => {
     const labels = store.decoration.styles.labels;
@@ -217,6 +222,9 @@ const updateState = (store: Settings, action: SettingsActions) => {
                 store.idling.daysUnused = daysUnused;
             }
         }
+    } else if (action.type === 'SET_CLIPBOARD_TEMPLATE') {
+        const { template, name } = action.payload;
+        store.clipboard.templates[name] = template;
     }
 };
 export const settingsReducer = (

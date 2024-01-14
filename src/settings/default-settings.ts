@@ -1,4 +1,6 @@
 import { Settings } from './settings-type';
+import { copiedAnnotationsTemplates } from '../clipboard/helpers/annotations-to-text';
+import { noteTemplate } from '../note-creation/create-note-file';
 
 export const DEFAULT_SETTINGS = (): Settings => ({
     editorSuggest: {
@@ -40,9 +42,12 @@ export const DEFAULT_SETTINGS = (): Settings => ({
         openNoteAfterCreation: false,
         insertLinkToNote: true,
         defaultFolderMode: 'current folder/notes',
-        template: `#annotation/{{label}}\n\n{{content}}`,
+        template: noteTemplate,
     },
     idling: {
         daysUnused: [],
+    },
+    clipboard: {
+        templates: copiedAnnotationsTemplates,
     },
 });

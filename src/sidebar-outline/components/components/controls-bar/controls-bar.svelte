@@ -1,5 +1,4 @@
 <script lang="ts">
-
 	import TabsFilter from './components/tabs-filter.svelte';
 	import SearchInput from './components/search-input.svelte';
 	import { showLabelsFilter, showSearchInput, showSecondaryControlsBar } from './controls-bar.store';
@@ -13,51 +12,50 @@
 
 	export let plugin: LabeledAnnotations;
 	const toggleLabelsFilter = () => {
-		showLabelsFilter.update(v => !v);
+		showLabelsFilter.update((v) => !v);
 		plugin.idling.logActivity();
 	};
 	const toggleShowSearchInput = () => {
-		showSearchInput.update(v => !v);
+		showSearchInput.update((v) => !v);
 		plugin.idling.logActivity();
 	};
-
 
 	const toggleSecondaryControlsBar = () => {
-		showSecondaryControlsBar.update(v => !v);
+		showSecondaryControlsBar.update((v) => !v);
 		plugin.idling.logActivity();
 	};
-
 </script>
 
 <div class="nav-header outline-controls">
-
 	<div class="nav-buttons-container">
-
-
-		<NavButton hasEnabledItems={$searchTerm} isActive={$showSearchInput} label={l.OUTLINE_FILTER_ANNOTATIONS}
-				   onClick={toggleShowSearchInput}>
+		<NavButton
+			hasEnabledItems={!!$searchTerm}
+			isActive={$showSearchInput}
+			label={l.OUTLINE_FILTER_ANNOTATIONS}
+			onClick={toggleShowSearchInput}
+		>
 			<Search class="svg-icon" />
 		</NavButton>
 		<NavButton
-			hasEnabledItems={$filteredHiddenLabels.size>0 ||$filteredHiddenCategories.size>0}
+			hasEnabledItems={$filteredHiddenLabels.size > 0 ||
+                $filteredHiddenCategories.size > 0}
 			isActive={$showLabelsFilter}
 			label={l.OUTLINE_FILTER_LABELS}
 			onClick={toggleLabelsFilter}
 		>
 			<ListFilter class="svg-icon" />
 		</NavButton>
-		<NavButton isActive={$showSecondaryControlsBar} label={l.OUTLINE_SHOW_ALL_CONTROLS}
-				   onClick={toggleSecondaryControlsBar}>
-
+		<NavButton
+			isActive={$showSecondaryControlsBar}
+			label={l.OUTLINE_SHOW_ALL_CONTROLS}
+			onClick={toggleSecondaryControlsBar}
+		>
 			<MoreHorizontal class="svg-icon" />
 		</NavButton>
-
-
 	</div>
 
-
 	{#if $showSecondaryControlsBar}
-		<SecondaryControlsBar />
+		<SecondaryControlsBar plugin={plugin} />
 	{/if}
 
 	{#if $showSearchInput}
@@ -67,7 +65,6 @@
 		<TabsFilter />
 	{/if}
 </div>
-
 
 <style>
 	.outline-controls {
@@ -89,6 +86,4 @@
 		align-items: center;
 		justify-content: center;
 	}
-
-
 </style>

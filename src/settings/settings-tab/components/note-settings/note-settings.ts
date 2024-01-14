@@ -3,7 +3,8 @@ import { Setting } from 'obsidian';
 import { FolderSuggest } from './helpers/folder-suggestions';
 import { DefaultFolderMode, NotesNamingMode } from '../../../settings-type';
 import { l } from '../../../../lang/lang';
-import { noteVariables } from '../../../../note-creation/calculate-file-content';
+
+import { noteVariables } from '../../../../note-creation/create-note-file';
 
 type Props = {
     containerEl: HTMLElement;
@@ -101,7 +102,7 @@ export const NoteSettings = ({ containerEl, plugin }: Props) => {
     new Setting(containerEl)
         .setName(l.SETTINGS_NOTE_CREATION_TEMPLATE)
         .setDesc(
-            l.SETTINGS_NOTE_CREATION_TEMPLATE_desc +
+            l.SETTINGS_TEMPLATE_desc +
                 noteVariables.map((v) => `{{${v}}}`).join(', '),
         )
         .addTextArea((c) => {

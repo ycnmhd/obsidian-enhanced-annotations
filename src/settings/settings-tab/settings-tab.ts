@@ -4,6 +4,7 @@ import { AutoSuggestSettings } from './components/auto-suggest-settings';
 import { TTSSettings } from './components/tts-settings';
 import { NoteSettings } from './components/note-settings/note-settings';
 import { LabelsSettings } from './components/label-settings/labels-settings';
+import { ClipboardSettings } from './components/clipboard-settings';
 
 export class SettingsTab extends PluginSettingTab {
     plugin: LabeledAnnotations;
@@ -31,6 +32,10 @@ export class SettingsTab extends PluginSettingTab {
             containerEl: containerEl.createEl('div'),
         });
         LabelsSettings({
+            plugin: this.plugin,
+            containerEl: containerEl.createEl('div'),
+        });
+        ClipboardSettings({
             plugin: this.plugin,
             containerEl: containerEl.createEl('div'),
         });

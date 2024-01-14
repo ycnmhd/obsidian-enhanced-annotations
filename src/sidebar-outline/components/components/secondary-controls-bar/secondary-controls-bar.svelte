@@ -1,10 +1,51 @@
-<script>
+<script lang="ts">
 	import NavButton from '../controls-bar/components/clickable-icon.svelte';
-	import { copyAnnotationsToClipboard } from '../controls-bar/helpers/copy-annotations-to-clipboard';
 	import { l } from '../../../../lang/lang';
 	import { fontSize, isReading, POSSIBLE_FONT_SIZES, showStylesSettings } from '../controls-bar/controls-bar.store';
 	import { tts } from '../controls-bar/helpers/tts';
 	import { Paintbrush } from 'lucide-svelte';
+	import LabeledAnnotations from '../../../../main';
+	import { onDestroy } from 'svelte';
+	import {
+		Annotation
+	} from '../../../../editor-plugin/helpers/decorate-annotations/helpers/parse-annotations/parse-annotations';
+	import { filteredBySearchAndCategory } from '../annotations-list/annotations-list.store';
+	import { annotationsToText } from '../../../../clipboard/helpers/annotations-to-text';
+	import { clipboard } from 'electron';
+	import { Notice } from 'obsidian';
+
+	export let plugin: LabeledAnnotations;
+
+
+	const state: { annotations: Annotation[] } = { annotations: undefined as any };
+
+	const unsubscribe = filteredBySearchAndCategory.subscribe((v) => {
+		state.annotations = Object.values(v.labels)
+			.flat()
+			.sort((a, b) => a.position.from - b.position.from);
+	});
+	onDestroy(unsubscribe);
+
+	export const copyAnnotationsToClipboard = () => {
+		const outline = plugin.outline;
+		const f = outline.getValue().view?.file;
+		if (f) {
+			const path = f.parent?.path as string;
+			const name = f.basename;
+
+			const text = annotationsToText(
+				[{ path, name, annotations: state.annotations }],
+				plugin.settings.getValue().clipboard.templates,
+				path
+			);
+			clipboard.writeText(text);
+			new Notice(l.OUTLINE_NOTICE_COPIED_TO_CLIPBOARD);
+		} else {
+			new Notice(l.OUTLINE_NOTICE_COULD_NOT_COPY);
+
+		}
+	};
+
 
 	const increaseFontSize = () => {
 		const i = (POSSIBLE_FONT_SIZES.indexOf($fontSize) || 0) + 1;
@@ -32,7 +73,7 @@
 <div class="nav-buttons-container">
 	<NavButton
 		isActive={$isReading}
-		label={l.OUTLINE_READ_COMMENTS}
+		label={l.OUTLINE_READ_ANNOTATIONS}
 		onClick={read}
 	>
 		{#if $isReading}
@@ -75,7 +116,7 @@
 		{/if}
 	</NavButton>
 	<NavButton
-		label={l.OUTLINE_COPY_COMMENTS_TO_CLIPBOARD}
+		label={l.OUTLINE_COPY_ANNOTATIONS_TO_CLIPBOARD}
 		onClick={copyAnnotationsToClipboard}
 	>
 		<svg

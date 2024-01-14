@@ -1,4 +1,5 @@
 import { AnnotationType } from '../sidebar-outline/components/components/annotations-list/annotations-list.store';
+import { ClipboardTemplates } from '../clipboard/helpers/annotations-to-text';
 
 export type Case = 'upper' | 'lower' | 'title';
 export type Opacity = 80 | 60 | 40 | 20;
@@ -44,7 +45,7 @@ export type DefaultFolderMode =
     | 'current folder/notes'
     | 'customFolder';
 
-export type DateString = `${number}-${number}-${number}`;
+export type DateString = string;
 
 export type Settings = {
     editorSuggest: {
@@ -85,6 +86,7 @@ export type Settings = {
         insertLinkToNote: boolean;
         template: string;
     };
+    clipboard: { templates: ClipboardTemplates };
     idling: {
         daysUnused: [DateString?, DateString?, DateString?];
     };
