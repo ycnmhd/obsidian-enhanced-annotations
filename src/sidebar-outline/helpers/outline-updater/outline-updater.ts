@@ -1,4 +1,4 @@
-import { MarkdownView, TFile } from 'obsidian';
+import { MarkdownView, View } from 'obsidian';
 import LabeledAnnotations from '../../../main';
 import { updateOutline } from './helpers/update-outline';
 import { resetOutline } from './helpers/reset-outline';
@@ -7,12 +7,6 @@ import W from 'src/editor-plugin/helpers/decorate-annotations/helpers/parse-anno
 import { Store } from '../../../helpers/store';
 import { WorkerPromise } from '../../../helpers/worker-promise';
 import { Annotation } from '../../../editor-plugin/helpers/decorate-annotations/helpers/parse-annotations/parse-annotations';
-
-const getViewOfFile = (plugin: LabeledAnnotations, file: TFile) => {
-    return plugin.app.workspace
-        .getLeavesOfType('markdown')
-        .find((l) => l.view instanceof MarkdownView && l.view.file === file);
-};
 
 type OutlineState = {
     view: MarkdownView | null;
@@ -27,10 +21,10 @@ export class OutlineUpdater extends Store<OutlineState, never> {
         this.onLoad();
     }
 
-    private updateOutline(view: MarkdownView | null, immediate = false) {
+    private updateOutline(view?: View | null, immediate = false) {
         clearTimeout(this.timeout);
-        this.set({ view });
         if (view instanceof MarkdownView) {
+            this.set({ view });
             if (immediate) {
                 this.worker
                     .run(view.editor.getValue())
@@ -43,16 +37,8 @@ export class OutlineUpdater extends Store<OutlineState, never> {
                 }, 2000);
             }
         } else {
+            this.set({ view: null });
             resetOutline();
-        }
-    }
-
-    private onFileOpen(file: TFile | null) {
-        if (file) {
-            const leaf = getViewOfFile(this.plugin, file);
-            if (leaf) {
-                this.updateOutline(leaf.view as MarkdownView, true);
-            }
         }
     }
 
@@ -68,17 +54,18 @@ export class OutlineUpdater extends Store<OutlineState, never> {
         );
 
         this.plugin.registerEvent(
-            app.workspace.on('file-open', (file) => {
-                this.onFileOpen(file);
+            app.workspace.on('active-leaf-change', (leaf) => {
+                const side = (leaf?.getRoot() as any)?.side;
+                if (!side) this.updateOutline(leaf?.view, true);
             }),
         );
 
-        this.plugin.app.workspace.onLayoutReady(() => {
-            this.onFileOpen(this.plugin.app.workspace.getActiveFile());
-        });
-
-        setTimeout(() => {
-            this.onFileOpen(this.plugin.app.workspace.getActiveFile());
-        }, 1000);
+        const onStart = () => {
+            this.updateOutline(
+                this.plugin.app.workspace.getActiveViewOfType(MarkdownView),
+            );
+        };
+        this.plugin.app.workspace.onLayoutReady(onStart);
+        setTimeout(onStart, 1000);
     }
 }

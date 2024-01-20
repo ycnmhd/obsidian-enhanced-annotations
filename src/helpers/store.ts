@@ -1,17 +1,12 @@
-import {
-    Invalidator,
-    Subscriber,
-    Unsubscriber,
-    Updater,
-    Writable,
-} from 'svelte/store';
+import { Invalidator, Unsubscriber, Updater, Writable } from 'svelte/store';
+
+export type Subscriber<T, U> = (value: T, action?: U) => void;
 
 export type Reducer<T, U> = (store: T, action: U) => T;
 
 export class Store<T, U> implements Writable<T> {
     private value: T;
-    private subscribers: Set<Subscriber<T>> = new Set();
-    private readonly reducer: Reducer<T, U> = () => this.value;
+    private subscribers: Set<Subscriber<T, U>> = new Set();
 
     constructor(initialValue: T, reducer?: Reducer<T, U>) {
         this.value = initialValue;
@@ -23,7 +18,8 @@ export class Store<T, U> implements Writable<T> {
     }
 
     dispatch(action: U) {
-        this.set(this.reducer(this.value, action));
+        this.value = this.reducer(this.value, action);
+        this.notifySubscribers(action);
     }
 
     set(value: T): void {
@@ -31,7 +27,10 @@ export class Store<T, U> implements Writable<T> {
         this.notifySubscribers();
     }
 
-    subscribe(run: Subscriber<T>, invalidate?: Invalidator<T>): Unsubscriber {
+    subscribe(
+        run: Subscriber<T, U>,
+        invalidate?: Invalidator<T>,
+    ): Unsubscriber {
         this.subscribers.add(run);
         run(this.value);
         return () => {
@@ -44,9 +43,11 @@ export class Store<T, U> implements Writable<T> {
         this.notifySubscribers();
     }
 
-    private notifySubscribers(): void {
+    private readonly reducer: Reducer<T, U> = () => this.value;
+
+    private notifySubscribers(action?: U): void {
         for (const subscriber of this.subscribers) {
-            subscriber(this.value);
+            subscriber(this.value, action);
         }
     }
 }

@@ -4,7 +4,10 @@ import { FolderSuggest } from './helpers/folder-suggestions';
 import { DefaultFolderMode, NotesNamingMode } from '../../../settings-type';
 import { l } from '../../../../lang/lang';
 
-import { noteVariables } from '../../../../note-creation/create-note-file';
+import {
+    noteTemplate,
+    noteVariables,
+} from '../../../../note-creation/create-note-file';
 
 type Props = {
     containerEl: HTMLElement;
@@ -76,6 +79,16 @@ export const NoteSettings = ({ containerEl, plugin }: Props) => {
                 });
             });
         });
+    new Setting(containerEl)
+        .setName(l.SETTINGS_NOTE_TRUNCATE_FILE_NAME)
+        .addToggle((c) => {
+            c.setValue(noteSettings.truncateFileName);
+            c.onChange((v) => {
+                settings.dispatch({
+                    type: 'TOGGLE_TRUNCATE_FILE_NAME',
+                });
+            });
+        });
 
     new Setting(containerEl)
         .setName(l.SETTINGS_NOTE_CREATION_INSERT)
@@ -113,6 +126,17 @@ export const NoteSettings = ({ containerEl, plugin }: Props) => {
                     type: 'SET_NOTES_TEMPLATE',
                     payload: { template: v },
                 });
+            });
+        })
+        .addExtraButton((c) => {
+            c.setIcon('reset');
+            c.setTooltip('Reset');
+            c.onClick(() => {
+                settings.dispatch({
+                    type: 'SET_NOTES_TEMPLATE',
+                    payload: { template: noteTemplate },
+                });
+                render();
             });
         });
 };

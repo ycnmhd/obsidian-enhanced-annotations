@@ -17,15 +17,17 @@ export const parseAnnotationsFromFiles = async (
 ) => {
     for (const abstractFile of abstractFiles) {
         if (abstractFile instanceof TFile) {
-            const annotations = parseAnnotations(
-                await plugin.app.vault.read(abstractFile),
-            );
-            if (annotations.length)
-                content.push({
-                    annotations,
-                    name: abstractFile.basename,
-                    path: abstractFile.parent?.path as string,
-                });
+            if (abstractFile.extension === 'md') {
+                const annotations = parseAnnotations(
+                    await plugin.app.vault.read(abstractFile),
+                );
+                if (annotations.length)
+                    content.push({
+                        annotations,
+                        name: abstractFile.basename,
+                        path: abstractFile.parent?.path as string,
+                    });
+            }
         } else if (abstractFile instanceof TFolder) {
             await parseAnnotationsFromFiles(
                 abstractFile.children,

@@ -105,4 +105,25 @@ describe('parse multi-line annotations', () => {
         );
         expect(annotations[0].text).toBe('some comment');
     });
+
+    it('should handle text in between highlights', () => {
+        const text = `C: ==Convallis aenean et tortor at risus viverra adipiscing. 
+At augue eget arcu dictum. Sit amet mattis vulputate== 
+Quam nulla porttitor massa id neque aliquam
+==Viverra accumsan in nisl nisi scelerisque eu ultrices vitae auctorg==. `;
+        const annotations = parseAnnotations(text);
+        expect(annotations.map((v) => v.text)).toEqual([
+            'Convallis aenean et tortor at risus viverra adipiscing. At augue eget arcu dictum. Sit amet mattis vulputate',
+            'Viverra accumsan in nisl nisi scelerisque eu ultrices vitae auctorg',
+        ]);
+    });
+
+    it('should handle closing tag next line', () => {
+        const text = `==rhoncus urna neque viverra. Tempus
+== malesuada fames. Cursus euismod quis viverra nibh cras pulvinar mattis nunc sed. Mauris sit amet massa vitae tortor condimentum.`;
+        const annotations = parseAnnotations(text);
+        expect(annotations.map((v) => v.text)).toEqual([
+            'rhoncus urna neque viverra. Tempus',
+        ]);
+    });
 });

@@ -37,8 +37,10 @@ export class AnnotationSuggest extends EditorSuggest<AnnotationCompletion> {
 
     getSuggestions(context: EditorSuggestContext): AnnotationCompletion[] {
         const groups = this.plugin.settings.getValue().decoration.styles.labels;
-        const patterns = Object.values(groups).map((g) => g.label);
-        const suggestions = patterns
+        const labels = Object.values(groups)
+            .map((g) => g.label)
+            .filter((v) => v);
+        const suggestions = labels
             .map((val) => ({ label: val, text: `<!--${val}: -->` }))
             .filter((item) =>
                 item.label.toLowerCase().startsWith(context.query),
@@ -88,7 +90,6 @@ export class AnnotationSuggest extends EditorSuggest<AnnotationCompletion> {
         });
 
         this.recordUsedSuggestion(label);
-        this.plugin.idling.logActivity();
     }
 
     onTrigger(

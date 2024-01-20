@@ -8,14 +8,14 @@ export const wrapSelectedTextInAnAnnotation = ({
     selection,
     format,
     type,
-    label,
+    label = '',
     doc,
 }: {
     doc: Editor;
     selection: string;
     format: CommentFormat;
     type?: AnnotationType;
-    label: string;
+    label?: string;
 }) => {
     if (type)
         selection = wrapText({

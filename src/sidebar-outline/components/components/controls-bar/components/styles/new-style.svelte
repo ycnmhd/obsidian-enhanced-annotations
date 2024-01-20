@@ -1,7 +1,7 @@
 <script lang="ts">
-	import { l } from '../../../../lang/lang';
+	import { l } from '../../../../../../lang/lang';
 	import SquareButton from './square-button.svelte';
-	import LabeledAnnotations from '../../../../main';
+	import LabeledAnnotations from '../../../../../../main';
 	import { Plus } from 'lucide-svelte';
 
 	export let plugin: LabeledAnnotations;

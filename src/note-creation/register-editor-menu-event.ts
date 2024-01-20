@@ -7,7 +7,10 @@ export const registerEditorMenuEvent = (plugin: LabeledAnnotations) => {
     plugin.registerEvent(
         plugin.app.workspace.on('editor-menu', (menu, editor, view) => {
             const cursor = editor.getCursor();
-            const line = editor.getLine(cursor.line);
+            const line = editor.getRange(
+                { line: cursor.line, ch: 0 },
+                { line: cursor.line + 3, ch: Infinity },
+            );
             const annotation = parseAnnotations(line)[0];
             if (annotation) {
                 const onClick = async () => {

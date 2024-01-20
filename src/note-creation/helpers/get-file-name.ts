@@ -1,8 +1,9 @@
 import { Annotation } from '../../editor-plugin/helpers/decorate-annotations/helpers/parse-annotations/parse-annotations';
 import { sanitizeFileName } from './sanitize-file-name';
 import { Settings } from '../../settings/settings-type';
+import { truncateString } from '../../helpers/string-utils';
 
-export const calculateFilePath = (
+export const getFileName = (
     annotation: Pick<Annotation, 'label' | 'text'>,
     settings: Settings['notes'],
     currentFolder: string,
@@ -20,18 +21,21 @@ export const calculateFilePath = (
         folderParts.push(currentFolder, 'notes');
     }
     if (settings.notesNamingMode === 'label - annotation') {
-        nameParts.push(`${sanitizedLabel} - ${sanitizedAnnotation}.md`);
+        nameParts.push(`${sanitizedLabel} - ${sanitizedAnnotation}`);
     } else if (settings.notesNamingMode === 'label/annotation') {
         folderParts.push(sanitizedLabel);
-        nameParts.push(`${sanitizedAnnotation}.md`);
+        nameParts.push(`${sanitizedAnnotation}`);
     } else {
-        nameParts.push(sanitizedAnnotation + '.md');
+        nameParts.push(sanitizedAnnotation);
     }
     const folderPath = folderParts.filter((p) => p && p !== '/').join('/');
-    const fileName = nameParts.join('/');
+    const fileBasename = truncateString(
+        nameParts.join('/'),
+        settings.truncateFileName ? 100 : 250,
+    );
     return {
-        filePath: `${folderPath}/${fileName}`,
+        filePath: `${folderPath}/${fileBasename}.md`,
         folderPath,
-        fileBasename: fileName.replace(/\.md$/, ''),
+        fileBasename,
     };
 };

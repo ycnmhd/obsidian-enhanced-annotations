@@ -1,18 +1,20 @@
 <script lang="ts">
 	import Styles from './styles.svelte';
-	import LabeledAnnotations from '../../../../main';
+	import LabeledAnnotations from '../../../../../../main';
 	import NewStyle from './new-style.svelte';
+	import { onDestroy } from 'svelte';
 
 	export let plugin: LabeledAnnotations;
 
 	let labels = (Object.values(
 		plugin.settings.getValue().decoration.styles.labels
 	));
-	plugin.settings.subscribe(v => {
+	const unsub = plugin.settings.subscribe(v => {
 		labels = (Object.values(
 			v.decoration.styles.labels
 		));
 	});
+	onDestroy(unsub);
 </script>
 
 <div class="styles-list">

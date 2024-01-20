@@ -5,9 +5,9 @@
 	import { searchTerm } from './components/controls-bar/components/search-input.store';
 	import { filteredBySearch } from './components/annotations-list/annotations-list.store';
 	import LabeledAnnotations from '../../main';
-	import { pluginIdle, showStylesSettings } from './components/controls-bar/controls-bar.store';
+	import { controls, pluginIdle } from './components/controls-bar/controls-bar.store';
 	import PluginIdle from './components/plugin-idle.svelte';
-	import StylesList from './components/styles/styles-list.svelte';
+	import StylesList from './components/controls-bar/components/styles/styles-list.svelte';
 
 	export let plugin: LabeledAnnotations;
 </script>
@@ -17,7 +17,7 @@
 		<PluginIdle {plugin} />
 	{:else}
 		<ControlsBar {plugin} />
-		{#if $showStylesSettings}
+		{#if $controls.showStylesSettings}
 			<StylesList {plugin} />
 		{:else if Object.values($filteredBySearch.labels).flat().length || $searchTerm.length}
 			<FlatOutline {plugin} />

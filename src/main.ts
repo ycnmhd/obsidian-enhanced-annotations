@@ -1,4 +1,4 @@
-import { Plugin } from 'obsidian';
+import { Menu, Plugin, TAbstractFile, TFile } from 'obsidian';
 import { addInsertCommentCommands } from './commands/commands';
 import { Settings } from './settings/settings-type';
 import {
@@ -31,6 +31,7 @@ export default class LabeledAnnotations extends Plugin {
     idling: Idling;
     decorationSettings: DecorationSettings;
     editorSuggest: AnnotationSuggest;
+    private unsubscribeCallbacks: Set<() => void> = new Set();
 
     async onload() {
         await this.loadSettings();
@@ -38,7 +39,14 @@ export default class LabeledAnnotations extends Plugin {
         this.editorSuggest = new AnnotationSuggest(this.app, this);
         this.registerEditorSuggest(this.editorSuggest);
         this.registerEvent(
-            this.app.workspace.on('file-menu', fileMenuItems(this)),
+            this.app.workspace.on(
+                'file-menu',
+                (menu: Menu, abstractFiles: TAbstractFile) => {
+                    const extension = (abstractFiles as TFile).extension;
+                    if (extension && extension === 'md')
+                        fileMenuItems(this)(menu, abstractFiles);
+                },
+            ),
         );
         this.registerEvent(
             this.app.workspace.on('files-menu', fileMenuItems(this)),
@@ -55,7 +63,7 @@ export default class LabeledAnnotations extends Plugin {
         this.app.workspace.onLayoutReady(async () => {
             await this.activateView();
             loadOutlineStateFromSettings(this);
-            subscribeSettingsToOutlineState(this);
+            this.registerSubscription(...subscribeSettingsToOutlineState(this));
             this.addSettingTab(new SettingsTab(this.app, this));
             registerEditorMenuEvent(this);
         });
@@ -63,6 +71,9 @@ export default class LabeledAnnotations extends Plugin {
 
     onunload() {
         tts.stop();
+        for (const callback of this.unsubscribeCallbacks) {
+            callback();
+        }
     }
 
     loadPlugin() {
@@ -70,7 +81,7 @@ export default class LabeledAnnotations extends Plugin {
         EditorPlugin.plugin = this;
         this.outline = new OutlineUpdater(this);
         tts.setPlugin(this);
-        subscribeDecorationStateToSettings(this);
+        this.unsubscribeCallbacks.add(subscribeDecorationStateToSettings(this));
         this.registerEditorExtension([editorPlugin]);
         this.statusBar = new StatusBar(this);
     }
@@ -81,9 +92,11 @@ export default class LabeledAnnotations extends Plugin {
             mergeDeep(settings, DEFAULT_SETTINGS()),
             settingsReducer,
         );
-        this.settings.subscribe(() => {
-            this.saveSettings();
-        });
+        this.registerSubscription(
+            this.settings.subscribe(() => {
+                this.saveSettings();
+            }),
+        );
     }
 
     async saveSettings() {
@@ -101,5 +114,11 @@ export default class LabeledAnnotations extends Plugin {
         this.app.workspace.revealLeaf(
             this.app.workspace.getLeavesOfType(SIDEBAR_OUTLINE_VIEW_TYPE)[0],
         );
+    }
+
+    registerSubscription(...callback: (() => void)[]) {
+        callback.forEach((callback) => {
+            this.unsubscribeCallbacks.add(callback);
+        });
     }
 }

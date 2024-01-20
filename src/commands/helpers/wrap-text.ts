@@ -5,7 +5,7 @@ export const wrapText = ({
     text,
     type,
     format,
-    label,
+    label = '',
 }: {
     label?: string;
     text: string;

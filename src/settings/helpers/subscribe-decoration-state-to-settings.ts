@@ -8,7 +8,7 @@ export const subscribeDecorationStateToSettings = (
     const previousValue = {
         current: '',
     };
-    settings.subscribe((value) => {
+    return settings.subscribe((value) => {
         const styles = value.decoration.styles;
         const stylesStr = JSON.stringify(styles);
         if (stylesStr !== previousValue.current) {

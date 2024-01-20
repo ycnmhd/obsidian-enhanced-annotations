@@ -1,15 +1,17 @@
 <script lang="ts">
-	import LabeledAnnotations from '../../../../main';
+	import LabeledAnnotations from '../../../../../../main';
 	import MultiOptionsToggleButton from './multi-option-toggle-button.svelte';
-	import { FontFamily, FontWeight, LabelSettings, Opacity } from '../../../../settings/settings-type';
-	import { TextSVG } from '../../../../settings/settings-tab/components/label-settings/components/text-svg';
+	import { FontFamily, FontWeight, LabelSettings, Opacity } from '../../../../../../settings/settings-type';
+	import { TextSVG } from '../../../../../../settings/settings-tab/components/label-settings/components/text-svg';
 	import { ChevronDown, ChevronUp, Italic, Trash2, Underline } from 'lucide-svelte';
-	import { l } from '../../../../lang/lang';
+	import { l } from '../../../../../../lang/lang';
 	import ToggleButton from './toggle-button.svelte';
 	import SquareButton from './square-button.svelte';
 
 	export let plugin: LabeledAnnotations;
 	export let label: LabelSettings;
+	export let onToggleAdditionalSettings: () =>void;
+	export let showAdditionalSettings = false;
 
 	const onColorChange = (e: any) => {
 		const value = e.target.value;
@@ -129,10 +131,7 @@
 			payload: { id: label.id, opacity: value as Opacity }
 		});
 
-	let showAdditionalSettings = false;
-	const onToggleAdditionalSettings = () => {
-		showAdditionalSettings = !showAdditionalSettings;
-	};
+
 
 	const onDelete = () => {
 		plugin.settings.dispatch({
@@ -143,9 +142,7 @@
 </script>
 
 <div
-	class={`additional-settings ${
-        showAdditionalSettings ? ' additional-settings--expanded' : ''
-    }`}
+	class={`additional-settings `}
 >
 	<input
 		on:change={onColorChange}
@@ -235,7 +232,5 @@
 		/*margin-left: 75px;*/
 	}
 
-	.additional-settings--expanded {
-		margin-bottom: 20px;
-	}
+
 </style>

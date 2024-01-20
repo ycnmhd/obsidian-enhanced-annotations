@@ -63,6 +63,7 @@ export type Settings = {
     };
     commands: {
         enableLabelCommands: boolean;
+        assignHotkeys: boolean;
     };
     outline: {
         showSearchInput: boolean;
@@ -85,6 +86,7 @@ export type Settings = {
         openNoteAfterCreation: boolean;
         insertLinkToNote: boolean;
         template: string;
+        truncateFileName: boolean;
     };
     clipboard: { templates: ClipboardTemplates };
     idling: {

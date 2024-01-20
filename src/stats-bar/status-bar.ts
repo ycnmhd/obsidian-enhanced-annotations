@@ -4,6 +4,7 @@ import { fileAnnotations } from '../sidebar-outline/components/components/annota
 import { Annotation } from '../editor-plugin/helpers/decorate-annotations/helpers/parse-annotations/parse-annotations';
 import { wordCount } from './word-count';
 import { pluralize } from '../helpers/pluralize';
+import { get } from 'svelte/store';
 
 export class StatusBar {
     private elements: {
@@ -38,42 +39,82 @@ export class StatusBar {
                     },
                     [[], []] as [Annotation[], Annotation[]],
                 );
-            await this.update(comments, highlights);
+            await this.updateText(comments, highlights);
         });
+        this.elements.container.onmouseenter = this.onHover;
     };
 
-    private update = async (
+    private updateTooltip = async (
+        comments: Annotation[],
+        highlights: Annotation[],
+    ) => {
+        let fileTextChars = 0;
+        const file = this.plugin.outline.getValue().view?.file;
+        if (file) {
+            const text = await this.plugin.app.vault.read(file);
+            fileTextChars = text.length;
+        }
+        if (fileTextChars > 0) {
+            const commentsBoilerplate = comments
+                .map((v) => `==${`${v.label ? `${v.label}: ` : ''}`}==`)
+                .join('').length;
+            const highlightsBoilerplate = highlights
+                .map((v) => `<!--${`${v.label ? `${v.label}: ` : ''}`}-->`)
+                .join('').length;
+
+            fileTextChars =
+                fileTextChars - commentsBoilerplate - highlightsBoilerplate;
+        }
+        if (comments.length) {
+            this.elements.comments.ariaLabel = await this.createTooltip(
+                comments,
+                fileTextChars,
+            );
+        }
+        if (highlights.length) {
+            this.elements.highlights.ariaLabel = await this.createTooltip(
+                highlights,
+                fileTextChars,
+            );
+        }
+    };
+    private async createTooltip(
+        annotations: Annotation[],
+        fileTextChars: number,
+    ) {
+        const commentsText = annotations.map((c) => c.text).join();
+        const chars = commentsText.length;
+        const words = await wordCount(commentsText);
+        let tooltip = `${pluralize(words, 'word', 'words')} ${pluralize(
+            chars,
+            'character',
+            'characters',
+        )}`;
+        if (fileTextChars > 0) {
+            tooltip += ` (${Math.floor((chars / fileTextChars) * 100)}%)`;
+        }
+        return tooltip;
+    }
+
+    private updateText = async (
         comments: Annotation[],
         highlights: Annotation[],
     ) => {
         const numberOfComments = comments.length;
         const numberOfHighlights = highlights.length;
-        this.elements.comments.setText(
-            `${pluralize(numberOfComments, 'comment', 'comments')}`,
-        );
         if (numberOfComments) {
-            const commentsText = comments.map((c) => c.text).join();
-            const commentsChars = commentsText.length;
-            const commentsWords = await wordCount(commentsText);
-            this.elements.comments.ariaLabel = `${pluralize(
-                commentsWords,
-                'word',
-                'words',
-            )} ${pluralize(commentsChars, 'character', 'characters')}`;
+            this.elements.comments.style.display = 'inline';
+            this.elements.comments.setText(
+                `${pluralize(numberOfComments, 'comment', 'comments')}`,
+            );
+        } else {
+            this.elements.comments.style.display = 'none';
         }
         if (numberOfHighlights) {
             this.elements.highlights.style.display = 'inline';
-            const highlightsText = highlights.map((c) => c.text).join();
-            const highlightsChars = highlightsText.length;
-            const highlightsWords = await wordCount(highlightsText);
             this.elements.highlights.setText(
                 `${pluralize(numberOfHighlights, 'highlight', 'highlights')}`,
             );
-            this.elements.highlights.ariaLabel = `${pluralize(
-                highlightsWords,
-                'word',
-                'words',
-            )} ${pluralize(highlightsChars, 'character', 'characters')}`;
         } else {
             this.elements.highlights.style.display = 'none';
         }
@@ -85,5 +126,21 @@ export class StatusBar {
         )[0];
         if (leaf) this.plugin.app.workspace.revealLeaf(leaf);
         else this.plugin.activateView();
+    };
+
+    private onHover = async () => {
+        const v = get(fileAnnotations);
+
+        const [comments, highlights] = Object.values(v.labels)
+            .flat()
+            .reduce(
+                (acc, v) => {
+                    if (v.isHighlight) acc[1].push(v);
+                    else acc[0].push(v);
+                    return acc;
+                },
+                [[], []] as [Annotation[], Annotation[]],
+            );
+        await this.updateTooltip(comments, highlights);
     };
 }

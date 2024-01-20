@@ -55,7 +55,7 @@ export const parseAnnotations = (
             endPattern.lastIndex = 0;
         }
 
-        const startRegex = startPattern.exec(line);
+        let startRegex = startPattern.exec(line);
 
         let endRegex: RegExpExecArray | null | undefined = undefined;
 
@@ -115,6 +115,9 @@ export const parseAnnotations = (
                         continue;
                     }
                     state.multiLineAnnotation = null;
+                } else if (from === beforeTo) {
+                    // start and end are the same
+                    startRegex = null;
                 }
             }
         }

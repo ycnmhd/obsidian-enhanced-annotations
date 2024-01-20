@@ -21,6 +21,7 @@ export const DEFAULT_SETTINGS = (): Settings => ({
     },
     commands: {
         enableLabelCommands: false,
+        assignHotkeys: false,
     },
     outline: {
         fontSize: 12,
@@ -43,6 +44,7 @@ export const DEFAULT_SETTINGS = (): Settings => ({
         insertLinkToNote: true,
         defaultFolderMode: 'current folder/notes',
         template: noteTemplate,
+        truncateFileName: false,
     },
     idling: {
         daysUnused: [],

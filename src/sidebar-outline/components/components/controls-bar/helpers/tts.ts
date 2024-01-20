@@ -16,22 +16,15 @@ export class TTS {
     #isReading: boolean;
     private subscribers: Set<Subscriber> = new Set();
     private utterance: SpeechSynthesisUtterance;
-    private file: TFile | null;
+    private activeTTSFile: TFile | undefined;
     private fileHasChanged = false;
 
     private constructor() {
         this.onLoad();
     }
 
-    private onLoad() {
-        filteredBySearchAndCategoryAndLabel.subscribe((v) => {
-            this.annotations = v;
-        });
-        this.utterance = new SpeechSynthesisUtterance();
-        this.utterance.onpause = this.updateState;
-        this.utterance.onend = this.updateState;
-        this.utterance.onstart = this.updateState;
-        this.utterance.onresume = this.updateState;
+    get isReading() {
+        return this.#isReading;
     }
 
     static getInstance() {
@@ -44,9 +37,10 @@ export class TTS {
     setPlugin = (value: LabeledAnnotations) => {
         this.plugin = value;
         this.plugin.outline.subscribe((v) => {
-            if (v.view?.file !== this.file) {
-                this.file = v.view?.file || null;
+            if (v.view?.file !== this.activeTTSFile) {
                 this.fileHasChanged = true;
+            } else {
+                this.fileHasChanged = false;
             }
         });
     };
@@ -60,6 +54,9 @@ export class TTS {
             },
             { annotations: {} as Record<number, Annotation>, c: 0 },
         );
+        this.activeTTSFile = this.plugin.outline.getValue().view?.file as
+            | TFile
+            | undefined;
         this.utterance.text = this.annotations.map((c) => c.text).join('.\n');
         const settings = this.plugin.settings.getValue().tts;
         this.utterance.volume = settings.volume;
@@ -94,6 +91,25 @@ export class TTS {
         activeAnnotationIndex.set(-1);
     }
 
+    subscribe(callback: Subscriber) {
+        this.subscribers.add(callback);
+        callback(this.isReading);
+        return () => {
+            this.subscribers.delete(callback);
+        };
+    }
+
+    private onLoad() {
+        filteredBySearchAndCategoryAndLabel.subscribe((v) => {
+            this.annotations = v;
+        });
+        this.utterance = new SpeechSynthesisUtterance();
+        this.utterance.onpause = this.updateState;
+        this.utterance.onend = this.updateState;
+        this.utterance.onstart = this.updateState;
+        this.utterance.onresume = this.updateState;
+    }
+
     private updateState = () => {
         this.#isReading =
             window.speechSynthesis.speaking ||
@@ -102,18 +118,6 @@ export class TTS {
         if (!this.#isReading) activeAnnotationIndex.set(-1);
         this.invokeSubscribers();
     };
-
-    get isReading() {
-        return this.#isReading;
-    }
-
-    subscribe(callback: Subscriber) {
-        this.subscribers.add(callback);
-        callback(this.isReading);
-        return () => {
-            this.subscribers.delete(callback);
-        };
-    }
 
     private invokeSubscribers() {
         this.subscribers.forEach((subscriber) => {

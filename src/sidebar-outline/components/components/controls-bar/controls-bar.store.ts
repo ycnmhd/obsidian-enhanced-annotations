@@ -1,37 +1,62 @@
 import { writable } from 'svelte/store';
-import { tts } from './helpers/tts';
+import { Store } from '../../../../helpers/store';
 
 export const POSSIBLE_FONT_SIZES = [10, 12, 14, 16, 18, 20, 22, 24] as const;
 export const fontSize = writable<(typeof POSSIBLE_FONT_SIZES)[number]>(12);
 
-export const showLabelsFilter = writable<boolean>(false);
-
-export const showSearchInput = writable<boolean>(false);
-
 export const isReading = writable<boolean>(false);
-tts.subscribe((value) => isReading.set(value));
-
-export const showSecondaryControlsBar = writable<boolean>(false);
 
 export const pluginIdle = writable(false);
 
-export const showStylesSettings = writable(false);
+type Controls = {
+    showSearchInput: boolean;
+    showLabelsFilter: boolean;
+    showExtraButtons: boolean;
+    showStylesSettings: boolean;
+    showOutlineSettings: boolean;
+};
 
-// hide style settings
-showSecondaryControlsBar.subscribe((v) => {
-    if (!v) showStylesSettings.set(false);
-});
-showSearchInput.subscribe((v) => {
-    if (v) showStylesSettings.set(false);
-});
-showLabelsFilter.subscribe((v) => {
-    if (v) showStylesSettings.set(false);
-});
+type ControlsAction =
+    | { type: 'TOGGLE_EXTRA_BUTTONS' }
+    | { type: 'TOGGLE_OUTLINE_SETTINGS' }
+    | { type: 'TOGGLE_STYLES_SETTINGS' }
+    | { type: 'TOGGLE_SEARCH_INPUT' }
+    | { type: 'TOGGLE_LABELS_FILTERS' };
 
-// hide filters
-showStylesSettings.subscribe((v) => {
-    if (v) {
-        showSearchInput.set(false);
-        showLabelsFilter.set(false);
+const updateState = (store: Controls, action: ControlsAction) => {
+    if (action.type === 'TOGGLE_SEARCH_INPUT') {
+        store.showSearchInput = !store.showSearchInput;
+        if (store.showSearchInput) store.showStylesSettings = false;
+    } else if (action.type === 'TOGGLE_LABELS_FILTERS') {
+        store.showLabelsFilter = !store.showLabelsFilter;
+        if (store.showLabelsFilter) store.showStylesSettings = false;
+    } else if (action.type === 'TOGGLE_EXTRA_BUTTONS') {
+        store.showExtraButtons = !store.showExtraButtons;
+        if (!store.showExtraButtons) store.showStylesSettings = false;
+    } else if (action.type === 'TOGGLE_STYLES_SETTINGS') {
+        store.showStylesSettings = !store.showStylesSettings;
+        if (store.showStylesSettings) {
+            store.showSearchInput = false;
+            store.showLabelsFilter = false;
+            store.showOutlineSettings = false;
+        }
+    } else if (action.type === 'TOGGLE_OUTLINE_SETTINGS') {
+        store.showOutlineSettings = !store.showOutlineSettings;
+        if (store.showOutlineSettings) store.showStylesSettings = false;
     }
-});
+};
+export const reducer = (store: Controls, action: ControlsAction): Controls => {
+    updateState(store, action);
+    return store;
+};
+
+export const controls = new Store<Controls, ControlsAction>(
+    {
+        showLabelsFilter: false,
+        showSearchInput: false,
+        showExtraButtons: false,
+        showStylesSettings: false,
+        showOutlineSettings: false,
+    },
+    reducer,
+);

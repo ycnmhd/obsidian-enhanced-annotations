@@ -1,19 +1,19 @@
 import { Annotation } from '../editor-plugin/helpers/decorate-annotations/helpers/parse-annotations/parse-annotations';
 import { Editor, EditorPosition, Notice } from 'obsidian';
 import { insertBlockId } from './helpers/insert-block-id';
-import { calculateFilePath } from './helpers/calculate-file-path';
+import { getFileName } from './helpers/get-file-name';
 import { writeFile } from './helpers/write-file';
 import { insertLinkToNote } from './helpers/insert-link-to-note';
 import LabeledAnnotations from '../main';
 import { applyVariablesToTemplate } from '../clipboard/helpers/apply-variables-to-template';
 import { formattedDate, formattedTime, timeTag } from '../helpers/date-utils';
 
-export const noteTemplate = `{{link}}`;
+export const noteTemplate = `{{block_link}}`;
 
 export const noteVariables = [
-    'name',
-    'link',
-    'label',
+    'block_link',
+    'annotation_text',
+    'annotation_label',
     'date',
     'time',
     'time_tag',
@@ -45,9 +45,9 @@ export const createNoteFile = async ({
     const settings = plugin.settings.getValue();
 
     const variables: Record<NoteVariables, string> = {
-        name: currentFileName,
-        label: annotation.label,
-        link: `![[${currentFileName}#${blockId.blockId}]]`,
+        block_link: `![[${currentFileName}#${blockId.blockId}]]`,
+        annotation_label: annotation.label,
+        annotation_text: annotation.text,
         time_tag: timeTag(),
         date: formattedDate(),
         time: formattedTime(),
@@ -57,7 +57,7 @@ export const createNoteFile = async ({
         variables: variables,
     });
 
-    const { filePath, folderPath, fileBasename } = calculateFilePath(
+    const { filePath, folderPath, fileBasename } = getFileName(
         annotation,
         settings.notes,
         currentFileFolder,

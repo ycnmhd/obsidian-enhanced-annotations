@@ -10,27 +10,22 @@ export const updateOutline = (
     annotations: Annotation[],
     plugin: LabeledAnnotations,
 ) => {
-    let fileHasLabeledAnnotations = false;
     const labels = annotations
         .sort((a, b) => a.label.localeCompare(b.label))
         .reduce(
             (acc, val) => {
-                if (val.label) fileHasLabeledAnnotations = true;
-                else val.label = '/';
                 if (val.text) {
-                    if (!acc[val.label]) {
-                        acc[val.label] = [];
+                    const label = val.label || '/';
+                    if (!acc[label]) {
+                        acc[label] = [];
                     }
-                    acc[val.label].push(val);
+                    acc[label].push(val);
                 }
                 return acc;
             },
             {} as OutlineStore['labels'],
         );
 
-    if (fileHasLabeledAnnotations) {
-        plugin.idling.logActivity();
-    }
     fileAnnotations.set({ labels });
     registerNewLabels(annotations, plugin);
 };

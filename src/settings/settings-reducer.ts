@@ -125,6 +125,12 @@ export type SettingsActions =
     | {
           type: 'SET_CLIPBOARD_TEMPLATE';
           payload: { template: string; name: ClipboardTemplateSection };
+      }
+    | {
+          type: 'TOGGLE_TRUNCATE_FILE_NAME';
+      }
+    | {
+          type: 'TOGGLE_ASSIGN_HOTKEYS';
       };
 
 const updateState = (store: Settings, action: SettingsActions) => {
@@ -225,6 +231,10 @@ const updateState = (store: Settings, action: SettingsActions) => {
     } else if (action.type === 'SET_CLIPBOARD_TEMPLATE') {
         const { template, name } = action.payload;
         store.clipboard.templates[name] = template;
+    } else if (action.type === 'TOGGLE_TRUNCATE_FILE_NAME') {
+        store.notes.truncateFileName = !store.notes.truncateFileName;
+    } else if (action.type === 'TOGGLE_ASSIGN_HOTKEYS') {
+        store.commands.assignHotkeys = !store.commands.assignHotkeys;
     }
 };
 export const settingsReducer = (

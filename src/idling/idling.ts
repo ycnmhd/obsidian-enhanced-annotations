@@ -1,6 +1,10 @@
 import LabeledAnnotations from '../main';
-import { pluginIdle } from '../sidebar-outline/components/components/controls-bar/controls-bar.store';
+import {
+    controls,
+    pluginIdle,
+} from '../sidebar-outline/components/components/controls-bar/controls-bar.store';
 import { pluginIsIdle } from '../settings/settings-selectors';
+import { fileAnnotations } from '../sidebar-outline/components/components/annotations-list/annotations-list.store';
 
 /*
  * This plugin parses every line of the active document after each change made by the user.
@@ -8,13 +12,19 @@ import { pluginIsIdle } from '../settings/settings-selectors';
  */
 export class Idling {
     private enabled = false;
+    private subscriptions: Set<() => void> = new Set();
 
     constructor(private plugin: LabeledAnnotations) {
-        if (!pluginIsIdle(plugin.settings.getValue())) this.plugin.loadPlugin();
         this.plugin.settings.dispatch({ type: 'LOG_PLUGIN_STARTED' });
+        if (!pluginIsIdle(plugin.settings.getValue())) this.plugin.loadPlugin();
+        this.subscribe();
     }
 
-    logActivity() {
+    enable() {
+        this.logActivity();
+    }
+
+    private logActivity() {
         if (!this.enabled) {
             this.enabled = true;
             const wasIdle = pluginIsIdle(this.plugin.settings.getValue());
@@ -23,6 +33,31 @@ export class Idling {
                 pluginIdle.set(false);
                 this.plugin.loadPlugin();
             }
+            for (const unsub of this.subscriptions) {
+                unsub();
+                this.subscriptions.delete(unsub);
+            }
         }
+    }
+
+    private subscribe() {
+        this.subscriptions.add(
+            controls.subscribe((v, action) => {
+                if (action) {
+                    this.logActivity();
+                }
+            }),
+        );
+        this.subscriptions.add(
+            fileAnnotations.subscribe((v) => {
+                if (
+                    Object.values(v.labels)
+                        .flat()
+                        .some((v) => v.label)
+                ) {
+                    this.logActivity();
+                }
+            }),
+        );
     }
 }
