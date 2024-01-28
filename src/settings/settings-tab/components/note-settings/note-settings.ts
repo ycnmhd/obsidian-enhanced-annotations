@@ -14,10 +14,10 @@ type Props = {
     plugin: LabeledAnnotations;
 };
 const options: Record<DefaultFolderMode, string> = {
-    vault: 'Vault folder',
-    'current folder': 'Current folder',
-    'current folder/notes': 'Current folder / Notes',
-    customFolder: 'Folder specified below',
+    vault: 'vault folder',
+    'current folder': 'current folder',
+    'current folder/notes': 'current folder / notes',
+    customFolder: 'folder specified below',
 };
 export const NoteSettings = ({ containerEl, plugin }: Props) => {
     const render = () => {
@@ -67,9 +67,11 @@ export const NoteSettings = ({ containerEl, plugin }: Props) => {
         .setName(l.SETTINGS_NOTE_CREATION_NAME)
         .addDropdown((c) => {
             c.addOptions({
-                annotation: 'annotation',
-                'label/annotation': 'label / annotation',
-                'label - annotation': 'label - annotation',
+                'annotation-text': 'annotation text',
+                'annotation-label/annotation-text':
+                    'annotation label / annotation text',
+                'annotation-label - annotation-text':
+                    'annotation label - annotation text',
             } as Record<NotesNamingMode, string>);
             c.setValue(noteSettings.notesNamingMode);
             c.onChange((v) => {
@@ -81,6 +83,7 @@ export const NoteSettings = ({ containerEl, plugin }: Props) => {
         });
     new Setting(containerEl)
         .setName(l.SETTINGS_NOTE_TRUNCATE_FILE_NAME)
+        .setDesc(l.SETTINGS_NOTE_TRUNCATE_FILE_NAME_DESC)
         .addToggle((c) => {
             c.setValue(noteSettings.truncateFileName);
             c.onChange((v) => {
@@ -92,6 +95,7 @@ export const NoteSettings = ({ containerEl, plugin }: Props) => {
 
     new Setting(containerEl)
         .setName(l.SETTINGS_NOTE_CREATION_INSERT)
+        .setDesc(l.SETTINGS_NOTE_CREATION_INSERT_DESC)
         .addToggle((c) => {
             c.setValue(noteSettings.insertLinkToNote);
             c.onChange((v) => {
@@ -103,6 +107,7 @@ export const NoteSettings = ({ containerEl, plugin }: Props) => {
         });
     new Setting(containerEl)
         .setName(l.SETTINGS_NOTE_CREATION_OPEN)
+        .setDesc(l.SETTINGS_NOTE_CREATION_OPEN_DESC)
         .addToggle((c) => {
             c.setValue(noteSettings.openNoteAfterCreation);
             c.onChange((v) => {

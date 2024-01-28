@@ -44,10 +44,6 @@ export type SettingsActions =
     | { type: 'SET_AUTO_SUGGEST_TRIGGER'; payload: { trigger: string } }
     | { type: 'ENABLE_AUTO_REGISTER_LABELS'; payload: { enable: boolean } }
     | {
-          type: 'ENABLE_DECORATE_COMMENT_TAGS';
-          payload: { enable: boolean };
-      }
-    | {
           type: 'ENABLE_LABEL_STYLES';
           payload: { id: string; enable: boolean };
       }
@@ -154,7 +150,6 @@ const updateState = (store: Settings, action: SettingsActions) => {
                     color: getDefaultColor(Object.values(labels)),
                     italic: true,
                     fontWeight: 'thin',
-                    opacity: 80,
                 },
             };
         }
@@ -203,8 +198,6 @@ const updateState = (store: Settings, action: SettingsActions) => {
         store.notes.insertLinkToNote = action.payload.insert;
     else if (action.type === 'SET_NOTES_TEMPLATE')
         store.notes.template = action.payload.template;
-    else if (action.type === 'ENABLE_DECORATE_COMMENT_TAGS')
-        store.decoration.decorateCommentTags = action.payload.enable;
     else if (action.type === 'ENABLE_TAG_STYLES')
         tag.enableStyle = action.payload.enable;
     else if (action.type === 'SET_TAG_FONT_FAMILY')

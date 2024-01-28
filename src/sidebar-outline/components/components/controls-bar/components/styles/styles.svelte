@@ -1,12 +1,12 @@
 <script lang="ts">
-	import { l } from '../../../../../../lang/lang';
-	import { LabelSettings } from 'src/settings/settings-type';
-	import { Notice } from 'obsidian';
-	import LabeledAnnotations from '../../../../../../main';
-	import AdditionalStyles from './additional-styles.svelte';
-	import { onDestroy } from 'svelte';
+    import { l } from '../../../../../../lang/lang';
+    import { LabelSettings } from 'src/settings/settings-type';
+    import { Notice } from 'obsidian';
+    import LabeledAnnotations from '../../../../../../main';
+    import AdditionalStyles from './additional-styles.svelte';
+    import { onDestroy } from 'svelte';
 
-	export let label: LabelSettings;
+    export let label: LabelSettings;
     export let plugin: LabeledAnnotations;
 
     const onLabelChange = (e: any) => {
@@ -51,17 +51,16 @@
 </script>
 
 <div
-    class={`main-styles${
-        showAdditionalSettings ? ' additional-settings--expanded' : ''
-    }`}
+    class={"main-styles"}
 >
     <input
         on:change={onLabelChange}
         pattern={'^\\w+$'}
         placeholder={l.SETTINGS_LABELS_STYLES_NAME_PLACE_HOLDER}
-        style="width: 50px;"
+        style="width: 75px;"
         type="text"
         value={label.label}
+
     />
     <AdditionalStyles
         {label}
@@ -75,9 +74,8 @@
     .main-styles {
         display: flex;
         gap: 5px;
+        flex-wrap: wrap;
+        justify-content: center;
     }
-    .additional-settings--expanded {
-        margin-bottom: 10px;
-        margin-top: 10px;
-    }
+
 </style>

@@ -10,7 +10,6 @@ export const DEFAULT_SETTINGS = (): Settings => ({
     },
     decoration: {
         autoRegisterLabels: true,
-        decorateCommentTags: true,
         styles: {
             labels: {},
             tag: {
@@ -39,7 +38,7 @@ export const DEFAULT_SETTINGS = (): Settings => ({
     },
     notes: {
         defaultFolder: 'notes',
-        notesNamingMode: 'label/annotation',
+        notesNamingMode: 'annotation-label/annotation-text',
         openNoteAfterCreation: false,
         insertLinkToNote: true,
         defaultFolderMode: 'current folder/notes',

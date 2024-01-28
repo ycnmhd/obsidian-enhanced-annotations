@@ -1,8 +1,7 @@
 {
-	"name": "labeled-annotations",
+	"name": "enhanced-annotations",
 	"version": "0.1.0",
 	"description": "",
-	"main": "main.js",
 	"scripts": {
 		"dev": "node esbuild.config.mjs",
 		"build": "tsc -noEmit -skipLibCheck && node esbuild.config.mjs production",
@@ -35,7 +34,6 @@
 		"prettier": "3.0.3",
 		"svelte": "4.2.1",
 		"svelte-preprocess": "5.0.4",
-		"tailwindcss": "3.3.5",
 		"tslib": "2.4.0",
 		"typescript": "4.7.4",
 		"vitest": "0.34.5",

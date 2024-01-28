@@ -22,7 +22,9 @@ export const TagSettings = ({ containerEl, tag, plugin, render }: Props) => {
     const style = tag.style;
     el.controlEl.innerHTML = '';
 
-    el.setName(l.TAG_STYLE);
+    el.setName(l.SETTINGS_STYLES_WRAPPERS_STYLE).setDesc(
+        l.SETTINGS_STYLES_WRAPPERS_STYLE_DESC,
+    );
     el.addExtraButton((button) => {
         MultiOptionExtraButton({
             name: 'Font weight',

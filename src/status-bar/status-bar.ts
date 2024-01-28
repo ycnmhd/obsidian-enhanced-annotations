@@ -2,9 +2,10 @@ import { SIDEBAR_OUTLINE_VIEW_TYPE } from '../sidebar-outline/sidebar-outline-vi
 import LabeledAnnotations from '../main';
 import { fileAnnotations } from '../sidebar-outline/components/components/annotations-list/annotations-list.store';
 import { Annotation } from '../editor-plugin/helpers/decorate-annotations/helpers/parse-annotations/parse-annotations';
-import { wordCount } from './word-count';
 import { pluralize } from '../helpers/pluralize';
 import { get } from 'svelte/store';
+import { TFile } from 'obsidian';
+import { createTooltip } from './helpers/create-tooltip';
 
 export class StatusBar {
     private elements: {
@@ -39,6 +40,7 @@ export class StatusBar {
                     },
                     [[], []] as [Annotation[], Annotation[]],
                 );
+            this.resetTooltip();
             await this.updateText(comments, highlights);
         });
         this.elements.container.onmouseenter = this.onHover;
@@ -48,52 +50,30 @@ export class StatusBar {
         comments: Annotation[],
         highlights: Annotation[],
     ) => {
-        let fileTextChars = 0;
-        const file = this.plugin.outline.getValue().view?.file;
-        if (file) {
-            const text = await this.plugin.app.vault.read(file);
-            fileTextChars = text.length;
-        }
-        if (fileTextChars > 0) {
-            const commentsBoilerplate = comments
-                .map((v) => `==${`${v.label ? `${v.label}: ` : ''}`}==`)
-                .join('').length;
-            const highlightsBoilerplate = highlights
-                .map((v) => `<!--${`${v.label ? `${v.label}: ` : ''}`}-->`)
-                .join('').length;
+        let file: TFile | null | undefined;
+        let text = '';
 
-            fileTextChars =
-                fileTextChars - commentsBoilerplate - highlightsBoilerplate;
+        if (comments.length | highlights.length) {
+            file = this.plugin.outline.getValue().view?.file;
+            if (file) text = await this.plugin.app.vault.read(file);
         }
         if (comments.length) {
-            this.elements.comments.ariaLabel = await this.createTooltip(
+            this.elements.comments.ariaLabel = await createTooltip(
                 comments,
-                fileTextChars,
+                text,
             );
         }
         if (highlights.length) {
-            this.elements.highlights.ariaLabel = await this.createTooltip(
+            this.elements.highlights.ariaLabel = await createTooltip(
                 highlights,
-                fileTextChars,
+                text,
             );
         }
     };
-    private async createTooltip(
-        annotations: Annotation[],
-        fileTextChars: number,
-    ) {
-        const commentsText = annotations.map((c) => c.text).join();
-        const chars = commentsText.length;
-        const words = await wordCount(commentsText);
-        let tooltip = `${pluralize(words, 'word', 'words')} ${pluralize(
-            chars,
-            'character',
-            'characters',
-        )}`;
-        if (fileTextChars > 0) {
-            tooltip += ` (${Math.floor((chars / fileTextChars) * 100)}%)`;
-        }
-        return tooltip;
+
+    private resetTooltip() {
+        this.elements.comments.ariaLabel = '';
+        this.elements.highlights.ariaLabel = '';
     }
 
     private updateText = async (
@@ -120,12 +100,12 @@ export class StatusBar {
         }
     };
 
-    private onClick = () => {
+    private onClick = async () => {
         const leaf = this.plugin.app.workspace.getLeavesOfType(
             SIDEBAR_OUTLINE_VIEW_TYPE,
         )[0];
         if (leaf) this.plugin.app.workspace.revealLeaf(leaf);
-        else this.plugin.activateView();
+        else await this.plugin.activateView();
     };
 
     private onHover = async () => {

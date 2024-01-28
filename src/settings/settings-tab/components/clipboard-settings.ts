@@ -15,8 +15,8 @@ type Props = {
 export const ClipboardSettings = ({ plugin, containerEl }: Props) => {
     const settings = plugin.settings;
     const render = () => {
-        containerEl.createEl('h3', { text: l.SETTINGS_CLIPBOARD_TITLE });
         containerEl.empty();
+        containerEl.createEl('h3', { text: l.SETTINGS_CLIPBOARD_TITLE });
         for (const Key of ['Front', 'Header', 'Comment', 'Highlight']) {
             const key = Key.toLowerCase() as ClipboardTemplateSection;
 

@@ -26,11 +26,13 @@
 
 <style>
 	.styles-list {
+		box-sizing: border-box;
 		display: flex;
 		flex-direction: column;
 		gap: 5px;
 		width: 100%;
 		align-items: center;
-		padding: 10px;
+		padding: 10px 0;
+		overflow-y: auto;
 	}
 </style>

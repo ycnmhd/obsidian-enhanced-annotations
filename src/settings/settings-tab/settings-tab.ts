@@ -24,11 +24,11 @@ export class SettingsTab extends PluginSettingTab {
             containerEl: containerEl.createEl('div'),
             plugin: this.plugin,
         });
-        AutoSuggestSettings({
+        ClipboardSettings({
             plugin: this.plugin,
             containerEl: containerEl.createEl('div'),
         });
-        TTSSettings({
+        AutoSuggestSettings({
             plugin: this.plugin,
             containerEl: containerEl.createEl('div'),
         });
@@ -36,7 +36,7 @@ export class SettingsTab extends PluginSettingTab {
             plugin: this.plugin,
             containerEl: containerEl.createEl('div'),
         });
-        ClipboardSettings({
+        TTSSettings({
             plugin: this.plugin,
             containerEl: containerEl.createEl('div'),
         });

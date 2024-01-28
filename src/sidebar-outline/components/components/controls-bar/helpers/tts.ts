@@ -74,12 +74,14 @@ export class TTS {
             if (e.name === 'sentence') {
                 const annotation = dict.annotations[e.charIndex] as Annotation;
                 if (annotation) {
-                    if (
-                        !this.fileHasChanged &&
-                        settings.focusAnnotationInEditor
-                    )
-                        selectText(annotation, this.plugin);
-                    activeAnnotationIndex.set(annotationIndex++);
+                    if (!this.fileHasChanged) {
+                        if (settings.focusAnnotationInEditor)
+                            selectText(annotation, this.plugin);
+                        activeAnnotationIndex.set(annotationIndex);
+                    } else {
+                        activeAnnotationIndex.set(-1);
+                    }
+                    annotationIndex = annotationIndex + 1;
                 }
             }
         };

@@ -6,8 +6,9 @@ import {
 } from '../../editor-plugin/helpers/decorate-annotations/helpers/parse-annotations/parse-annotations';
 
 export type ParsedAnnotations = {
+    folder: string;
+    basename: string;
     path: string;
-    name: string;
     annotations: Pick<Annotation, 'label' | 'text' | 'isHighlight'>[];
 };
 export const parseAnnotationsFromFiles = async (
@@ -24,8 +25,9 @@ export const parseAnnotationsFromFiles = async (
                 if (annotations.length)
                     content.push({
                         annotations,
-                        name: abstractFile.basename,
-                        path: abstractFile.parent?.path as string,
+                        path: abstractFile.path,
+                        basename: abstractFile.basename,
+                        folder: abstractFile.parent?.path as string,
                     });
             }
         } else if (abstractFile instanceof TFolder) {

@@ -42,7 +42,6 @@
 	};
 </script>
 
-{#if Object.keys($filteredBySearch.labels).length }
 	<div class="tabs-container">
 		<div class={`tab ${$hiddenTypes.has("comment")? "is-hidden":""}`}
 			 on:click={()=>toggleCategory("comment",)}>
@@ -55,7 +54,6 @@
 			<span class="tab-badge">{stats.highlights}</span>
 		</div>
 	</div>
-{/if}
 {#if Object.keys($filteredBySearchAndCategory.labels).length}
 	<div class="tabs-container">
 		{#each Object.entries($filteredBySearchAndCategory.labels) as [label, group]}

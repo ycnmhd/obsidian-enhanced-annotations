@@ -125,5 +125,6 @@ export const TTSSettings = ({ plugin, containerEl }: Props) => {
                 });
             });
         })
-        .setName(l.SETTINGS_TTS_FOCUS_ANNOTATION_IN_EDITOR);
+        .setName(l.SETTINGS_TTS_FOCUS_ANNOTATION_IN_EDITOR)
+        .setDesc(l.SETTINGS_TTS_FOCUS_ANNOTATION_IN_EDITOR_DESC);
 };

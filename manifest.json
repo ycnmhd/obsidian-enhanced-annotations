@@ -1,10 +1,9 @@
 {
-	"id": "labeled-annotations",
-	"name": "Labeled Annotations",
+	"id": "enhanced-annotations",
+	"name": "Enhanced Annotations",
 	"version": "0.1.0",
 	"minAppVersion": "0.15.0",
-	"description": "",
+	"description": "Adds features to comments and highlights.",
 	"author": "ycnmhd",
-	"authorUrl": "https://github.com/ycnmhd/labeled-annotations",
 	"isDesktopOnly": true
 }

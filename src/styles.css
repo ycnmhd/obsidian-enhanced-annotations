@@ -1,17 +1,4 @@
-/*
-
-This CSS file will be included with your plugin, and
-available in the app when your plugin is enabled.
-
-If your plugin does not need CSS, delete this file.
-
-*/
-
 .cm-highlight {
 	background-color: transparent !important;
-}
-
-.cm-highlight-default {
-	background-color: var(--text-highlight-bg);
 }
 

@@ -35,9 +35,9 @@ export type LabelSettings = {
     enableStyle: boolean;
 };
 export type NotesNamingMode =
-    | 'annotation'
-    | 'label - annotation'
-    | 'label/annotation';
+    | 'annotation-text'
+    | 'annotation-label - annotation-text'
+    | 'annotation-label/annotation-text';
 export type CommentFormat = 'markdown' | 'html';
 export type DefaultFolderMode =
     | 'vault'
@@ -55,7 +55,6 @@ export type Settings = {
     };
     decoration: {
         autoRegisterLabels: boolean;
-        decorateCommentTags: boolean;
         styles: {
             labels: Record<string, LabelSettings>;
             tag: TagSettings;

@@ -1,17 +1,17 @@
 <script lang="ts">
-    import TabsFilter from './components/tabs-filter.svelte';
-    import SearchInput from './components/search-input.svelte';
-    import { controls } from './controls-bar.store';
-    import NavButton from './components/clickable-icon.svelte';
-    import { l } from '../../../../lang/lang';
-    import { searchTerm } from './components/search-input.store';
-    import { ListFilter, MoreHorizontal, Search } from 'lucide-svelte';
-    import { filteredHiddenCategories, filteredHiddenLabels } from '../annotations-list/annotations-list.store';
-    import SecondaryControlsBar from './components/extra-buttons.svelte';
-    import LabeledAnnotations from '../../../../main';
-    import OutlineSettings from './components/outline-settings.svelte';
+	import TabsFilter from './components/tabs-filter.svelte';
+	import SearchInput from './components/search-input.svelte';
+	import { controls } from './controls-bar.store';
+	import NavButton from './components/clickable-icon.svelte';
+	import { l } from '../../../../lang/lang';
+	import { searchTerm } from './components/search-input.store';
+	import { ListFilter, MoreHorizontal, Search } from 'lucide-svelte';
+	import { filteredHiddenCategories, filteredHiddenLabels } from '../annotations-list/annotations-list.store';
+	import SecondaryControlsBar from './components/extra-buttons.svelte';
+	import LabeledAnnotations from '../../../../main';
+	import OutlineSettings from './components/outline-settings.svelte';
 
-    export let plugin: LabeledAnnotations;
+	export let plugin: LabeledAnnotations;
 	const toggleLabelsFilter = () => {
 		controls.dispatch({type:"TOGGLE_LABELS_FILTERS"})
 	};
@@ -28,7 +28,7 @@
 
 </script>
 
-<div class="nav-header outline-controls">
+<div class="outline-controls">
 	<div class="nav-buttons-container">
 		<NavButton
 			hasEnabledItems={!!$searchTerm}
@@ -70,7 +70,6 @@
 		<OutlineSettings/>
 		{/if}
 </div>
-
 <style>
 	.outline-controls {
 		display: flex;

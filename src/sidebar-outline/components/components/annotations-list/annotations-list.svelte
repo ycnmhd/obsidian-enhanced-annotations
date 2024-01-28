@@ -38,8 +38,8 @@
         flex-direction: column;
         width: 100%;
         gap: 5px;
-        margin-top: 10px;
         overflow-y: auto;
-
+        box-sizing: border-box;
+        padding: 0 10px;
     }
 </style>

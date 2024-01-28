@@ -23,13 +23,13 @@
         const outline = plugin.outline;
         const f = outline.getValue().view?.file;
         if (f) {
-            const path = f.parent?.path as string;
-            const name = f.basename;
+            const folder = f.parent?.path as string;
+            const basename = f.basename;
 
             const text = annotationsToText(
-                [{ path, name, annotations }],
+                [{ folder, basename, annotations }],
                 plugin.settings.getValue().clipboard.templates,
-                path,
+                folder,
             );
             clipboard.writeText(text);
             new Notice(l.OUTLINE_NOTICE_COPIED_TO_CLIPBOARD);

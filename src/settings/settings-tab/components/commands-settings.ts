@@ -11,6 +11,7 @@ export const CommandsSettings = ({ plugin, containerEl }: Props) => {
     const settings = plugin.settings.getValue();
     new Setting(containerEl)
         .setName(l.SETTINGS_COMMANDS_ASSIGN_HOTKEYS)
+        .setDesc(l.SETTINGS_COMMANDS_ASSIGN_HOTKEYS_DESC)
         .addToggle((toggle) => {
             toggle.setValue(settings.commands.assignHotkeys).onChange((value) =>
                 plugin.settings.dispatch({

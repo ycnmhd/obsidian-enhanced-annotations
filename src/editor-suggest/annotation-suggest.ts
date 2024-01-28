@@ -13,7 +13,6 @@ import { isInsideAnnotation } from './helpers/is-inside-annotation';
 
 export type AnnotationCompletion = {
     label: string;
-    // text: string;
 };
 
 export class AnnotationSuggest extends EditorSuggest<AnnotationCompletion> {
@@ -139,7 +138,7 @@ export class AnnotationSuggest extends EditorSuggest<AnnotationCompletion> {
         else if (this.usedSuggestions[suggestion] < 3)
             this.usedSuggestions[suggestion]++;
         for (const label of Object.keys(this.usedSuggestions)) {
-            if (label !== suggestion && this.usedSuggestions[label] > 0)
+            if (label !== suggestion && this.usedSuggestions[label] > 1)
                 this.usedSuggestions[label]--;
         }
         this.mostRecentSuggestion = suggestion;

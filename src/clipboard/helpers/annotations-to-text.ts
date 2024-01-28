@@ -48,11 +48,15 @@ export const annotationsToText = (
     });
     const annotationsText: string[] = [];
     if (front.trim()) annotationsText.push(front);
-    for (const { annotations: fileAnnotations, name, path } of annotations) {
+    for (const {
+        annotations: fileAnnotations,
+        basename,
+        folder,
+    } of annotations) {
         const fileText: string[] = [];
         const header = applyVariablesToTemplate({
             template: templates.header,
-            variables: { note_folder: path, note_name: name } as Record<
+            variables: { note_folder: folder, note_name: basename } as Record<
                 HeaderVariables[number],
                 string
             >,

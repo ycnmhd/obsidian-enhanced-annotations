@@ -26,6 +26,7 @@ export const LabelsSettings = ({ plugin, containerEl }: Props) => {
     });
     new Setting(containerEl)
         .setName(l.SETTINGS_AUTO_SUGGEST_AUTO_REGISTER)
+        .setDesc(l.SETTINGS_AUTO_SUGGEST_AUTO_REGISTER_DESC)
         .addToggle((component) => {
             component
                 .onChange((value) =>

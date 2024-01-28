@@ -1,15 +1,15 @@
 <script lang="ts">
-	import ControlsBar from './components/controls-bar/controls-bar.svelte';
-	import FlatOutline from './components/annotations-list/annotations-list.svelte';
-	import NoAnnotations from './components/no-annotations.svelte';
-	import { searchTerm } from './components/controls-bar/components/search-input.store';
-	import { filteredBySearch } from './components/annotations-list/annotations-list.store';
-	import LabeledAnnotations from '../../main';
-	import { controls, pluginIdle } from './components/controls-bar/controls-bar.store';
-	import PluginIdle from './components/plugin-idle.svelte';
-	import StylesList from './components/controls-bar/components/styles/styles-list.svelte';
+    import ControlsBar from './components/controls-bar/controls-bar.svelte';
+    import FlatOutline from './components/annotations-list/annotations-list.svelte';
+    import NoAnnotations from './components/no-annotations.svelte';
+    import { searchTerm } from './components/controls-bar/components/search-input.store';
+    import { filteredBySearch } from './components/annotations-list/annotations-list.store';
+    import LabeledAnnotations from '../../main';
+    import { controls, pluginIdle } from './components/controls-bar/controls-bar.store';
+    import PluginIdle from './components/plugin-idle.svelte';
+    import StylesList from './components/controls-bar/components/styles/styles-list.svelte';
 
-	export let plugin: LabeledAnnotations;
+    export let plugin: LabeledAnnotations;
 </script>
 
 <div class="outline">
@@ -30,7 +30,10 @@
 <style>
 	.outline {
 		height: 100%;
+		width: 100%;
+		box-sizing: border-box;
 		display: flex;
+		gap: 8px;
 		flex-direction: column;
 		align-items: start;
 		justify-content: start;

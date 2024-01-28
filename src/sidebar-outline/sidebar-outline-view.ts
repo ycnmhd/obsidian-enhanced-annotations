@@ -27,6 +27,8 @@ export class SidebarOutlineView extends ItemView {
     }
 
     async onOpen() {
+        this.contentEl.style.padding = '0px';
+        this.contentEl.style.paddingTop = '8px';
         this.component = new SidebarOutline({
             target: this.contentEl,
             props: {

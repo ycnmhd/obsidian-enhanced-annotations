@@ -20,9 +20,11 @@ export const getFileName = (
     } else if (settings.defaultFolderMode === 'current folder/notes') {
         folderParts.push(currentFolder, 'notes');
     }
-    if (settings.notesNamingMode === 'label - annotation') {
+    if (settings.notesNamingMode === 'annotation-label - annotation-text') {
         nameParts.push(`${sanitizedLabel} - ${sanitizedAnnotation}`);
-    } else if (settings.notesNamingMode === 'label/annotation') {
+    } else if (
+        settings.notesNamingMode === 'annotation-label/annotation-text'
+    ) {
         folderParts.push(sanitizedLabel);
         nameParts.push(`${sanitizedAnnotation}`);
     } else {

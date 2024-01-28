@@ -1,4 +1,4 @@
-import { Menu, Plugin, TAbstractFile, TFile } from 'obsidian';
+import { Menu, Plugin, TAbstractFile, TFile, TFolder } from 'obsidian';
 import { addInsertCommentCommands } from './commands/commands';
 import { Settings } from './settings/settings-type';
 import {
@@ -17,7 +17,7 @@ import { registerEditorMenuEvent } from './note-creation/register-editor-menu-ev
 import { OutlineUpdater } from './sidebar-outline/helpers/outline-updater/outline-updater';
 import { loadOutlineStateFromSettings } from './settings/helpers/load-outline-state-from-settings';
 import { subscribeSettingsToOutlineState } from './settings/helpers/subscribe-settings-to-outline-state';
-import { StatusBar } from './stats-bar/status-bar';
+import { StatusBar } from './status-bar/status-bar';
 import { fileMenuItems } from './clipboard/file-menu-items';
 import { subscribeDecorationStateToSettings } from './settings/helpers/subscribe-decoration-state-to-settings';
 import { DecorationSettings } from './editor-plugin/helpers/decorate-annotations/decoration-settings';
@@ -42,8 +42,10 @@ export default class LabeledAnnotations extends Plugin {
             this.app.workspace.on(
                 'file-menu',
                 (menu: Menu, abstractFiles: TAbstractFile) => {
-                    const extension = (abstractFiles as TFile).extension;
-                    if (extension && extension === 'md')
+                    if (
+                        abstractFiles instanceof TFolder ||
+                        (abstractFiles as TFile).extension === 'md'
+                    )
                         fileMenuItems(this)(menu, abstractFiles);
                 },
             ),

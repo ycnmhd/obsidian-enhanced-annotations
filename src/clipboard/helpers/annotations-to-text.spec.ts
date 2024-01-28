@@ -11,8 +11,9 @@ const samples: {
         input: [
             [
                 {
-                    path: 'folder a',
-                    name: 'note 1',
+                    folder: 'folder a',
+                    basename: 'note 1',
+                    path: 'folder a/note 1.md',
                     annotations: [
                         {
                             text: 'some highlight',
@@ -54,8 +55,9 @@ const samples: {
                             isHighlight: true,
                         },
                     ],
-                    name: 'Third-order intercept point',
-                    path: 'clipboard/other',
+                    basename: 'Third-order intercept point',
+                    folder: 'clipboard/other',
+                    path: 'clipboard/other/Third-order intercept point.md',
                 },
                 {
                     annotations: [
@@ -70,8 +72,9 @@ const samples: {
                             isHighlight: true,
                         },
                     ],
-                    name: 'Intermodulation',
-                    path: 'clipboard',
+                    basename: 'Intermodulation',
+                    folder: 'clipboard',
+                    path: 'clipboard/Intermodulation.md',
                 },
                 {
                     annotations: [
@@ -81,8 +84,9 @@ const samples: {
                             isHighlight: false,
                         },
                     ],
-                    name: 'Second-order intercept point',
-                    path: 'clipboard',
+                    basename: 'Second-order intercept point',
+                    folder: 'clipboard',
+                    path: 'clipboard/Second-order intercept point.md',
                 },
             ],
             {
@@ -109,8 +113,9 @@ const samples: {
         input: [
             [
                 {
-                    path: 'folder a',
-                    name: 'note 1',
+                    folder: 'folder a',
+                    basename: 'note 1',
+                    path: 'folder a/note 1.md',
                     annotations: [
                         {
                             text: 'some comment',

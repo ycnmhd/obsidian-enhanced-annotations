@@ -12,6 +12,7 @@ export const AutoSuggestSettings = ({ plugin, containerEl }: Props) => {
     const settings = plugin.settings.getValue();
     new Setting(containerEl)
         .setName(l.SETTINGS_AUTO_SUGGEST_ENABLE)
+        .setDesc(l.SETTINGS_AUTO_SUGGEST_ENABLE_DESC)
         .addToggle((toggle) => {
             toggle
                 .onChange((value) =>
@@ -24,6 +25,7 @@ export const AutoSuggestSettings = ({ plugin, containerEl }: Props) => {
         });
     new Setting(containerEl)
         .setName(l.SETTINGS_AUTO_SUGGEST_TRIGGER_PHRASE)
+        .setDesc(l.SETTINGS_AUTO_SUGGEST_TRIGGER_PHRASE_DESC)
         .addText((component) => {
             component
                 .onChange((value) =>
@@ -38,9 +40,10 @@ export const AutoSuggestSettings = ({ plugin, containerEl }: Props) => {
 
     new Setting(containerEl)
         .setName(l.SETTINGS_AUTO_SUGGEST_COMMENT_TYPE)
+        .setDesc(l.SETTINGS_AUTO_SUGGEST_COMMENT_TYPE_DESC)
         .addDropdown((component) => {
             component.addOption('html', 'HTML');
-            component.addOption('markdown', 'Markdown');
+            component.addOption('markdown', 'Obsidian');
             component
                 .onChange((value) =>
                     plugin.settings.dispatch({

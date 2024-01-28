@@ -1,11 +1,11 @@
-import LabeledAnnotations from '../main';
+import EnhancedAnnotations from '../main';
 import { l } from '../lang/lang';
 import { slugify } from './helpers/slugify';
 import { insertNewLine } from './helpers/insert-new-line';
 import { insertAnnotation } from './helpers/insert-annotation';
 import { Hotkey } from 'obsidian';
 
-export const addInsertCommentCommands = (plugin: LabeledAnnotations) => {
+export const addInsertCommentCommands = (plugin: EnhancedAnnotations) => {
     const commands: Array<{
         name: string;
         hotkeys: Hotkey[];
@@ -63,7 +63,7 @@ export const addInsertCommentCommands = (plugin: LabeledAnnotations) => {
     for (const { name, hotkeys, callback } of commands) {
         plugin.addCommand({
             id: slugify(name),
-            callback,
+            editorCallback: callback,
             name: name,
             hotkeys: plugin.settings.getValue().commands.assignHotkeys
                 ? hotkeys
