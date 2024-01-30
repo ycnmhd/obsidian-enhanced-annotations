@@ -1,6 +1,7 @@
 import LabeledAnnotations from '../../main';
 import {
     controls,
+    FontSize,
     fontSize,
     pluginIdle,
 } from '../../sidebar-outline/components/components/controls-bar/controls-bar.store';
@@ -14,7 +15,7 @@ import { pluginIsIdle } from '../settings-selectors';
 export const loadOutlineStateFromSettings = (plugin: LabeledAnnotations) => {
     const settings = plugin.settings.getValue();
     const outlineSettings = settings.outline;
-    fontSize.set(outlineSettings.fontSize as any);
+    fontSize.set(outlineSettings.fontSize as FontSize);
     controls.update((v) => ({
         ...v,
         showLabelsFilter: settings.outline.showLabelsFilter,

@@ -1,4 +1,4 @@
-import { MarkdownView, View } from 'obsidian';
+import { MarkdownView, View, WorkspaceItem } from 'obsidian';
 import LabeledAnnotations from '../../../main';
 import { updateOutline } from './helpers/update-outline';
 import { resetOutline } from './helpers/reset-outline';
@@ -55,7 +55,9 @@ export class OutlineUpdater extends Store<OutlineState, never> {
 
         this.plugin.registerEvent(
             app.workspace.on('active-leaf-change', (leaf) => {
-                const side = (leaf?.getRoot() as any)?.side;
+                const side = (
+                    leaf?.getRoot() as WorkspaceItem & { side?: string }
+                )?.side;
                 if (!side) this.updateOutline(leaf?.view, true);
             }),
         );

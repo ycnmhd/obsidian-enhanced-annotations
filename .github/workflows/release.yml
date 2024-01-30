@@ -31,4 +31,4 @@ jobs:
                   gh release create "$tag" \
                     --title="$tag" \
                     --draft \
-                    manifest.json temp/vault/.obsidian/plugins/enhanced-annotations/main.js temp/vault/.obsidian/plugins/enhanced-annotations/styles.css
+                    manifest.json temp/vault/.obsidian/plugins/enhanced-annotations-dev/main.js temp/vault/.obsidian/plugins/enhanced-annotations-dev/styles.css

@@ -1,4 +1,5 @@
 import {
+    Case,
     CommentFormat,
     DefaultFolderMode,
     FontFamily,
@@ -98,7 +99,7 @@ export type SettingsActions =
           type: 'SET_LABEL_CASE';
           payload: {
               id: string;
-              case?: string;
+              case?: Case;
           };
       }
     | { type: 'SET_TTS_VOLUME'; payload: { volume: number } }
@@ -175,7 +176,7 @@ const updateState = (store: Settings, action: SettingsActions) => {
     else if (action.type === 'SET_LABEL_ITALIC')
         labels[action.payload.id].style.italic = action.payload.italic;
     else if (action.type === 'SET_LABEL_CASE')
-        labels[action.payload.id].style.case = action.payload.case as any;
+        labels[action.payload.id].style.case = action.payload.case;
     else if (action.type === 'SET_TTS_PITCH')
         store.tts.pitch = action.payload.pitch;
     else if (action.type === 'SET_TTS_RATE')

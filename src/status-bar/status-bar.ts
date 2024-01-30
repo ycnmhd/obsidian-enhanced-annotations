@@ -6,6 +6,7 @@ import { pluralize } from '../helpers/pluralize';
 import { get } from 'svelte/store';
 import { TFile } from 'obsidian';
 import { createTooltip } from './helpers/create-tooltip';
+import { toggleElementVisibility } from './helpers/toggle-element-visibility';
 
 export class StatusBar {
     private elements: {
@@ -25,8 +26,10 @@ export class StatusBar {
             comments: container.createEl('span'),
             highlights: container.createEl('span'),
         };
-        this.elements.highlights.style.marginInlineStart = '5px';
-        this.elements.container.addClass('mod-clickable');
+        this.elements.container.addClass(
+            'mod-clickable',
+            'enhanced-annotations__status',
+        );
         this.elements.container.onClickEvent(this.onClick);
 
         fileAnnotations.subscribe(async (v) => {
@@ -83,20 +86,20 @@ export class StatusBar {
         const numberOfComments = comments.length;
         const numberOfHighlights = highlights.length;
         if (numberOfComments) {
-            this.elements.comments.style.display = 'inline';
+            toggleElementVisibility(this.elements.comments, true);
             this.elements.comments.setText(
                 `${pluralize(numberOfComments, 'comment', 'comments')}`,
             );
         } else {
-            this.elements.comments.style.display = 'none';
+            toggleElementVisibility(this.elements.comments, false);
         }
         if (numberOfHighlights) {
-            this.elements.highlights.style.display = 'inline';
+            toggleElementVisibility(this.elements.highlights, true);
             this.elements.highlights.setText(
                 `${pluralize(numberOfHighlights, 'highlight', 'highlights')}`,
             );
         } else {
-            this.elements.highlights.style.display = 'none';
+            toggleElementVisibility(this.elements.highlights, false);
         }
     };
 

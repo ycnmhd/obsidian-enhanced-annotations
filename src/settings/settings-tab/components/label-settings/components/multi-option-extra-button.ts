@@ -31,7 +31,13 @@ export const MultiOptionExtraButton = <T extends string | number>({
     const renderButton = () => {
         const option = state.selected || defaultOption;
         if (option.iconType === 'svg-html') {
-            button.extraSettingsEl.innerHTML = option.iconContent;
+            button.extraSettingsEl.empty();
+            const parser = new DOMParser();
+            const doc = parser.parseFromString(
+                option.iconContent,
+                'image/svg+xml',
+            );
+            button.extraSettingsEl.append(doc.documentElement);
         } else {
             button.setIcon(option.iconContent);
         }

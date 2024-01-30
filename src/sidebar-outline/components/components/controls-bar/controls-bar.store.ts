@@ -2,7 +2,8 @@ import { writable } from 'svelte/store';
 import { Store } from '../../../../helpers/store';
 
 export const POSSIBLE_FONT_SIZES = [10, 12, 14, 16, 18, 20, 22, 24] as const;
-export const fontSize = writable<(typeof POSSIBLE_FONT_SIZES)[number]>(12);
+export type FontSize = (typeof POSSIBLE_FONT_SIZES)[number];
+export const fontSize = writable<FontSize>(12);
 
 export const isReading = writable<boolean>(false);
 

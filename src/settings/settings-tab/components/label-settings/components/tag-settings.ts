@@ -20,7 +20,7 @@ export const TagSettings = ({ containerEl, tag, plugin, render }: Props) => {
     const el = new Setting(containerEl);
 
     const style = tag.style;
-    el.controlEl.innerHTML = '';
+    el.controlEl.empty();
 
     el.setName(l.SETTINGS_STYLES_WRAPPERS_STYLE).setDesc(
         l.SETTINGS_STYLES_WRAPPERS_STYLE_DESC,

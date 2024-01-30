@@ -16,7 +16,7 @@ export class TTS {
     #isReading: boolean;
     private subscribers: Set<Subscriber> = new Set();
     private utterance: SpeechSynthesisUtterance;
-    private activeTTSFile: TFile | undefined;
+    private activeTTSFile: TFile | null | undefined;
     private fileHasChanged = false;
 
     private constructor() {
@@ -54,9 +54,8 @@ export class TTS {
             },
             { annotations: {} as Record<number, Annotation>, c: 0 },
         );
-        this.activeTTSFile = this.plugin.outline.getValue().view?.file as
-            | TFile
-            | undefined;
+        this.activeTTSFile = this.plugin.outline.getValue().view?.file;
+
         this.utterance.text = this.annotations.map((c) => c.text).join('.\n');
         const settings = this.plugin.settings.getValue().tts;
         this.utterance.volume = settings.volume;

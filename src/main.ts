@@ -44,7 +44,8 @@ export default class LabeledAnnotations extends Plugin {
                 (menu: Menu, abstractFiles: TAbstractFile) => {
                     if (
                         abstractFiles instanceof TFolder ||
-                        (abstractFiles as TFile).extension === 'md'
+                        (abstractFiles instanceof TFile &&
+                            abstractFiles.extension === 'md')
                     )
                         fileMenuItems(this)(menu, abstractFiles);
                 },

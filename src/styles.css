@@ -1,4 +1,16 @@
 .cm-highlight {
-	background-color: transparent !important;
+    background-color: transparent !important;
 }
 
+.enhanced-annotations__sidebar-outline {
+    padding: 8px 0 0 !important;
+}
+
+.enhanced-annotations__status {
+    display: flex;
+    gap: 5px;
+}
+
+.enhanced-annotations__display-none {
+    display: none;
+}

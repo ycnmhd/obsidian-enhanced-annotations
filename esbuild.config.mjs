@@ -40,7 +40,7 @@ const context = await esbuild.context({
 	logLevel: "info",
 	sourcemap: prod ? false : "inline",
 	treeShaking: true,
-	outfile: "temp/vault/.obsidian/plugins/enhanced-annotations/main.js",
+	outfile: "temp/vault/.obsidian/plugins/enhanced-annotations-dev/main.js",
 	plugins: [
 		inlineWorkerPlugin(),
 		esbuildSvelte({
@@ -61,7 +61,7 @@ const context = await esbuild.context({
 const cssContext = await esbuild.context({
 	entryPoints: ["src/styles.css"],
 	bundle: true,
-	outfile: "temp/vault/.obsidian/plugins/enhanced-annotations/styles.css"
+	outfile: "temp/vault/.obsidian/plugins/enhanced-annotations-dev/styles.css"
 });
 
 if (prod) {

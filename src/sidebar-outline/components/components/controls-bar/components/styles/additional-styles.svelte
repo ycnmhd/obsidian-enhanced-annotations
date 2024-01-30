@@ -1,7 +1,7 @@
 <script lang="ts">
     import LabeledAnnotations from '../../../../../../main';
     import MultiOptionsToggleButton from './multi-option-toggle-button.svelte';
-    import { FontFamily, FontWeight, LabelSettings, Opacity } from '../../../../../../settings/settings-type';
+    import { Case, FontFamily, FontWeight, LabelSettings, Opacity } from '../../../../../../settings/settings-type';
     import { TextSVG } from '../../../../../../settings/settings-tab/components/label-settings/components/text-svg';
     import { ChevronDown, ChevronUp, Italic, Trash2, Underline } from 'lucide-svelte';
     import { l } from '../../../../../../lang/lang';
@@ -105,7 +105,7 @@
             type: 'SET_LABEL_CASE',
             payload: {
                 id: label.id,
-                case: value,
+                case: value as Case,
             },
         });
 
