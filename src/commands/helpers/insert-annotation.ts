@@ -4,20 +4,21 @@ import { cursorPosition } from './cursor-position';
 import { parseAnnotations } from '../../editor-plugin/helpers/decorate-annotations/helpers/parse-annotations/parse-annotations';
 import { wrapSelectedTextInAnAnnotation } from './wrap-selected-text-in-an-annotation';
 import LabeledAnnotations from '../../main';
+import { Editor } from 'obsidian';
 
 export const insertAnnotation = ({
     plugin,
     type,
     label,
     emptyLines = 0,
+    editor,
 }: {
     label?: string;
     type?: AnnotationType;
     emptyLines?: number;
     plugin: LabeledAnnotations;
+    editor: Editor;
 }) => {
-    const editor = plugin.app.workspace.activeEditor?.editor;
-    if (!editor) return;
     const format = plugin.settings.getValue().editorSuggest.commentFormat;
     const doc = editor.getDoc();
     const selection = doc.getSelection();

@@ -1,6 +1,6 @@
 {
 	"name": "enhanced-annotations",
-	"version": "0.1.0",
+	"version": "0.1.1",
 	"description": "",
 	"scripts": {
 		"dev": "node esbuild.config.mjs",
@@ -30,15 +30,15 @@
 		"eslint-plugin-svelte": "2.35.1",
 		"husky": "8.0.3",
 		"lint-staged": "13.1.0",
+		"lucide-svelte": "0.292.0",
 		"obsidian": "latest",
 		"prettier": "3.0.3",
+		"prettier-plugin-svelte": "3.1.2",
 		"svelte": "4.2.1",
 		"svelte-preprocess": "5.0.4",
 		"tslib": "2.4.0",
 		"typescript": "4.7.4",
-		"vitest": "0.34.5",
-		"lucide-svelte": "0.292.0",
-		"prettier-plugin-svelte": "3.1.2"
+		"vitest": "0.34.5"
 	},
 	"dependencies": {
 		"@popperjs/core": "2.11.8"

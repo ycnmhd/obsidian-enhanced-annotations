@@ -69,14 +69,18 @@ export const l = {
     EXPAND: 'Expand',
     COLLAPSE: 'Collapse',
     SETTINGS_LABELS_STYLES_LABEL_INVALID: 'Invalid label',
-    COMMANDS_JUMP_NEXT_LINE: 'Jump to the next line',
+    COMMANDS_JUMP_TO_NEW_LINE: 'Jump to a new line',
     COMMANDS_INSERT_COMMENT: 'Insert a comment',
     COMMANDS_INSERT_COMMENT_AFTER_EMPTY_LINE:
         'Insert a comment after an empty line',
     COMMANDS_INSERT_COMMENT_WITH_PREVIOUS_LABEL:
         'Insert a comment with the most recently used label',
+    COMMANDS_INSERT_COMMENT_WITH_SECOND_PREVIOUS_LABEL:
+        'Insert a comment with the second most recently used label',
     COMMANDS_INSERT_COMMENT_WITH_PREVIOUS_LABEL_AFTER_EMPTY_LINE:
-        'Insert a comment with the most recent label after an empty line',
+        'Insert a comment with the most recently used label after an empty line',
+    COMMANDS_INSERT_COMMENT_WITH_SECOND_PREVIOUS_LABEL_AFTER_EMPTY_LINE:
+        'Insert a comment with the second most recently used label after an empty line',
     COMMANDS_COULD_NOT_CREATE_FILE: 'Could not create note: ',
     OUTLINE_EDITOR_CREATE_NOTE_FROM_COMMENT: 'Create a note from this comment',
     OUTLINE_EDITOR_CREATE_NOTE_FROM_HIGHLIGHT:
@@ -84,4 +88,11 @@ export const l = {
     SETTINGS_AUTO_SUGGEST_COMMENT_TYPE: 'Comment format',
     SETTINGS_AUTO_SUGGEST_COMMENT_TYPE_DESC:
         'The format of the inserted comment: `<!-- HTML comment -->` or `%% Obsidian comment %%`',
+    SETTINGS_DEFAULT_PALETTE: 'Default color palette',
+    SETTINGS_DEFAULT_PALETTE_DESC:
+        'The default color palette used to assign colors to new styles',
+    OUTLINE_NO_ANNOTATIONS_MATCH_FILTER:
+        'No annotations match the applied filter.',
+    DISABLE_DECORATION: 'Disable decoration',
+    ENABLE_DECORATION: 'Enable decoration',
 };

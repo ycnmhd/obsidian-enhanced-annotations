@@ -61,6 +61,7 @@ export const createNoteFile = async ({
         annotation,
         settings.notes,
         currentFileFolder,
+        currentFileName,
     );
 
     await writeFile({

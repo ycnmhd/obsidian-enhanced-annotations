@@ -1,5 +1,11 @@
 <script lang="ts">
-  import { l } from "../../../lang/lang";
+    import { l } from '../../../lang/lang';
+
+    export let variant: 'filter-applied' | null | undefined = undefined;
 </script>
 
-<div class="pane-empty">{l.OUTLINE_NO_ANNOTATIONS_FOUND}</div>
+<div class="pane-empty">
+    {variant === 'filter-applied'
+        ? l.OUTLINE_NO_ANNOTATIONS_MATCH_FILTER
+        : l.OUTLINE_NO_ANNOTATIONS_FOUND}
+</div>

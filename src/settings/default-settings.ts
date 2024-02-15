@@ -17,6 +17,7 @@ export const DEFAULT_SETTINGS = (): Settings => ({
                 enableStyle: true,
             },
         },
+        defaultPalette: 'bright',
     },
     commands: {
         enableLabelCommands: false,
@@ -41,7 +42,7 @@ export const DEFAULT_SETTINGS = (): Settings => ({
         notesNamingMode: 'annotation-label/annotation-text',
         openNoteAfterCreation: false,
         insertLinkToNote: true,
-        defaultFolderMode: 'current folder/notes',
+        defaultFolderMode: 'current folder/notes/<file-name>',
         template: noteTemplate,
         truncateFileName: false,
     },

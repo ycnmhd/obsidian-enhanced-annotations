@@ -126,4 +126,21 @@ Quam nulla porttitor massa id neque aliquam
             'rhoncus urna neque viverra. Tempus',
         ]);
     });
+
+    it('should skip blocks', () => {
+        const input = [
+            '1 2',
+            '3 4',
+            '```',
+            'x==1',
+            '```',
+            '==5 6',
+            '7 8',
+            '9 10==',
+            '11 12',
+        ].join('\n');
+        const output = '5 6 7 8 9 10';
+        const annotations = parseAnnotations(input);
+        expect(annotations.map((v) => v.text).join('')).toEqual(output);
+    });
 });

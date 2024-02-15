@@ -43,9 +43,12 @@ export type DefaultFolderMode =
     | 'vault'
     | 'current folder'
     | 'current folder/notes'
+    | 'current folder/notes/<file-name>'
     | 'customFolder';
 
 export type DateString = string;
+
+export type DefaultPalette = 'bright' | 'dull';
 
 export type Settings = {
     editorSuggest: {
@@ -59,6 +62,7 @@ export type Settings = {
             labels: Record<string, LabelSettings>;
             tag: TagSettings;
         };
+        defaultPalette: DefaultPalette;
     };
     commands: {
         enableLabelCommands: boolean;
