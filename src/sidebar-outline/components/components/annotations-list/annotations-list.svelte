@@ -1,6 +1,6 @@
 <script lang="ts">
     import { activeAnnotationIndex, filteredBySearchAndCategoryAndLabel } from './annotations-list.store';
-    import NoComments from '../no-annotations.svelte';
+    import NoAnnotations from '../no-annotations.svelte';
     import LabeledAnnotations from '../../../../main';
     import Annotation from './annotation.svelte';
     import { onDestroy } from 'svelte';
@@ -29,7 +29,7 @@
         {/each}
     </div>
 {:else}
-    <NoComments />
+    <NoAnnotations variant={"filter-applied"} />
 {/if}
 
 <style>

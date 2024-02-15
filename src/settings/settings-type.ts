@@ -47,6 +47,8 @@ export type DefaultFolderMode =
 
 export type DateString = string;
 
+export type DefaultPalette = 'bright' | 'dull';
+
 export type Settings = {
     editorSuggest: {
         enableAutoSuggest: boolean;
@@ -59,6 +61,7 @@ export type Settings = {
             labels: Record<string, LabelSettings>;
             tag: TagSettings;
         };
+        defaultPalette: DefaultPalette;
     };
     commands: {
         enableLabelCommands: boolean;

@@ -17,6 +17,7 @@ export const DEFAULT_SETTINGS = (): Settings => ({
                 enableStyle: true,
             },
         },
+        defaultPalette: 'bright',
     },
     commands: {
         enableLabelCommands: false,

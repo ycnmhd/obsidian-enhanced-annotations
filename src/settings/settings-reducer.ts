@@ -2,6 +2,7 @@ import {
     Case,
     CommentFormat,
     DefaultFolderMode,
+    DefaultPalette,
     FontFamily,
     FontWeight,
     NotesNamingMode,
@@ -128,7 +129,8 @@ export type SettingsActions =
       }
     | {
           type: 'TOGGLE_ASSIGN_HOTKEYS';
-      };
+      }
+    | { type: 'SET_DEFAULT_PALETTE'; payload: { palette: DefaultPalette } };
 
 const updateState = (store: Settings, action: SettingsActions) => {
     const labels = store.decoration.styles.labels;
@@ -148,7 +150,7 @@ const updateState = (store: Settings, action: SettingsActions) => {
                 id,
                 enableStyle: true,
                 style: {
-                    color: getDefaultColor(Object.values(labels)),
+                    color: getDefaultColor(store),
                     italic: true,
                     fontWeight: 'thin',
                 },
@@ -229,6 +231,8 @@ const updateState = (store: Settings, action: SettingsActions) => {
         store.notes.truncateFileName = !store.notes.truncateFileName;
     } else if (action.type === 'TOGGLE_ASSIGN_HOTKEYS') {
         store.commands.assignHotkeys = !store.commands.assignHotkeys;
+    } else if (action.type === 'SET_DEFAULT_PALETTE') {
+        store.decoration.defaultPalette = action.payload.palette;
     }
 };
 export const settingsReducer = (

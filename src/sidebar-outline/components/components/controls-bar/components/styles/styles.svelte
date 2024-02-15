@@ -50,17 +50,15 @@
     onDestroy(cleanupEmptyLabels);
 </script>
 
-<div
-    class={"main-styles"}
->
+<div class={'main-styles'}>
     <input
         on:change={onLabelChange}
+
         pattern={'^\\w+$'}
         placeholder={l.SETTINGS_LABELS_STYLES_NAME_PLACE_HOLDER}
         style="width: 75px;"
         type="text"
         value={label.label}
-
     />
     <AdditionalStyles
         {label}
@@ -77,5 +75,4 @@
         flex-wrap: wrap;
         justify-content: center;
     }
-
 </style>

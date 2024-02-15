@@ -7,6 +7,7 @@
     import { l } from '../../../../../../lang/lang';
     import ToggleButton from './toggle-button.svelte';
     import SquareButton from './square-button.svelte';
+    import { getDefaultColor } from '../../../../../../settings/helpers/get-default-color';
 
     export let plugin: LabeledAnnotations;
     export let label: LabelSettings;
@@ -142,7 +143,17 @@
 <div class={`additional-settings `}>
     <div class="settings-row">
         <input
+            aria-label="Press `shift` + `left click` for a random color"
             on:change={onColorChange}
+            on:click={(e) => {
+                if (e.shiftKey) {
+                    e.preventDefault();
+                    e.currentTarget.value = getDefaultColor(
+                        plugin.settings.getValue(),
+                    );
+                    onColorChange(e);
+                }
+            }}
             type="color"
             value={label.style.color || ''}
         />
