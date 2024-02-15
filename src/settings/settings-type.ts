@@ -43,6 +43,7 @@ export type DefaultFolderMode =
     | 'vault'
     | 'current folder'
     | 'current folder/notes'
+    | 'current folder/notes/<file-name>'
     | 'customFolder';
 
 export type DateString = string;

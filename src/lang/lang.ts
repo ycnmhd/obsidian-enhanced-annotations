@@ -93,4 +93,6 @@ export const l = {
         'The default color palette used to assign colors to new styles',
     OUTLINE_NO_ANNOTATIONS_MATCH_FILTER:
         'No annotations match the applied filter.',
+    DISABLE_DECORATION: 'Disable decoration',
+    ENABLE_DECORATION: 'Enable decoration',
 };

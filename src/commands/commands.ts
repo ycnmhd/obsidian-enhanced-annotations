@@ -8,6 +8,18 @@ import { Command } from 'obsidian';
 export const addInsertCommentCommands = (plugin: EnhancedAnnotations) => {
     const commands: Array<Omit<Command, 'id'>> = [
         {
+            name: l.ENABLE_DECORATION,
+            editorCallback: () => {
+                plugin.decorationSettings.enabled = true;
+            },
+        },
+        {
+            name: l.DISABLE_DECORATION,
+            editorCallback: () => {
+                plugin.decorationSettings.enabled = false;
+            },
+        },
+        {
             name: l.COMMANDS_JUMP_TO_NEW_LINE,
             hotkeys: [{ key: 'F5', modifiers: [] }],
             editorCallback: async (editor) => {

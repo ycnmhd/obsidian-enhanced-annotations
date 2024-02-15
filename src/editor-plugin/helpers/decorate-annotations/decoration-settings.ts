@@ -7,6 +7,17 @@ import { triggerEditorUpdate } from '../../../sidebar-outline/helpers/outline-up
 export class DecorationSettings {
     constructor(private plugin: LabeledAnnotations) {}
 
+    private _enabled = true;
+
+    get enabled(): boolean {
+        return this._enabled;
+    }
+
+    set enabled(value: boolean) {
+        this._enabled = value;
+        this.decorate();
+    }
+
     private _decorations: Record<
         string,
         {
