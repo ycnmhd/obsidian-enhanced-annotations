@@ -17,6 +17,7 @@ const options: Record<DefaultFolderMode, string> = {
     vault: 'vault folder',
     'current folder': 'current folder',
     'current folder/notes': 'current folder / notes',
+    'current folder/notes/<file-name>': 'current folder / notes / <file-name> ',
     customFolder: 'folder specified below',
 };
 export const NoteSettings = ({ containerEl, plugin }: Props) => {
