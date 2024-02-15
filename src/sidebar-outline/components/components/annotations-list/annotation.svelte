@@ -31,7 +31,7 @@
     <span class="annotation-badge">
 
         <span >{annotation.range.from.line + 1}</span>
-        <span style="position: absolute; bottom: 0">{annotation.label}</span>
+        <span style="position: absolute; bottom: 0; white-space:nowrap">{annotation.label}</span>
     </span>
 </div>
 

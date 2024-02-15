@@ -11,8 +11,16 @@ export const registerEditorMenuEvent = (plugin: LabeledAnnotations) => {
                 { line: cursor.line, ch: 0 },
                 { line: cursor.line + 3, ch: Infinity },
             );
-            const annotation = parseAnnotations(line)[0];
-            if (annotation) {
+            const annotations = parseAnnotations(line, cursor.line);
+            const annotation =
+                annotations.length === 1
+                    ? annotations[0]
+                    : annotations.find(
+                          (a) =>
+                              a.range.from.ch <= cursor.ch &&
+                              Number(a.range.to?.ch) >= cursor.ch,
+                      );
+            if (annotation && annotation.range.from.line === cursor.line) {
                 const onClick = async () => {
                     const currentFileName = view.file?.basename as string;
                     const currentFileFolder = view.file?.parent?.path as string;
