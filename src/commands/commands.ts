@@ -3,20 +3,14 @@ import { l } from '../lang/lang';
 import { slugify } from './helpers/slugify';
 import { insertNewLine } from './helpers/insert-new-line';
 import { insertAnnotation } from './helpers/insert-annotation';
-import { Hotkey } from 'obsidian';
+import { Command } from 'obsidian';
 
 export const addInsertCommentCommands = (plugin: EnhancedAnnotations) => {
-    const commands: Array<{
-        name: string;
-        hotkeys: Hotkey[];
-        callback: () => Promise<void>;
-    }> = [
+    const commands: Array<Omit<Command, 'id'>> = [
         {
-            name: l.COMMANDS_JUMP_NEXT_LINE,
+            name: l.COMMANDS_JUMP_TO_NEW_LINE,
             hotkeys: [{ key: 'F5', modifiers: [] }],
-            callback: async () => {
-                const editor = plugin.app.workspace.activeEditor?.editor;
-                if (!editor) return;
+            editorCallback: async (editor) => {
                 const doc = editor.getDoc();
                 insertNewLine({ doc });
             },
@@ -24,33 +18,63 @@ export const addInsertCommentCommands = (plugin: EnhancedAnnotations) => {
         {
             name: l.COMMANDS_INSERT_COMMENT,
             hotkeys: [{ key: 'F7', modifiers: [] }],
-            callback: async () => {
-                insertAnnotation({ plugin, type: 'comment' });
+            editorCallback: async (editor) => {
+                insertAnnotation({ editor, plugin, type: 'comment' });
             },
         },
 
         {
             name: l.COMMANDS_INSERT_COMMENT_AFTER_EMPTY_LINE,
             hotkeys: [{ key: 'F7', modifiers: ['Shift'] }],
-            callback: async () => {
-                insertAnnotation({ plugin, type: 'comment', emptyLines: 1 });
+            editorCallback: async (editor) => {
+                insertAnnotation({
+                    editor,
+                    plugin,
+                    type: 'comment',
+                    emptyLines: 1,
+                });
             },
         },
         {
             name: l.COMMANDS_INSERT_COMMENT_WITH_PREVIOUS_LABEL,
 
             hotkeys: [{ key: 'F6', modifiers: [] }],
-            callback: async () => {
-                const label = plugin.editorSuggest.mostRecentSuggestion;
-                insertAnnotation({ plugin, type: 'comment', label });
+            editorCallback: async (editor) => {
+                const label = plugin.editorSuggest.useMostRecentSuggestion();
+                insertAnnotation({ editor, plugin, type: 'comment', label });
             },
         },
         {
             name: l.COMMANDS_INSERT_COMMENT_WITH_PREVIOUS_LABEL_AFTER_EMPTY_LINE,
             hotkeys: [{ key: 'F6', modifiers: ['Shift'] }],
-            callback: async () => {
-                const label = plugin.editorSuggest.mostRecentSuggestion;
+            editorCallback: async (editor) => {
+                const label = plugin.editorSuggest.useMostRecentSuggestion();
                 insertAnnotation({
+                    editor,
+                    plugin,
+                    type: 'comment',
+                    label,
+                    emptyLines: 1,
+                });
+            },
+        },
+        {
+            name: l.COMMANDS_INSERT_COMMENT_WITH_SECOND_PREVIOUS_LABEL,
+            hotkeys: [{ key: 'F6', modifiers: ['Alt'] }],
+            editorCallback: async (editor) => {
+                const label =
+                    plugin.editorSuggest.useSecondMostRecentSuggestion();
+                insertAnnotation({ editor, plugin, type: 'comment', label });
+            },
+        },
+        {
+            name: l.COMMANDS_INSERT_COMMENT_WITH_SECOND_PREVIOUS_LABEL_AFTER_EMPTY_LINE,
+            hotkeys: [{ key: 'F6', modifiers: ['Shift', 'Alt'] }],
+            editorCallback: async (editor) => {
+                const label =
+                    plugin.editorSuggest.useSecondMostRecentSuggestion();
+                insertAnnotation({
+                    editor,
                     plugin,
                     type: 'comment',
                     label,
@@ -60,10 +84,10 @@ export const addInsertCommentCommands = (plugin: EnhancedAnnotations) => {
         },
     ];
 
-    for (const { name, hotkeys, callback } of commands) {
+    for (const { name, hotkeys, editorCallback } of commands) {
         plugin.addCommand({
             id: slugify(name),
-            editorCallback: callback,
+            editorCallback,
             name: name,
             hotkeys: plugin.settings.getValue().commands.assignHotkeys
                 ? hotkeys

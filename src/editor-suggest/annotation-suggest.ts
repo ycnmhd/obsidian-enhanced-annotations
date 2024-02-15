@@ -17,9 +17,13 @@ export type AnnotationCompletion = {
 
 export class AnnotationSuggest extends EditorSuggest<AnnotationCompletion> {
     readonly app: App;
-    mostRecentSuggestion: string;
+    private mostRecentSuggestion: string;
+    private secondMostRecentSuggestion: string;
     private plugin: LabeledAnnotations;
-    private usedSuggestions: Record<string, number> = {};
+    private usedSuggestions: Record<
+        string,
+        { count: number; timestamp: number }
+    > = {};
 
     constructor(app: App, plugin: LabeledAnnotations) {
         super(app);
@@ -40,14 +44,18 @@ export class AnnotationSuggest extends EditorSuggest<AnnotationCompletion> {
             .map((g) => g.label)
             .filter((v) => v);
         const suggestions = labels
-            .map((val) => ({ label: val, text: `<!--${val}: -->` }))
+            .map((val) => ({ label: val }))
             .filter((item) =>
                 item.label.toLowerCase().startsWith(context.query),
             )
             .sort((a, b) => {
-                const nA = this.usedSuggestions[a.label] || 0;
-                const nB = this.usedSuggestions[b.label] || 0;
-                return nB - nA;
+                const nA = this.usedSuggestions[a.label];
+                const nB = this.usedSuggestions[b.label];
+                const countB = nB?.count || 0;
+                const countA = nA?.count || 0;
+                return countB === countA
+                    ? nB?.timestamp - nB?.timestamp
+                    : countB - countA;
             });
         if (suggestions.length) {
             return suggestions;
@@ -58,7 +66,18 @@ export class AnnotationSuggest extends EditorSuggest<AnnotationCompletion> {
     }
 
     renderSuggestion(suggestion: AnnotationCompletion, el: HTMLElement): void {
-        el.setText(suggestion.label);
+        el.addClass('enhanced-annotations__suggestion');
+        const textEL = el.createEl('span');
+        const label = suggestion.label;
+        textEL.setText(label);
+        el.appendChild(textEL);
+        const count = this.usedSuggestions[label]?.count;
+        if (count > 0) {
+            const countEl = el.createEl('sup');
+            countEl.addClass('enhanced-annotations__suggestion-count');
+            countEl.setText(String(count));
+            el.appendChild(countEl);
+        }
     }
 
     selectSuggestion(
@@ -88,7 +107,7 @@ export class AnnotationSuggest extends EditorSuggest<AnnotationCompletion> {
                 (settings.editorSuggest.commentFormat === 'html' ? 3 : 2),
         });
 
-        this.recordUsedSuggestion(label);
+        this.recordUsedSuggestion(label, true);
     }
 
     onTrigger(
@@ -132,15 +151,34 @@ export class AnnotationSuggest extends EditorSuggest<AnnotationCompletion> {
         };
     }
 
-    private recordUsedSuggestion = (suggestion: string) => {
+    useSecondMostRecentSuggestion(): string {
+        this.recordUsedSuggestion(this.secondMostRecentSuggestion);
+        return this.secondMostRecentSuggestion;
+    }
+
+    useMostRecentSuggestion(): string {
+        this.recordUsedSuggestion(this.mostRecentSuggestion);
+        return this.mostRecentSuggestion;
+    }
+
+    private recordUsedSuggestion = (
+        suggestion: string,
+        updateMostRecent = false,
+    ) => {
         if (!this.usedSuggestions[suggestion])
-            this.usedSuggestions[suggestion] = 1;
-        else if (this.usedSuggestions[suggestion] < 3)
-            this.usedSuggestions[suggestion]++;
-        for (const label of Object.keys(this.usedSuggestions)) {
-            if (label !== suggestion && this.usedSuggestions[label] > 1)
-                this.usedSuggestions[label]--;
+            this.usedSuggestions[suggestion] = {
+                count: 1,
+                timestamp: Date.now(),
+            };
+        else {
+            this.usedSuggestions[suggestion].timestamp = Date.now();
+            this.usedSuggestions[suggestion].count++;
         }
-        this.mostRecentSuggestion = suggestion;
+
+        if (updateMostRecent) {
+            if (this.mostRecentSuggestion !== suggestion)
+                this.secondMostRecentSuggestion = this.mostRecentSuggestion;
+            this.mostRecentSuggestion = suggestion;
+        }
     };
 }

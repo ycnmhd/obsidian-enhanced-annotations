@@ -14,3 +14,16 @@
 .enhanced-annotations__display-none {
     display: none;
 }
+
+.enhanced-annotations__suggestion-count {
+    margin-left: auto;
+    justify-self: end;
+    opacity: 0.5;
+}
+
+.enhanced-annotations__suggestion{
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 10px;
+}
