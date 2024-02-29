@@ -127,9 +127,6 @@ export type SettingsActions =
     | {
           type: 'TOGGLE_TRUNCATE_FILE_NAME';
       }
-    | {
-          type: 'TOGGLE_ASSIGN_HOTKEYS';
-      }
     | { type: 'SET_DEFAULT_PALETTE'; payload: { palette: DefaultPalette } };
 
 const updateState = (store: Settings, action: SettingsActions) => {
@@ -229,8 +226,6 @@ const updateState = (store: Settings, action: SettingsActions) => {
         store.clipboard.templates[name] = template;
     } else if (action.type === 'TOGGLE_TRUNCATE_FILE_NAME') {
         store.notes.truncateFileName = !store.notes.truncateFileName;
-    } else if (action.type === 'TOGGLE_ASSIGN_HOTKEYS') {
-        store.commands.assignHotkeys = !store.commands.assignHotkeys;
     } else if (action.type === 'SET_DEFAULT_PALETTE') {
         store.decoration.defaultPalette = action.payload.palette;
     }
