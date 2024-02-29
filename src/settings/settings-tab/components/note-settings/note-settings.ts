@@ -52,17 +52,18 @@ export const NoteSettings = ({ containerEl, plugin }: Props) => {
         new Setting(containerEl)
             .setName(l.SETTINGS_NOTE_CREATION_FOLDER)
             .addSearch((cb) => {
-                new FolderSuggest(plugin.app, cb.inputEl);
-                cb.setPlaceholder(l.SETTINGS_NOTE_CREATION_FOLDER_PLACEHOLDER)
-                    .setValue(noteSettings.defaultFolder)
-                    .onChange((e) => {
-                        if (e) {
-                            settings.dispatch({
-                                type: 'SET_NOTES_FOLDER',
-                                payload: { folder: e },
-                            });
-                        }
-                    });
+                const onSelectCallback = (e: string) => {
+                    if (e) {
+                        settings.dispatch({
+                            type: 'SET_NOTES_FOLDER',
+                            payload: { folder: e },
+                        });
+                    }
+                };
+                new FolderSuggest(plugin.app, cb.inputEl, onSelectCallback);
+                cb.setValue(noteSettings.defaultFolder).setPlaceholder(
+                    l.SETTINGS_NOTE_CREATION_FOLDER_PLACEHOLDER,
+                );
             });
 
     new Setting(containerEl)
