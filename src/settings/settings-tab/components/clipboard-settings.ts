@@ -6,6 +6,7 @@ import {
     copiedAnnotationsTemplates,
     copiedAnnotationsVariables,
 } from '../../../clipboard/helpers/annotations-to-text';
+import { settingsHeader } from '../../../status-bar/helpers/class-names';
 
 type Props = {
     containerEl: HTMLElement;
@@ -16,7 +17,10 @@ export const ClipboardSettings = ({ plugin, containerEl }: Props) => {
     const settings = plugin.settings;
     const render = () => {
         containerEl.empty();
-        containerEl.createEl('h3', { text: l.SETTINGS_CLIPBOARD_TITLE });
+        new Setting(containerEl)
+            .setName(l.SETTINGS_CLIPBOARD_TITLE)
+            .setHeading()
+            .settingEl.addClass(settingsHeader);
         for (const Key of ['Front', 'Header', 'Comment', 'Highlight']) {
             const key = Key.toLowerCase() as ClipboardTemplateSection;
 

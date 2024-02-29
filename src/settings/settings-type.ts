@@ -64,10 +64,6 @@ export type Settings = {
         };
         defaultPalette: DefaultPalette;
     };
-    commands: {
-        enableLabelCommands: boolean;
-        assignHotkeys: boolean;
-    };
     outline: {
         showSearchInput: boolean;
         fontSize: number;

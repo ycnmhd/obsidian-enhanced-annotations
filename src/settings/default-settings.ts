@@ -19,10 +19,6 @@ export const DEFAULT_SETTINGS = (): Settings => ({
         },
         defaultPalette: 'bright',
     },
-    commands: {
-        enableLabelCommands: false,
-        assignHotkeys: false,
-    },
     outline: {
         fontSize: 12,
         showLabelsFilter: false,

@@ -1,9 +1,9 @@
 {
 	"id": "enhanced-annotations",
 	"name": "Enhanced Annotations",
-	"version": "0.1.1",
+	"version": "0.1.2",
 	"minAppVersion": "0.15.0",
-	"description": "Adds features to comments and highlights.",
+	"description": "Add a sidebar view for comments and highlights.",
 	"author": "ycnmhd",
 	"isDesktopOnly": true
 }

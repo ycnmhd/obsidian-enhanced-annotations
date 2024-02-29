@@ -96,14 +96,11 @@ export const addInsertCommentCommands = (plugin: EnhancedAnnotations) => {
         },
     ];
 
-    for (const { name, hotkeys, editorCallback } of commands) {
+    for (const { name, editorCallback } of commands) {
         plugin.addCommand({
             id: slugify(name),
             editorCallback,
             name: name,
-            hotkeys: plugin.settings.getValue().commands.assignHotkeys
-                ? hotkeys
-                : undefined,
         });
     }
 };

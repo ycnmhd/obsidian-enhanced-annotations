@@ -2,6 +2,7 @@ import { Setting } from 'obsidian';
 import LabeledAnnotations from '../../../main';
 import { DEFAULT_SETTINGS } from '../../default-settings';
 import { l } from '../../../lang/lang';
+import { settingsHeader } from '../../../status-bar/helpers/class-names';
 
 type Props = {
     containerEl: HTMLElement;
@@ -15,7 +16,10 @@ export const TTSSettings = ({ plugin, containerEl }: Props) => {
             containerEl,
         });
     };
-    containerEl.createEl('h3', { text: l.SETTINGS_TTS_TITLE });
+    new Setting(containerEl)
+        .setName(l.SETTINGS_TTS_TITLE)
+        .setHeading()
+        .settingEl.addClass(settingsHeader);
     new Setting(containerEl)
         .addDropdown((component) => {
             const voices = window.speechSynthesis

@@ -27,3 +27,7 @@
     align-items: center;
     gap: 10px;
 }
+
+.enhanced-annotations__settings-header{
+    margin-top: 40px;
+}
