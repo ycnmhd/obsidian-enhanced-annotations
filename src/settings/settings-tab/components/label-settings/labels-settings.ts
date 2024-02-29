@@ -3,13 +3,17 @@ import { l } from '../../../../lang/lang';
 import { Setting } from 'obsidian';
 import { TagSettings } from './components/tag-settings';
 import { DefaultPalette } from '../../../settings-type';
+import { settingsHeader } from '../../../../status-bar/helpers/class-names';
 
 type Props = {
     containerEl: HTMLElement;
     plugin: LabeledAnnotations;
 };
 export const LabelsSettings = ({ plugin, containerEl }: Props) => {
-    containerEl.createEl('h3', { text: l.SETTINGS_LABELS_STYLES_TITLE });
+    new Setting(containerEl)
+        .setName(l.SETTINGS_LABELS_STYLES_TITLE)
+        .setHeading()
+        .settingEl.addClass(settingsHeader);
     const settings = plugin.settings.getValue();
     const render = () => {
         containerEl.empty();

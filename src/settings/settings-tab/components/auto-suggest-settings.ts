@@ -2,13 +2,17 @@ import { Setting } from 'obsidian';
 import LabeledAnnotations from '../../../main';
 import { l } from '../../../lang/lang';
 import { CommentFormat } from '../../settings-type';
+import { settingsHeader } from '../../../status-bar/helpers/class-names';
 
 type Props = {
     containerEl: HTMLElement;
     plugin: LabeledAnnotations;
 };
 export const AutoSuggestSettings = ({ plugin, containerEl }: Props) => {
-    containerEl.createEl('h3', { text: l.SETTINGS_AUTO_SUGGEST_TITLE });
+    new Setting(containerEl)
+        .setName(l.SETTINGS_AUTO_SUGGEST_TITLE)
+        .setHeading()
+        .settingEl.addClass(settingsHeader);
     const settings = plugin.settings.getValue();
     new Setting(containerEl)
         .setName(l.SETTINGS_AUTO_SUGGEST_ENABLE)

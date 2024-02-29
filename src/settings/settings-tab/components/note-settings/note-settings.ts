@@ -28,8 +28,9 @@ export const NoteSettings = ({ containerEl, plugin }: Props) => {
             plugin,
         });
     };
-    containerEl.createEl('h3', { text: l.SETTINGS_NOTE_CREATION_TITLE });
-
+    new Setting(containerEl)
+        .setName(l.SETTINGS_NOTE_CREATION_TITLE)
+        .setHeading();
     const settings = plugin.settings;
 
     const noteSettings = settings.getValue().notes;
