@@ -109,14 +109,20 @@ export default class LabeledAnnotations extends Plugin {
     async activateView() {
         this.app.workspace.detachLeavesOfType(SIDEBAR_OUTLINE_VIEW_TYPE);
 
-        await this.app.workspace.getRightLeaf(false).setViewState({
-            type: SIDEBAR_OUTLINE_VIEW_TYPE,
-            active: true,
-        });
-
-        this.app.workspace.revealLeaf(
-            this.app.workspace.getLeavesOfType(SIDEBAR_OUTLINE_VIEW_TYPE)[0],
+        const leaves = this.app.workspace.getLeavesOfType(
+            SIDEBAR_OUTLINE_VIEW_TYPE,
         );
+        if (leaves.length === 0) {
+            await this.app.workspace.getRightLeaf(false).setViewState({
+                type: SIDEBAR_OUTLINE_VIEW_TYPE,
+                active: true,
+            });
+            this.app.workspace.revealLeaf(
+                this.app.workspace.getLeavesOfType(
+                    SIDEBAR_OUTLINE_VIEW_TYPE,
+                )[0],
+            );
+        }
     }
 
     registerSubscription(...callback: (() => void)[]) {
