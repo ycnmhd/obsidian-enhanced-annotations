@@ -6,7 +6,7 @@ import { pluralize } from '../helpers/pluralize';
 import { get } from 'svelte/store';
 import { TFile } from 'obsidian';
 import { createTooltip } from './helpers/create-tooltip';
-import { toggleElementVisibility } from './helpers/toggle-element-visibility';
+import { displayNone } from './helpers/class-names';
 
 export class StatusBar {
     private elements: {
@@ -86,20 +86,20 @@ export class StatusBar {
         const numberOfComments = comments.length;
         const numberOfHighlights = highlights.length;
         if (numberOfComments) {
-            toggleElementVisibility(this.elements.comments, true);
+            this.elements.comments.toggleClass(displayNone, false);
             this.elements.comments.setText(
                 `${pluralize(numberOfComments, 'comment', 'comments')}`,
             );
         } else {
-            toggleElementVisibility(this.elements.comments, false);
+            this.elements.comments.toggleClass(displayNone, true);
         }
         if (numberOfHighlights) {
-            toggleElementVisibility(this.elements.highlights, true);
+            this.elements.highlights.toggleClass(displayNone, false);
             this.elements.highlights.setText(
                 `${pluralize(numberOfHighlights, 'highlight', 'highlights')}`,
             );
         } else {
-            toggleElementVisibility(this.elements.highlights, false);
+            this.elements.highlights.toggleClass(displayNone, true);
         }
     };
 
