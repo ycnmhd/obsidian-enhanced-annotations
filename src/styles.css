@@ -2,6 +2,10 @@
     background-color: transparent !important;
 }
 
+.cm-highlight-default {
+    background-color: var(--text-highlight-bg);
+}
+
 .enhanced-annotations__sidebar-outline {
     padding: 8px 0 0 !important;
 }

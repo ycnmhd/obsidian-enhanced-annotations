@@ -7,7 +7,7 @@ export const registerNewLabels = (
 ) => {
     const settings = plugin.settings.getValue();
     if (!settings.decoration.autoRegisterLabels) return;
-    const groups = new Set(annotations.map((c) => c.label));
+    const groups = new Set(annotations.map((c) => c.label).filter((l) => l));
     const existingGroups = new Set(
         Object.values(settings.decoration.styles.labels).map((g) => g.label),
     );
