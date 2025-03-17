@@ -59,6 +59,9 @@ export type Settings = {
         triggerPhrase: string;
         commentFormat: CommentFormat;
     };
+    experimental: {
+        inlineFootnotes: boolean;
+    };
     decoration: {
         autoRegisterLabels: boolean;
         styles: {

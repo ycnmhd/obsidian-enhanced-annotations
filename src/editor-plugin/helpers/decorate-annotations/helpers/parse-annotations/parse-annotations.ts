@@ -17,6 +17,7 @@ export type Annotation = {
         beforeTo: number;
         afterFrom: number;
     };
+    inlineFootnote?: string | undefined;
 };
 const startPattern = /(<!--|%%|==)/g;
 const endPattern = /(-->|%%|==)/g;
@@ -125,6 +126,7 @@ export const parseAnnotations = (
                                         ch: to,
                                     },
                                 },
+                                inlineFootnote: getInlineFootnote(line, to),
                             });
                         }
                         // multi comment line
@@ -193,6 +195,7 @@ export const parseAnnotations = (
                         annotations.push({
                             ...state.multiLineAnnotation,
                             text: allText,
+                            inlineFootnote: getInlineFootnote(line, to),
                         });
                     state.multiLineAnnotation = null;
                     state.multiLineStart = null;
@@ -216,3 +219,9 @@ export const parseAnnotations = (
 
     return annotations;
 };
+
+/**
+ * @param line last line containing the end of the annotation
+ * @param annotationEnd end of annotation (position)
+ */
+const getInlineFootnote = (line: string, annotationEnd: number) => line.substring(annotationEnd).matchAll(/^\^\[([^\]]+)]/g).next().value?.[1];

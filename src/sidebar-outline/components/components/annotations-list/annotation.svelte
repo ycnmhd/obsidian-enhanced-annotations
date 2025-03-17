@@ -5,6 +5,7 @@
     import {
         Annotation
     } from '../../../../editor-plugin/helpers/decorate-annotations/helpers/parse-annotations/parse-annotations';
+    import { CornerDownRight } from 'lucide-svelte';
 
     export let plugin: LabeledAnnotations;
     export let annotation: Annotation;
@@ -12,6 +13,7 @@
     const onClick = () => {
         selectText(annotation, plugin);
     };
+    const settings = plugin.settings;
 </script>
 
 <div
@@ -29,18 +31,27 @@
         {/if}
     </span>
     <span class="annotation-badge">
-
-        <span >{annotation.range.from.line + 1}</span>
+        <span>{annotation.range.from.line + 1}</span>
         <span style="position: absolute; bottom: 0; white-space:nowrap">{annotation.label}</span>
     </span>
+
+    {#if ($settings.experimental.inlineFootnotes && annotation.inlineFootnote)}
+        <div style="margin-top: 2px;">
+            <span style="vertical-align: middle;">
+                <CornerDownRight size={13} />
+            </span>
+            <span>{annotation.inlineFootnote}</span>
+        </div>
+    {/if}
 </div>
 
 <style>
     .annotation {
         position: relative;
         display: flex;
+        flex-direction: column;
         cursor: pointer;
-        align-items: center;
+        align-items: start;
         box-sizing: border-box;
         height: fit-content;
 

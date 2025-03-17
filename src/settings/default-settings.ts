@@ -8,6 +8,9 @@ export const DEFAULT_SETTINGS = (): Settings => ({
         triggerPhrase: '//',
         commentFormat: 'html',
     },
+    experimental: {
+        inlineFootnotes: false,
+    },
     decoration: {
         autoRegisterLabels: true,
         styles: {

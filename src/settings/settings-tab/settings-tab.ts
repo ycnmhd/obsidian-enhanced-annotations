@@ -5,6 +5,7 @@ import { TTSSettings } from './components/tts-settings';
 import { NoteSettings } from './components/note-settings/note-settings';
 import { LabelsSettings } from './components/label-settings/labels-settings';
 import { ClipboardSettings } from './components/clipboard-settings';
+import { ExperimentalSettings } from './components/experimental-settings';
 
 export class SettingsTab extends PluginSettingTab {
     plugin: LabeledAnnotations;
@@ -39,5 +40,9 @@ export class SettingsTab extends PluginSettingTab {
             plugin: this.plugin,
             containerEl: containerEl.createEl('div'),
         });
+        ExperimentalSettings({
+            plugin: this.plugin,
+            containerEl: containerEl.createEl('div'),
+        })
     };
 }

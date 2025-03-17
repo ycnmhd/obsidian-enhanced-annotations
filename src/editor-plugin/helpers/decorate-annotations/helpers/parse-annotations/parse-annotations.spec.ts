@@ -167,4 +167,15 @@ Quam nulla porttitor massa id neque aliquam
         const output = 'highlighted text 1, highlighted text 2';
         expect(annotations.map((v) => v.text).join(', ')).toEqual(output);
     });
+
+    it('should handle inline footnotes as comments', () => {
+        const input =
+            'That satchel was of great importance to them, it ==contained documents==^[the building schematics] on the ==case at hand\n' +
+            'they were assigned to==^[it was the management\'s decision].';
+        const annotations = parseAnnotations(input);
+        expect(annotations[0].text).toEqual('contained documents');
+        expect(annotations[0].inlineFootnote).toEqual('the building schematics');
+        expect(annotations[1].text).toEqual('case at hand they were assigned to');
+        expect(annotations[1].inlineFootnote).toEqual('it was the management\'s decision');
+    });
 });
